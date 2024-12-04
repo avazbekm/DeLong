@@ -6,7 +6,202 @@
         xmlns:local="clr-namespace:DeLong.WPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
+    <Window.Resources>
+        <DropShadowEffect x:Key="DefaultDropShadowEffect" ShadowDepth="5" Opacity="0.5" BlurRadius="10"/>
+    </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <Grid Grid.Column="0" Background="#334257">
+            <StackPanel Margin="20">
+
+                <Border 
+                 Height="50" 
+                 Background="#476072" 
+                 CornerRadius="15" 
+                 Margin="0,0,0,10"
+                 Effect="{StaticResource DefaultDropShadowEffect}">
+                    <StackPanel 
+                     Orientation="Horizontal" 
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center">
+                        <Label 
+                         x:Name="myMijozLabel"
+                         FontFamily="JetBrains Mono" 
+                         Content="Mijoz" 
+                         Foreground="#EEEEEE" 
+                         FontSize="18" 
+                         VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border 
+                 Height="50" 
+                 Background="#476072" 
+                 CornerRadius="15" 
+                 Margin="0,0,0,10"
+                 Effect="{StaticResource DefaultDropShadowEffect}"
+                >
+                    <StackPanel 
+                     Orientation="Horizontal" 
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center">
+
+                        <Label 
+                         x:Name="myProductLabel"
+                         FontFamily="JetBrains Mono" 
+                         Content="Mahsulot" 
+                         Foreground="#EEEEEE" 
+                         FontSize="18" 
+                         VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border 
+                         Height="50" 
+                         Background="#476072" 
+                         CornerRadius="15" 
+                         Margin="0,0,0,10"
+                         Effect="{StaticResource DefaultDropShadowEffect}"
+>
+                    <StackPanel 
+                         Orientation="Horizontal" 
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"
+                        >
+
+                        <Label
+                         x:Name="myWarehouse"
+                         FontFamily="JetBrains Mono" 
+                         Content="Ombor" 
+                         Foreground="#EEEEEE" 
+                         FontSize="18" 
+                         VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border 
+                         Height="50" 
+                         Background="#476072" 
+                         CornerRadius="15" 
+                         Margin="0,0,0,10"
+                         Effect="{StaticResource DefaultDropShadowEffect}">
+                    <StackPanel 
+                         Orientation="Horizontal" 
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center">
+                        <Label 
+                         x:Name="myKirimLabel"
+                         FontFamily="JetBrains Mono" 
+                         Content="Kirim" 
+                         Foreground="#E4E0E1" 
+                         FontSize="18" 
+                         VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border 
+                         Height="50" 
+                         Background="#476072" 
+                         CornerRadius="15" 
+                         Margin="0,0,0,10"
+                         Effect="{StaticResource DefaultDropShadowEffect}">
+                    <StackPanel 
+                         Orientation="Horizontal" 
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center">
+                        <Label 
+                         x:Name="myChiqimLabel"
+                         FontFamily="JetBrains Mono" 
+                         Content="Chiqim" 
+                         Foreground="#E4E0E1" 
+                         FontSize="18" 
+                         VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+
+                <Border 
+                 Height="50" 
+                 Background="#476072" 
+                 CornerRadius="15" 
+                 Margin="0,0,0,10"
+                 Effect="{StaticResource DefaultDropShadowEffect}">
+                    <StackPanel 
+                     Orientation="Horizontal" 
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center">
+                        <Label 
+                         x:Name="myExitLabel"
+                         FontFamily="JetBrains Mono" 
+                         Content="Chiqish" 
+                         Foreground="#E4E0E1" 
+                         FontSize="18" 
+                         VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border 
+ Height="50" 
+ Background="#476072" 
+ CornerRadius="15" 
+ Margin="0,0,0,10"
+ Effect="{StaticResource DefaultDropShadowEffect}">
+
+                    <StackPanel 
+     Orientation="Horizontal" 
+     VerticalAlignment="Center"
+     HorizontalAlignment="Center"
+                     >
+
+                        <Image
+ Height="24"
+ Width="24"
+ Source="C:\Users\mansu\source\repos\DeLong\DeLong\Assets\Icons\world-grid.png"
+ VerticalAlignment="Center"
+ HorizontalAlignment="Left"></Image>
+                        <ComboBox 
+ x:Name="languageComboBox"
+ Width="150"
+ SelectionChanged="LanguageAPP"
+ Foreground="#7AB2D3" 
+ Background="#476072"
+ FontFamily="JetBrains Mono" 
+ FontSize="18">
+
+                            <ComboBox.Resources>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="Foreground" Value="#AB886D" />
+                                    <Setter Property="Background" Value="#333333" />
+                                    <Setter Property="FontFamily" Value="JetBrains Mono" />
+                                    <Setter Property="FontSize" Value="16" />
+                                </Style>
+                            </ComboBox.Resources>
+
+                            <ComboBoxItem Tag="en-US" Background="Black">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Uzbek" Foreground="#ADD8E6" />
+                                </StackPanel>
+                            </ComboBoxItem>
+
+                            <ComboBoxItem Tag="zh-CN" Background="Black">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="国" Foreground="#ADD8E6" />
+                                </StackPanel>
+                            </ComboBoxItem>
+                        </ComboBox>
+
+
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1" Background="#548CA8">
+            <Frame x:Name="Navigator" Margin="20,20,20,20" NavigationUIVisibility="Hidden" Navigated="Navigator_Navigated"/>
+        </Grid>
     </Grid>
 </Window>

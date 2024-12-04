@@ -1,24 +1,38 @@
-﻿using System.Text;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace DeLong.WPF
+namespace DeLong.WPF;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+    }
+
+    private string _currentLanguage = "en"; // Tanlangan tilni saqlash uchun o'zgaruvchi
+
+    private void LanguageAPP(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (languageComboBox.SelectedItem is ComboBoxItem selectedItem)
         {
-            InitializeComponent();
+            string selectedLanguage = selectedItem.Tag.ToString();
+
+            if (_currentLanguage != selectedLanguage) // Faqat til o'zgarishida yangilash
+            {
+                _currentLanguage = selectedLanguage;
+                DeLong.WPF.Resources.Resource.Culture = new CultureInfo(selectedLanguage);
+                UpdateLanguage(); // Matnlarni yangilash
+            }
         }
+    }
+    private void UpdateLanguage()
+    {
+        
+        
     }
 }
