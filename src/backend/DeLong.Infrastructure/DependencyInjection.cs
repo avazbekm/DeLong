@@ -1,6 +1,7 @@
-﻿using DeLong.Infrastructure.Contexts;
-using DeLong.Infrastructure.Repositories;
+﻿using DeLong.Application.Interfaces;
+using DeLong.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

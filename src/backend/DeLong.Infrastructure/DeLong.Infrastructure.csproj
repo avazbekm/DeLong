@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DeLong.Application\DeLong.Application.csproj" />
     <ProjectReference Include="..\DeLong.Domain\DeLong.Domain.csproj" />
     <ProjectReference Include="..\DeLong.WebAPI\DeLong.WebAPI.csproj" />
   </ItemGroup>

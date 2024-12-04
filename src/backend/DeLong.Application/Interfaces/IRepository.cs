@@ -1,21 +1,15 @@
-﻿using System.Linq.Expressions;
+﻿using DeLong.Domain.Common;
+using System.Linq.Expressions;
 
 namespace DeLong.Application.Interfaces;
 
-public interface IRepository<TEntity> where TEntity : class
+public interface IRepository<T> where T : Auditable
 {
-    Task InsertAsync(TEntity entity);
-    void Update(TEntity entity);
-    void Delete(TEntity entity);
-    void Delete(Expression<Func<TEntity, bool>> expression);
-
-    Task<TEntity> SelectAsync(Expression<Func<TEntity,
-        bool>> expression,
-        string[] includes = null!);
-
-    IQueryable<TEntity> SelectAll(Expression<Func<TEntity,
-        bool>> expression = null!,
-        string[] includes = null!);
-
-    Task<int> SaveAsync();
+    Task CreateAsync(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+    void Destroy(T entity);
+    Task<T> GetAsync(Expression<Func<T, bool>> expression, string[] includes = null);
+    IQueryable<T> GetAll(Expression<Func<T, bool>> expression = null, bool isNoTracked = true, string[] includes = null);
+    Task SaveChanges();
 }
