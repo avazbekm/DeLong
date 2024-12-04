@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Surviveplus.WpfLocalization" Version="1.0.4.2" />
+    <PackageReference Include="Surviveplus.WpfLocalization" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
