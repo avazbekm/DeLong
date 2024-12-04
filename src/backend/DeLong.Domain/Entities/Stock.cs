@@ -11,6 +11,6 @@ public class Stock : Auditable // ombordagi qoldiq
     public Product? Product { get; set; }
 
     public decimal Quantity { get; set; } // maxsulot soni
-    public decimal MinStockLevel { get; set; }  // kam qoldiqni belgilab qo'yish
+    public decimal MinStockLevel { get; set; }  // minimal qoldiqni belgilab qo'yish
 }
 

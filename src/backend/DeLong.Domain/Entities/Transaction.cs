@@ -18,9 +18,9 @@ public class Transaction : Auditable  // kirim, chiqim, qaytarish amaliyotlari
     public TransactionType TransactionType { get; set; } // kirim, chiqim, qaytarish 
     public decimal Quantity { get; set; }  // maxsulot soni
 
-    public long? JismoniyCustomerId { get; set; }  // jismoniy mijozlar
-    public JismoniyCustomer? JismoniyCustomer { get; set; }
+    public long? CustomerId { get; set; }  //  mijozlar
+    public Customer? Customer { get; set; }
 
-    public long? YurdikCustomerId { get; set; }  // Yurdik mijozlar
-    public YurdikCustomer? YurdikCustomer { get; set; }
+    public long? SupplierId { get; set; } // yetkazib beruvchi
+    public Supplier? Supplier { get; set; }
 }
