@@ -1,6 +1,6 @@
 ﻿using DeLong.Application.Exceptions;
-using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 
 namespace DeLong.Application.Helpers;
 

@@ -1,8 +1,8 @@
-﻿using DeLong.Application.Interfaces;
+﻿using System.Linq.Expressions;
+using DeLong.Application.Interfaces;
 using DeLong.Domain.Common;
 using DeLong.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace DeLong.Infrastructure.Repositories;
 
