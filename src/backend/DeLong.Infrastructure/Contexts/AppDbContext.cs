@@ -24,12 +24,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<CashRegister>()
-            .HasOne(cr => cr.Warehouse) // CashRegister.Warehouse bilan bog‘lash
-            .WithMany(w => w.CashRegisters) // Warehouse.CashRegisters bilan bog‘lash
-            .HasForeignKey(cr => cr.WarehouseId) // CashRegister.WarehouseId ni ForeignKey qilish
-            .OnDelete(DeleteBehavior.Cascade); // Cascade o‘chirish xulqini belgilash
-       
         modelBuilder.Entity<Category>()
             .HasMany(c => c.Products)
             .WithOne(p => p.Category)
@@ -40,24 +34,6 @@ public class AppDbContext : DbContext
             .HasOne(i => i.Customer)
             .WithMany()
             .HasForeignKey(i => i.CustomerId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<InvoiceItem>()
-            .HasOne(ii => ii.Invoice)
-            .WithMany()
-            .HasForeignKey(ii => ii.InvoiceId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Stock>()
-            .HasOne(s => s.Warehouse)
-            .WithMany()
-            .HasForeignKey(s => s.WarehouseId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Stock>()
-            .HasOne(s => s.Product)
-            .WithMany()
-            .HasForeignKey(s => s.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Transaction>()
