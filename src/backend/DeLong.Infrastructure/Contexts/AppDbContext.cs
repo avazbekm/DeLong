@@ -22,5 +22,67 @@ public class AppDbContext : DbContext
 
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CashRegister>()
+            .HasOne(cr => cr.Warehouse) // CashRegister.Warehouse bilan bog‘lash
+            .WithMany(w => w.CashRegisters) // Warehouse.CashRegisters bilan bog‘lash
+            .HasForeignKey(cr => cr.WarehouseId) // CashRegister.WarehouseId ni ForeignKey qilish
+            .OnDelete(DeleteBehavior.Cascade); // Cascade o‘chirish xulqini belgilash
+       
+        modelBuilder.Entity<Category>()
+            .HasMany(c => c.Products)
+            .WithOne(p => p.Category)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+     
+        modelBuilder.Entity<Invoice>()
+            .HasOne(i => i.Customer)
+            .WithMany()
+            .HasForeignKey(i => i.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<InvoiceItem>()
+            .HasOne(ii => ii.Invoice)
+            .WithMany()
+            .HasForeignKey(ii => ii.InvoiceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Stock>()
+            .HasOne(s => s.Warehouse)
+            .WithMany()
+            .HasForeignKey(s => s.WarehouseId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Stock>()
+            .HasOne(s => s.Product)
+            .WithMany()
+            .HasForeignKey(s => s.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.WarehouseFrom)
+            .WithMany()
+            .HasForeignKey(t => t.WarehouseIdFrom)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.WarehouseTo)
+            .WithMany()
+            .HasForeignKey(t => t.WarehouseIdTo)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Customer)
+            .WithMany()
+            .HasForeignKey(t => t.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Supplier)
+            .WithMany()
+            .HasForeignKey(t => t.SupplierId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
 
 }

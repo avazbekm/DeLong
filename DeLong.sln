@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{8637
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frontend", "frontend", "{6A901D2D-D7EC-4E05-9DDF-6D62EB2BF11F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.Application", "src\backend\DeLong.Application\DeLong.Application.csproj", "{CD95CFAF-A1B9-4F68-BA95-5CBEBEED0046}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.Service", "src\backend\DeLong.Application\DeLong.Service.csproj", "{CD95CFAF-A1B9-4F68-BA95-5CBEBEED0046}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.Domain", "src\backend\DeLong.Domain\DeLong.Domain.csproj", "{333AEF6D-252D-4BE5-82AA-37B2F825A475}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.Infrastructure", "src\backend\DeLong.Infrastructure\DeLong.Infrastructure.csproj", "{65289B7D-B8C8-42F8-BE1D-78F3A2874315}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.Data", "src\backend\DeLong.Infrastructure\DeLong.Data.csproj", "{65289B7D-B8C8-42F8-BE1D-78F3A2874315}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.WebAPI", "src\backend\DeLong.WebAPI\DeLong.WebAPI.csproj", "{5D6FA1D8-F7D4-4691-B51B-6A74DB159823}"
 EndProject
