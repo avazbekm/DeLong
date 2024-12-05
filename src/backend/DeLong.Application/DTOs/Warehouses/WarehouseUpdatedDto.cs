@@ -1,6 +1,6 @@
 ﻿namespace DeLong.Application.DTOs.Warehouses;
 
-public class WarehouseUpdatedto
+public class WarehouseUpdatedDto
 {
     public long Id { get; set; }
     public string Name { get; set; } = string.Empty;
