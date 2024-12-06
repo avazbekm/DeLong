@@ -1,5 +1,5 @@
-using DeLong.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Infrastructure.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
