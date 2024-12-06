@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeLong.Domain\DeLong.Domain.csproj" />
+    <ProjectReference Include="..\DeLong.Infrastructure\DeLong.Data.csproj" />
   </ItemGroup>
 
 </Project>

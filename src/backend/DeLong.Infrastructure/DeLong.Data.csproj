@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DeLong.Application\DeLong.Service.csproj" />
     <ProjectReference Include="..\DeLong.Domain\DeLong.Domain.csproj" />
   </ItemGroup>
 
