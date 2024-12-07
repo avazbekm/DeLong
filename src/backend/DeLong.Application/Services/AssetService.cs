@@ -24,7 +24,7 @@ public class AssetService:IAssetService
     {
         Asset existAsset = await this.assetRepository.GetAsync(u => u.FileName.Equals(dto.FileName));
         if (existAsset is not null)
-            throw new AlreadyExistException($"This asset is already exists with phone = {dto.FileName}");
+            throw new AlreadyExistException($"This asset is already exists with FileName = {dto.FileName}");
 
         var mappedAssets = this.mapper.Map<Asset>(dto);
         await this.assetRepository.CreateAsync(mappedAssets);
@@ -83,15 +83,6 @@ public class AssetService:IAssetService
         var customers = await this.assetRepository.GetAll()
             .ToListAsync();
         var result = this.mapper.Map<IEnumerable<AssetResultDto>>(customers);
-        return result;
-    }
-
-    public async ValueTask<AssetResultDto> RetrieveByPhoneAsync(string phone)
-    {
-        Asset existAsset = await this.assetRepository.GetAsync(customer => customer.FileName.Equals(phone))
-            ?? throw new NotFoundException($"This asset is not found with phone = {phone}");
-
-        var result = this.mapper.Map<AssetResultDto>(existAsset);
         return result;
     }
 }
