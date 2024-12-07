@@ -1,6 +1,6 @@
 ﻿namespace DeLong.Application.DTOs.CashRegisters;
 
-internal class CashRegisterUpdateDto
+public class CashRegisterUpdateDto
 {
     public long Id { get; set; }
     public int WarehouseId { get; set; }

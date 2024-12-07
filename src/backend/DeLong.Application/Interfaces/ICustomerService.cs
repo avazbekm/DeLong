@@ -1,5 +1,5 @@
-﻿using DeLong.Application.DTOs.Customers;
-using DeLong.Domain.Configurations;
+﻿using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Interfaces;
 
