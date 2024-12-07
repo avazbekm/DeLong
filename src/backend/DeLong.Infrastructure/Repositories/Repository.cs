@@ -49,12 +49,12 @@ public class Repository<T> : IRepository<T> where T : Auditable
         if (includes is not null)
             foreach (var item in includes)
                 query = query.Include(item);
-        return query;
+        return query.Where(a=>!a.IsDeleted);
     }
 
     public async Task<T> GetAsync(Expression<Func<T, bool>> expression, string[] includes = null)
     {
-        IQueryable<T> query = dbSet.AsQueryable();
+        IQueryable<T> query = dbSet.AsQueryable().Where(a=>!a.IsDeleted);
         if (includes is not null)
             foreach (var include in includes)
                 query = query.Include(include);

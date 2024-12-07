@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using DeLong.Infrastructure.Contexts;
 using Serilog;
 using DeLong.WebAPI.Extentions;
+using Microsoft.EntityFrameworkCore;
+using DeLong.Infrastructure.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
