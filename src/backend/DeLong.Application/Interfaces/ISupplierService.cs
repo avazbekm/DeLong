@@ -1,6 +1,14 @@
-﻿namespace DeLong.Service.Interfaces;
+﻿using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Suppliers;
+
+namespace DeLong.Service.Interfaces;
 
 public interface ISupplierService
 {
-
+    ValueTask<SupplierResultDto> AddAsync(SupplierCreationDto dto);
+    ValueTask<SupplierResultDto> ModifyAsync(SupplierUpdateDto dto);
+    ValueTask<bool> RemoveAsync(long id);
+    ValueTask<SupplierResultDto> RetrieveByIdAsync(long id);
+    ValueTask<IEnumerable<SupplierResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
+    ValueTask<IEnumerable<SupplierResultDto>> RetrieveAllAsync();
 }
