@@ -1,6 +1,14 @@
-﻿namespace DeLong.Service.Interfaces;
+﻿using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Products;
+
+namespace DeLong.Service.Interfaces;
 
 public interface IProductService
 {
-
+    ValueTask<ProductResultDto> AddAsync(ProductCreationDto dto);
+    ValueTask<ProductResultDto> ModifyAsync(ProductUpdateDto dto);
+    ValueTask<bool> RemoveAsync(long id);
+    ValueTask<ProductResultDto> RetrieveByIdAsync(long id);
+    ValueTask<IEnumerable<ProductResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
+    ValueTask<IEnumerable<ProductResultDto>> RetrieveAllAsync();
 }
