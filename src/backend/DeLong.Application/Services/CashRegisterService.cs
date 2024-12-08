@@ -39,11 +39,11 @@ public class CashRegisterService:ICashRegisterService
         CashRegister existCashRegister = await this.cashRegisterRepository.GetAsync(u => u.Id.Equals(dto.Id))
             ?? throw new NotFoundException($"This CashRegister is not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existCashRegister);
-        this.cashRegisterRepository.Update(existCashRegister);
+        var mappedCashRegister = this.mapper.Map(dto, existCashRegister);
+        this.cashRegisterRepository.Update(mappedCashRegister);
         await this.cashRegisterRepository.SaveChanges();
 
-        var result = this.mapper.Map<CashRegisterResultDto>(existCashRegister);
+        var result = this.mapper.Map<CashRegisterResultDto>(mappedCashRegister);
         return result;
     }
 

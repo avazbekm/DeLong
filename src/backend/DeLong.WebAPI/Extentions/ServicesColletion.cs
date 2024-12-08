@@ -12,6 +12,7 @@ public static class ServicesColletion
     {
 
         services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<ICashRegisterService, CashRegisterService>();
         
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
