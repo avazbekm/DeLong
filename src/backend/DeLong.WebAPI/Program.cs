@@ -1,5 +1,6 @@
 using Serilog;
 using DeLong.WebAPI.Extentions;
+using DeLong.WebAPI.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using DeLong.Infrastructure.Contexts;
 
@@ -38,6 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
