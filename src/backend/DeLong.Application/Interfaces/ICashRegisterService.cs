@@ -3,6 +3,7 @@ using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.Service.Interfaces;
 
+#pragma warning disable // warninglarni o'chirish uchun
 public interface ICashRegisterService
 {
     ValueTask<CashRegisterResultDto> AddAsync(CashRegisterCreationDto dto);

@@ -2,6 +2,7 @@
 
 namespace DeLong.Application.Helpers;
 
+#pragma warning disable  // warninglarni o'chirish uchun
 public class HttpContextHelper
 {
     private static IHttpContextAccessor HttpContextAccessor { get; set; }

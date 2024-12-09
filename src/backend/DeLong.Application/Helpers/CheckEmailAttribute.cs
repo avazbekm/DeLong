@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DeLong.Application.Helpers;
 
+#pragma warning disable // warninglarni o'chirish uchun
 public class CheckEmailAttribute :ValidationAttribute
 {
     public override bool IsValid(object value)

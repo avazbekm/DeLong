@@ -10,6 +10,7 @@ using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Services;
 
+#pragma warning disable // warninglarni o'chirish uchun
 public class CustomerService:ICustomerService
 {
     private readonly IMapper mapper;

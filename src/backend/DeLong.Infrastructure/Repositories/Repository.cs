@@ -6,6 +6,7 @@ using DeLong.Infrastructure.Contexts;
 
 namespace DeLong.Infrastructure.Repositories;
 
+#pragma warning disable // warninglarni o'chirish uchun
 public class Repository<T> : IRepository<T> where T : Auditable
 {
     private readonly DbSet<T> dbSet;

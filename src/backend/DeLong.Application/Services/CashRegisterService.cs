@@ -10,6 +10,7 @@ using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.Service.Services;
 
+#pragma warning disable // warninglarni o'chirish uchun
 public class CashRegisterService:ICashRegisterService
 {
     private readonly IMapper mapper;

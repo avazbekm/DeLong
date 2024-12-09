@@ -5,6 +5,7 @@ using System.Windows.Controls;
 
 namespace DeLong.WPF;
 
+#pragma warning disable
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>

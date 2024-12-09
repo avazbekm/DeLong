@@ -67,7 +67,7 @@ namespace DeLong.WebAPI.Controllers
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = cashRegisterService.RetrieveAllAsync(@params, filter)
+                Data =await this.cashRegisterService.RetrieveAllAsync(@params, filter)
             });
     }
 }

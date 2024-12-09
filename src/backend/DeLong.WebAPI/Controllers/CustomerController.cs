@@ -67,7 +67,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = customerService.RetrieveAllAsync(@params,filter)
+            Data =await this.customerService.RetrieveAllAsync(@params,filter)
         });
 
 }
