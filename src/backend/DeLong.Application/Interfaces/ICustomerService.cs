@@ -2,7 +2,7 @@
 using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Interfaces;
-
+#pragma warning disable
 public interface ICustomerService
 {
     ValueTask<CustomerResultDto> AddAsync(CustomerCreationDto dto);

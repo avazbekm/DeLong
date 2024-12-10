@@ -62,12 +62,12 @@ public class CustomerController : BaseController
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params,Filter filter)
+    public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data =await this.customerService.RetrieveAllAsync(@params,filter)
+            Data = await this.customerService.RetrieveAllAsync(@params, filter, search)
         });
 
 }

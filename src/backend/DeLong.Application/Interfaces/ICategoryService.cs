@@ -3,6 +3,7 @@ using DeLong.Application.DTOs.Categories;
 
 namespace DeLong.Service.Interfaces;
 
+#pragma warning disable
 public interface ICategoryService
 {
     ValueTask<CategoryResultDto> AddAsync(CategoryCreationDto dto);
