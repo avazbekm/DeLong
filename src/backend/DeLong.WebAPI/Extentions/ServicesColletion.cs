@@ -17,6 +17,7 @@ public static class ServicesColletion
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<ISupplierService, SupplierService>();
+        services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IInvoiceItemService, InvoiceItemService>();
         services.AddScoped<ICashRegisterService, CashRegisterService>();
         
