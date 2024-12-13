@@ -2,34 +2,34 @@
 using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
 using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Customers;
+using DeLong.Application.DTOs.Stocks;
 
 namespace DeLong.WebAPI.Controllers;
 
-public class CustomerController : BaseController
+public class StockController : BaseController
 {
-    private readonly ICustomerService customerService;
-    public CustomerController(ICustomerService customerService)
+    private readonly IStockService stockService;
+    public StockController(IStockService stockService)
     {
-        this.customerService = customerService;
+        this.stockService = stockService;
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> AddAsync(CustomerCreationDto dto)
+    public async Task<IActionResult> AddAsync(StockCreationDto dto)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.AddAsync(dto)
+            Data = await this.stockService.AddAsync(dto)
         });
 
     [HttpPut("update")]
-    public async Task<IActionResult> UpdateAsync(CustomerUpdateDto dto)
+    public async Task<IActionResult> UpdateAsync(StockUpdateDto dto)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.ModifyAsync(dto)
+            Data = await this.stockService.ModifyAsync(dto)
         });
 
     [HttpDelete("delete/{id:long}")]
@@ -38,7 +38,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RemoveAsync(id)
+            Data = await this.stockService.RemoveAsync(id)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -47,7 +47,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RemoveAsync(id)
+            Data = await this.stockService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -56,7 +56,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveByIdAsync(id)
+            Data = await this.stockService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
@@ -65,7 +65,9 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveAllAsync(@params, filter, search)
+            Data = await this.stockService.RetrieveAllAsync(@params, filter, search)
         });
-
 }
+
+
+

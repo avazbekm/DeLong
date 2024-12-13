@@ -11,11 +11,16 @@ public static class ServicesColletion
     public static void AddServices(this IServiceCollection services)
     {
 
+        services.AddScoped<IStockService, StockService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IInvoiceItemService, InvoiceItemService>();
         services.AddScoped<ICashRegisterService, CashRegisterService>();
         
 
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddAutoMapper(typeof(MappingProfile));
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
     }
 }
