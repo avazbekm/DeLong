@@ -68,6 +68,3 @@ public class StockController : BaseController
             Data = await this.stockService.RetrieveAllAsync(@params, filter, search)
         });
 }
-
-
-
