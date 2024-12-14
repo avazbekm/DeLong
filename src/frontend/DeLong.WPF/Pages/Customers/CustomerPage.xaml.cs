@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DeLong.WPF.Pages
+namespace DeLong.WPF.Pages.Customers
 {
     /// <summary>
     /// Interaction logic for CustomerPage.xaml
