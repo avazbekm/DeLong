@@ -37,4 +37,9 @@ public partial class MainWindow : Window
         
         
     }
+
+    private void bntMijoz_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+
+    }
 }
