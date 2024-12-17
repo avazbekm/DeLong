@@ -8,41 +8,6 @@
       d:DesignHeight="500" d:DesignWidth="800"
       Title="CustomerPage">
 
-    <Grid Background="#334257">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="0" Margin="10">
-            <TextBox x:Name="txtSearch" Width="200" Height="30" VerticalAlignment="Center" Margin="0,0,10,0" Background="#476072" Foreground="#EEEEEE"/>
-            <Button x:Name="MySearch" Content="Search" Width="80" Height="30" Click="SearchButton_Click" VerticalAlignment="Center" Background="#476072" Foreground="#EEEEEE"/>
-            <Button x:Name="AddButton1" Content="Add" Width="80" Height="30" VerticalAlignment="Center" Margin="10,0,0,0" Background="#476072" Foreground="#EEEEEE" Click="AddUserButton_Click"/>
-        </StackPanel>
-
-        <DataGrid x:Name="userDataGrid" Grid.Row="1" Margin="10" AutoGenerateColumns="False" CanUserAddRows="False" Background="#548CA8" Foreground="Black">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="myFIO" Header="FIO" Binding="{Binding FIO}" SortMemberPath="FIO" Width="*"/>
-                <DataGridTextColumn Header="Telefon" Binding="{Binding Telefon}" Width="*"/>
-                <DataGridTextColumn Header="Adres" Binding="{Binding Adres}" Width="*"/>
-                <DataGridTextColumn Header="Telegram Raqam" Binding="{Binding TelegramRaqam}" Width="*"/>
-                <DataGridTextColumn Header="INN" Binding="{Binding INN}" Width="100"/>
-                <DataGridTextColumn Header="OKONX" Binding="{Binding OKONX}" Width="100"/>
-                <DataGridTextColumn Header="Xisob Raqam" Binding="{Binding XisobRaqam}" Width="*"/>
-                <DataGridTextColumn Header="JSHSHIR" Binding="{Binding JSHSHIR}" Width="100"/>
-                <DataGridTextColumn Header="Bank" Binding="{Binding Bank}" Width="*"/>
-                <DataGridTextColumn Header="Firma Manzil" Binding="{Binding FirmaAdres}" Width="*"/>
-                <DataGridTemplateColumn Header="Actions" Width="150">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button x:Name="Edit_Button" Content="✏️" ToolTip="Edit" Width="30" Height="30" Background="LightBlue" Margin="5,0" Click="EditButton_Click"/>
-                                <Button x:Name="Delete_Button" Content="🗑️" ToolTip="Delete" Width="30" Height="30" Background="LightBlue" Margin="5,0" Click="DeleteButton_Click"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+    <Grid >
     </Grid>
 </Page>
