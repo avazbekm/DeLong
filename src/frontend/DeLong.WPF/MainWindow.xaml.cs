@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using DeLong.WPF.Pages.Customers;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -34,8 +35,8 @@ public partial class MainWindow : Window
     }
     private void UpdateLanguage()
     {
-        
-        
+
+
     }
 
     private void bntMijoz_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -46,5 +47,10 @@ public partial class MainWindow : Window
     private void btnChiqish_Click(object sender, RoutedEventArgs e)
     {
         this.Close();
+    }
+
+    private void bntMijoz_Click(object sender, RoutedEventArgs e)
+    {
+        CustomerPage customerPage = new CustomerPage();
     }
 }
