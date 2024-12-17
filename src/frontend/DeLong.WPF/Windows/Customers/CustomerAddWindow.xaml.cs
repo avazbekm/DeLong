@@ -16,4 +16,27 @@ public partial class CustomerAddWindow : Window
     {
 
     }
+
+    private void rbtnYurdik_Checked(object sender, RoutedEventArgs e)
+    {
+        spYurCutomer.Visibility = Visibility.Visible;
+        spJisCutomer.Visibility = Visibility.Hidden;
+        spYattCutomer.Visibility = Visibility.Hidden;
+    }
+
+    private void rbtnYaTT_Checked(object sender, RoutedEventArgs e)
+    {
+        spYurCutomer.Visibility = Visibility.Hidden;
+        spJisCutomer.Visibility = Visibility.Hidden;
+        spYattCutomer.Visibility = Visibility.Visible;
+    }
+
+    private void rbtnJismoniy_Checked(object sender, RoutedEventArgs e)
+    {
+
+        spYurCutomer.Visibility = Visibility.Hidden;
+        spJisCutomer.Visibility = Visibility.Visible;
+        spYattCutomer.Visibility = Visibility.Hidden;
+
+    }
 }
