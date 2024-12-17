@@ -16,6 +16,8 @@
                 <!--begin::Styles-->
                 <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/ContextMenuStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/BorderStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/TextBoxStyles.xaml"/>
                 <!--end::Styles-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

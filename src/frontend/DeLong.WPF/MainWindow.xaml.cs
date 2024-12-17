@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 
 namespace DeLong.WPF;
@@ -51,6 +52,7 @@ public partial class MainWindow : Window
 
     private void bntMijoz_Click(object sender, RoutedEventArgs e)
     {
-        CustomerPage customerPage = new CustomerPage();
+        // Navigate to CustomerPage
+        Navigator.Navigate(new Pages.Customers.CustomerPage());
     }
 }

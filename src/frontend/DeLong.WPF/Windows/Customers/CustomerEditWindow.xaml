@@ -38,7 +38,7 @@
             <TextBlock Text="Firma Adres" Foreground="#EEEEEE" Margin="0,0,0,5"/>
             <TextBox x:Name="txtFirmaAdres" Background="#476072" Foreground="#EEEEEE" Margin="0,0,0,10"/>
 
-            <Button Content="Edit" Click="EditUserButton_Click" Background="#548CA8" Foreground="#EEEEEE" Height="30" Margin="0,20,0,0"/>
+            <Button Content="Edit" Background="#548CA8" Foreground="#EEEEEE" Height="30" Margin="0,20,0,0"/>
         </StackPanel>
     </Grid>
 </Window>

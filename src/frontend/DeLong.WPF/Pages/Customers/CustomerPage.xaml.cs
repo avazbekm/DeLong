@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeLong.WPF.Windows.Customers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace DeLong.WPF.Pages.Customers
         public CustomerPage()
         {
             InitializeComponent();
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            CustomerAddWindow customerAddWindow = new CustomerAddWindow();
+            customerAddWindow.ShowDialog();
         }
     }
 }

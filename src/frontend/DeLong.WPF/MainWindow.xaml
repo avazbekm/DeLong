@@ -152,7 +152,7 @@
         </Grid>
 
         <Grid Grid.Column="1" Background="#548CA8">
-            <!--<Frame x:Name="Navigator" Margin="20,20,20,20" NavigationUIVisibility="Hidden" Navigated="Navigator_Navigated"/>-->
+            <Frame x:Name="Navigator" Margin="20,20,20,20" NavigationUIVisibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>
