@@ -42,4 +42,9 @@ public partial class MainWindow : Window
     {
 
     }
+
+    private void btnChiqish_Click(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
 }
