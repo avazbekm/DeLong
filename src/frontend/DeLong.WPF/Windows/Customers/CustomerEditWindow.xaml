@@ -11,7 +11,7 @@
             <TextBlock Text="FIO" Foreground="#EEEEEE" Margin="0,0,0,5"/>
             <TextBox x:Name="txtFIO" Background="#476072" Foreground="#EEEEEE" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Telefon" Foreground="#EEEEEE" Margin="0,0,0,5"/>
+            <TextBlock  Text="Telefon" Foreground="#EEEEEE" Margin="0,0,0,5"/>
             <TextBox x:Name="txtTelefon" Background="#476072" Foreground="#EEEEEE" Margin="0,0,0,10"/>
 
             <TextBlock Text="Adres" Foreground="#EEEEEE" Margin="0,0,0,5"/>
