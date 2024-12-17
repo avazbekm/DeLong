@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DeLong.WPF.Windows.Customers"
         mc:Ignorable="d"
-        Title="CustomerAddWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="CustomerAddWindow" Height="800" Width="800">
+    <Grid Background="#334257">
+        <StackPanel Margin="20" VerticalAlignment="Top">
+            <TextBlock Text="FIO" Foreground="#EEEEEE" Margin="0,0,0,5"/>
+            <TextBox x:Name="txtFIO" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="Telefon" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtTelefon" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="Adres" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtAdres" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="Telegram Raqam" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtTelegramRaqam" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="INN" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtINN" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="OKONX" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtOKONX" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="Xisob Raqam" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtXisobRaqam" Background="#476072" Foreground="#E4E0E1"/>
+
+            <TextBlock Text="JSHSHIR" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtJSHSHIR" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="Bank" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtBank" Background="#476072" Foreground="#EEEEEE"/>
+
+            <TextBlock Text="Firma Adres" Foreground="#EEEEEE" Margin="0,20,0,5"/>
+            <TextBox x:Name="txtFirmaAdres" Background="#476072" Foreground="#EEEEEE"/>
+
+            <Button Content="Add User" Click="AddUserButton_Click" Background="#548CA8" Foreground="#EEEEEE" Height="30" Margin="0,20,0,0"/>
+        </StackPanel>
     </Grid>
 </Window>
