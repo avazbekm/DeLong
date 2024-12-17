@@ -73,7 +73,6 @@
                         Style="{DynamicResource MaterialDesignPaperLightButton}"
                         Background="#476072"
                         md:ButtonAssist.CornerRadius="17"/>
-   
  
                 <Border 
                      Height="45" 
@@ -137,6 +136,7 @@
                        Style="{DynamicResource MaterialDesignPaperLightButton}"
                        Background="#476072"
                        md:ButtonAssist.CornerRadius="17" Click="btnChiqish_Click"/>
+  
             </StackPanel>
         </Grid>
 
