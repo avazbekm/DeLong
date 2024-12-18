@@ -25,7 +25,7 @@ public class CustomerService:ICustomerService
     {
         Customer existCustomer = await this.customerRepository.GetAsync(u => u.INN.Equals(dto.INN));
         if (existCustomer is not null)
-            throw new AlreadyExistException($"This customer is already exists with phone = {dto.INN}");
+            throw new AlreadyExistException($"This customer is already exists with INN = {dto.INN}");
 
         var mappedCustomer = this.mapper.Map<Customer>(dto);
         await this.customerRepository.CreateAsync(mappedCustomer);
@@ -40,11 +40,11 @@ public class CustomerService:ICustomerService
         Customer existCustomer = await this.customerRepository.GetAsync(u => u.Id.Equals(dto.Id))
             ?? throw new NotFoundException($"This customer is not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existCustomer);
-        this.customerRepository.Update(existCustomer);
+        var mappedCustomer = this.mapper.Map(dto, existCustomer);
+        this.customerRepository.Update(mappedCustomer);
         await this.customerRepository.SaveChanges();
 
-        var result = this.mapper.Map<CustomerResultDto>(existCustomer);
+        var result = this.mapper.Map<CustomerResultDto>(mappedCustomer);
         return result;
     }
 

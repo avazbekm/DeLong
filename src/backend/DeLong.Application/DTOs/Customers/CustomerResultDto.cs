@@ -1,4 +1,5 @@
-﻿using DeLong.Domain.Entities;
+﻿using DeLong.Application.DTOs.Users;
+using DeLong.Domain.Entities;
 
 namespace DeLong.Application.DTOs.Customers;
 
