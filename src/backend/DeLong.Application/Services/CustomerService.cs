@@ -23,7 +23,7 @@ public class CustomerService:ICustomerService
 
     public async ValueTask<CustomerResultDto> AddAsync(CustomerCreationDto dto)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(u => u.Phone.Equals(dto.Phone));
+        Customer existCustomer = await this.customerRepository.GetAsync(u => u.INN.Equals(dto.INN));
         if (existCustomer is not null)
             throw new AlreadyExistException($"This customer is already exists with phone = {dto.Phone}");
 
@@ -87,10 +87,10 @@ public class CustomerService:ICustomerService
         return result;
     }
 
-    public async ValueTask<CustomerResultDto> RetrieveByPhoneAsync(string phone)
+    public async ValueTask<CustomerResultDto> RetrieveByPhoneAsync(int INN)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.Phone.Equals(phone))
-            ?? throw new NotFoundException($"This customer is not found with phone = {phone}");
+        Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.INN.Equals(INN))
+            ?? throw new NotFoundException($"This customer is not found with phone = {INN}");
 
         var result = this.mapper.Map<CustomerResultDto>(existCustomer);
         return result;

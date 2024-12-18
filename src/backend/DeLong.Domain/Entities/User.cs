@@ -17,4 +17,5 @@ public class User : Auditable
     public string TelegramPhone { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public long JSHSHIR { get; set; }
+    public Role Role { get; set; }
 }

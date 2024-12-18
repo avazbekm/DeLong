@@ -6,6 +6,7 @@ namespace DeLong.Infrastructure.Contexts;
 public class AppDbContext : DbContext
 {
     public DbSet<Asset> Assets { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
