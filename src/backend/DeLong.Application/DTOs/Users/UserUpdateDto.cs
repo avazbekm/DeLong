@@ -1,6 +1,6 @@
 ﻿using DeLong.Domain.Enums;
 
-namespace DeLong.Application.DTOs.Customers;
+namespace DeLong.Application.DTOs.Users;
 
 public class UserUpdateDto
 {
