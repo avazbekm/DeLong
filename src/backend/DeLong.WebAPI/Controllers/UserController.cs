@@ -3,33 +3,34 @@ using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
 using DeLong.Domain.Configurations;
 using DeLong.Application.DTOs.Customers;
+using DeLong.Application.DTOs.Users;
 
 namespace DeLong.WebAPI.Controllers;
 
-public class CustomerController : BaseController
+public class UserController : BaseController
 {
-    private readonly ICustomerService customerService;
-    public CustomerController(ICustomerService customerService)
+    private readonly IUserService userService;
+    public UserController(IUserService userService)
     {
-        this.customerService = customerService;
+        this.userService = userService;
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> AddAsync(CustomerCreationDto dto)
+    public async Task<IActionResult> AddAsync(UserCreationDto dto)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.AddAsync(dto)
+            Data = await this.userService.AddAsync(dto)
         });
 
     [HttpPut("update")]
-    public async Task<IActionResult> UpdateAsync(CustomerUpdateDto dto)
+    public async Task<IActionResult> UpdateAsync(UserUpdateDto dto)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.ModifyAsync(dto)
+            Data = await this.userService.ModifyAsync(dto)
         });
 
     [HttpDelete("delete/{id:long}")]
@@ -38,7 +39,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RemoveAsync(id)
+            Data = await this.userService.RemoveAsync(id)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -47,7 +48,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RemoveAsync(id)
+            Data = await this.userService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -56,7 +57,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveByIdAsync(id)
+            Data = await this.userService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
@@ -65,7 +66,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveAllAsync(@params, filter, search)
+            Data = await this.userService.RetrieveAllAsync(@params, filter, search)
         });
 
 }
