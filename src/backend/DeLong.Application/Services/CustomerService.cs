@@ -25,7 +25,7 @@ public class CustomerService:ICustomerService
     {
         Customer existCustomer = await this.customerRepository.GetAsync(u => u.INN.Equals(dto.INN));
         if (existCustomer is not null)
-            throw new AlreadyExistException($"This customer is already exists with phone = {dto.Phone}");
+            throw new AlreadyExistException($"This customer is already exists with phone = {dto.INN}");
 
         var mappedCustomer = this.mapper.Map<Customer>(dto);
         await this.customerRepository.CreateAsync(mappedCustomer);
