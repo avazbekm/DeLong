@@ -11,6 +11,7 @@ using DeLong.Application.DTOs.Warehouses;
 using DeLong.Application.DTOs.InvoiceItems;
 using DeLong.Application.DTOs.Transactions;
 using DeLong.Application.DTOs.CashRegisters;
+using DeLong.Application.DTOs.Users;
 
 namespace DeLong.Application.Mappers;
 
@@ -22,6 +23,11 @@ public class MappingProfile : Profile
         CreateMap<Customer, CustomerResultDto>().ReverseMap();
         CreateMap<Customer, CustomerUpdateDto>().ReverseMap();
         CreateMap<Customer, CustomerCreationDto>().ReverseMap();
+
+        //User
+        CreateMap<User, UserResultDto>();
+        CreateMap<UserUpdateDto,User>();
+        CreateMap<User, UserCreationDto>();
 
         //Asset
         CreateMap<Asset, AssetResultDto>().ReverseMap();
