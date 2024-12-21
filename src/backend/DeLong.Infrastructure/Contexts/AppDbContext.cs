@@ -30,7 +30,7 @@ public class AppDbContext : DbContext
             .WithOne(p => p.Category)
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
-     
+
         modelBuilder.Entity<Invoice>()
             .HasOne(i => i.Customer)
             .WithMany()
@@ -61,5 +61,4 @@ public class AppDbContext : DbContext
             .HasForeignKey(t => t.SupplierId)
             .OnDelete(DeleteBehavior.Restrict);
     }
-
 }
