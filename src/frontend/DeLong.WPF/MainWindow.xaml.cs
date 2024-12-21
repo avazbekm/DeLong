@@ -41,6 +41,15 @@ public partial class MainWindow : Window
             _customerPage = new CustomerPage();
         }
         _customerPage.userDataGrid.Columns[0].Header= DeLong.WPF.Resources.Resource.FirstName;
+        languageComboBox.Text = DeLong.WPF.Resources.Resource.Language;
+        btnMijoz.Content = DeLong.WPF.Resources.Resource.Customer;
+        btnOmbor.Content = DeLong.WPF.Resources.Resource.Warehouse;
+        btnMaxsulot.Content = DeLong.WPF.Resources.Resource.Product;
+        btnKirim.Content = DeLong.WPF.Resources.Resource.Income;
+        btnChiqim.Content = DeLong.WPF.Resources.Resource.Expense;
+        btnChiqish.Content = DeLong.WPF.Resources.Resource.Exit;
+        btnHisobot.Content = DeLong.WPF.Resources.Resource.Report;
+        _customerPage.txtSearch.Text = DeLong.WPF.Resources.Resource.Search;
 
     }
 
