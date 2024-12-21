@@ -19,7 +19,7 @@
 
         <Grid Grid.Column="0" Background="#334257">
             <StackPanel Margin="20">
-                <Button x:Name="bntMijoz" 
+                <Button x:Name="btnMijoz" 
                         Height="45"
                         Margin="0 0 0 5"
                         Content="Mijoz"
