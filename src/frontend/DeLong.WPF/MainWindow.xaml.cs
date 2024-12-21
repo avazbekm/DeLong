@@ -1,8 +1,7 @@
-﻿using DeLong.WPF.Pages.Customers;
+﻿using System.Windows;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
+using DeLong.WPF.Pages.Customers;
 
 
 namespace DeLong.WPF;
@@ -13,6 +12,7 @@ namespace DeLong.WPF;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private CustomerPage _customerPage;
     public MainWindow()
     {
         InitializeComponent();
@@ -36,7 +36,11 @@ public partial class MainWindow : Window
     }
     private void UpdateLanguage()
     {
-
+        if (_customerPage == null)
+        {
+            _customerPage = new CustomerPage();
+        }
+        _customerPage.userDataGrid.Columns[0].Header= DeLong.WPF.Resources.Resource.FirstName;
 
     }
 
@@ -52,7 +56,17 @@ public partial class MainWindow : Window
 
     private void bntMijoz_Click(object sender, RoutedEventArgs e)
     {
-        // Navigate to CustomerPage
-        Navigator.Navigate(new Pages.Customers.CustomerPage());
+        // UserPage sahifasini yaratish yoki ochish
+        if (_customerPage == null)
+        {
+            _customerPage = new CustomerPage(); // UserPage faqat bir marta yaratiladi
+        }
+
+        // Tanlangan tilni qo'llash
+        DeLong.WPF.Resources.Resource.Culture = new CultureInfo(_currentLanguage); // Tanlangan tilni qo'llash
+        UpdateLanguage(); // Matnlarni yangilash
+
+        // UserPage sahifasiga o'tish
+        Navigator.Navigate(_customerPage);
     }
 }

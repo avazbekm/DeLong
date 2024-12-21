@@ -117,7 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Client" xml:space="preserve">
+  <data name="Customer" xml:space="preserve">
     <value>Mijoz</value>
+  </data>
+  <data name="DateOfBirth " xml:space="preserve">
+    <value>Tug'ilgan Sanasi</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Ism</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Familiya</value>
+  </data>
+  <data name="Patronomyc " xml:space="preserve">
+    <value>Otasining Ismi</value>
+  </data>
+  <data name="SeriaPasport " xml:space="preserve">
+    <value>Pasport Seriyasi</value>
   </data>
 </root>

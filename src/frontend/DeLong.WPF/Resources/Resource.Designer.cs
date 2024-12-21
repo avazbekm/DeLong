@@ -63,9 +63,54 @@ namespace DeLong.WPF.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mijoz.
         /// </summary>
-        internal static string Client {
+        internal static string Customer {
             get {
-                return ResourceManager.GetString("Client", resourceCulture);
+                return ResourceManager.GetString("Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tug&apos;ilgan Sanasi.
+        /// </summary>
+        internal static string DateOfBirth_ {
+            get {
+                return ResourceManager.GetString("DateOfBirth ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ism.
+        /// </summary>
+        internal static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Familiya.
+        /// </summary>
+        internal static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Otasining Ismi.
+        /// </summary>
+        internal static string Patronomyc_ {
+            get {
+                return ResourceManager.GetString("Patronomyc ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pasport Seriyasi.
+        /// </summary>
+        internal static string SeriaPasport_ {
+            get {
+                return ResourceManager.GetString("SeriaPasport ", resourceCulture);
             }
         }
     }
