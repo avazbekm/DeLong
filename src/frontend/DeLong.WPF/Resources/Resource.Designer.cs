@@ -61,6 +61,15 @@ namespace DeLong.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manzil.
+        /// </summary>
+        internal static string Address_ {
+            get {
+                return ResourceManager.GetString("Address ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mijoz.
         /// </summary>
         internal static string Customer {
@@ -75,6 +84,24 @@ namespace DeLong.WPF.Resources {
         internal static string DateOfBirth_ {
             get {
                 return ResourceManager.GetString("DateOfBirth ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amal qilish muddati.
+        /// </summary>
+        internal static string DateOfExpiry_ {
+            get {
+                return ResourceManager.GetString("DateOfExpiry ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pasport berigan sana.
+        /// </summary>
+        internal static string DateOfIssue_ {
+            get {
+                return ResourceManager.GetString("DateOfIssue ", resourceCulture);
             }
         }
         
@@ -106,11 +133,29 @@ namespace DeLong.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Jinsi.
+        /// </summary>
+        internal static string Gender_ {
+            get {
+                return ResourceManager.GetString("Gender ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kirim.
         /// </summary>
         internal static string Income {
             get {
                 return ResourceManager.GetString("Income", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jismoniy shaxs identifikatsiya raqami.
+        /// </summary>
+        internal static string JSHSHIR_ {
+            get {
+                return ResourceManager.GetString("JSHSHIR ", resourceCulture);
             }
         }
         
@@ -142,6 +187,15 @@ namespace DeLong.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Telefon.
+        /// </summary>
+        internal static string Phone_ {
+            get {
+                return ResourceManager.GetString("Phone ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mahsulot.
         /// </summary>
         internal static string Product {
@@ -160,6 +214,15 @@ namespace DeLong.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roli.
+        /// </summary>
+        internal static string Role_ {
+            get {
+                return ResourceManager.GetString("Role ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Qidiruv.
         /// </summary>
         internal static string Search {
@@ -174,6 +237,15 @@ namespace DeLong.WPF.Resources {
         internal static string SeriaPasport_ {
             get {
                 return ResourceManager.GetString("SeriaPasport ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telegram raqam.
+        /// </summary>
+        internal static string TelegramPhone_ {
+            get {
+                return ResourceManager.GetString("TelegramPhone ", resourceCulture);
             }
         }
         

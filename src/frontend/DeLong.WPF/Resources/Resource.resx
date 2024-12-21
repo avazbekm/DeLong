@@ -159,4 +159,28 @@
   <data name="Search" xml:space="preserve">
     <value>Qidiruv</value>
   </data>
+  <data name="DateOfIssue " xml:space="preserve">
+    <value>Pasport berigan sana</value>
+  </data>
+  <data name="DateOfExpiry " xml:space="preserve">
+    <value>Amal qilish muddati</value>
+  </data>
+  <data name="Gender " xml:space="preserve">
+    <value>Jinsi</value>
+  </data>
+  <data name="Phone " xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="TelegramPhone " xml:space="preserve">
+    <value>Telegram raqam</value>
+  </data>
+  <data name="Address " xml:space="preserve">
+    <value>Manzil</value>
+  </data>
+  <data name="JSHSHIR " xml:space="preserve">
+    <value>Jismoniy shaxs identifikatsiya raqami</value>
+  </data>
+  <data name="Role " xml:space="preserve">
+    <value>Roli</value>
+  </data>
 </root>

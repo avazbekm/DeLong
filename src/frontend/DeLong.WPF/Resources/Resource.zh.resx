@@ -159,4 +159,28 @@
   <data name="Search" xml:space="preserve">
     <value>搜索 </value>
   </data>
+  <data name="DateOfIssue " xml:space="preserve">
+    <value>签发日期</value>
+  </data>
+  <data name="DateOfExpiry " xml:space="preserve">
+    <value>到期日期</value>
+  </data>
+  <data name="Gender " xml:space="preserve">
+    <value>性别 </value>
+  </data>
+  <data name="Phone " xml:space="preserve">
+    <value>电话号码</value>
+  </data>
+  <data name="TelegramPhone " xml:space="preserve">
+    <value>电报号码</value>
+  </data>
+  <data name="Address " xml:space="preserve">
+    <value>地址 </value>
+  </data>
+  <data name="JSHSHIR " xml:space="preserve">
+    <value>个人识别号</value>
+  </data>
+  <data name="Role " xml:space="preserve">
+    <value>角色</value>
+  </data>
 </root>
