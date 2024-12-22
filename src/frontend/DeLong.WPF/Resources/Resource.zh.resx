@@ -183,4 +183,34 @@
   <data name="Role " xml:space="preserve">
     <value>角色</value>
   </data>
+  <data name="Tax Identification Number " xml:space="preserve">
+    <value>纳税人识别号
+</value>
+  </data>
+  <data name="Classifier of Enterprises " xml:space="preserve">
+    <value>企业分类代码
+</value>
+  </data>
+  <data name="Bank  account number" xml:space="preserve">
+    <value>银行账户号码
+</value>
+  </data>
+  <data name="Bank " xml:space="preserve">
+    <value>银行</value>
+  </data>
+  <data name="Company Address" xml:space="preserve">
+    <value>公司地址
+</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>操作/事务
+</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Export to Excel " xml:space="preserve">
+    <value>导出到Excel
+</value>
+  </data>
 </root>

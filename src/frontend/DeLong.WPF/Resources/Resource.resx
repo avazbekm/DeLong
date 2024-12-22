@@ -183,4 +183,28 @@
   <data name="Role " xml:space="preserve">
     <value>Roli</value>
   </data>
+  <data name="Tax Identification Number " xml:space="preserve">
+    <value>INN</value>
+  </data>
+  <data name="Classifier of Enterprises " xml:space="preserve">
+    <value>OKONX</value>
+  </data>
+  <data name="Bank  account number" xml:space="preserve">
+    <value>Hisob raqam</value>
+  </data>
+  <data name="Bank " xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="Company Address" xml:space="preserve">
+    <value>Firma manzili</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Amallar</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Qo'shish</value>
+  </data>
+  <data name="Export to Excel " xml:space="preserve">
+    <value>Excellga O'tkazish</value>
+  </data>
 </root>

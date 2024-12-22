@@ -61,11 +61,65 @@ namespace DeLong.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amallar.
+        /// </summary>
+        internal static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qo&apos;shish.
+        /// </summary>
+        internal static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manzil.
         /// </summary>
         internal static string Address_ {
             get {
                 return ResourceManager.GetString("Address ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank.
+        /// </summary>
+        internal static string Bank_ {
+            get {
+                return ResourceManager.GetString("Bank ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hisob raqam.
+        /// </summary>
+        internal static string Bank__account_number {
+            get {
+                return ResourceManager.GetString("Bank  account number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OKONX.
+        /// </summary>
+        internal static string Classifier_of_Enterprises_ {
+            get {
+                return ResourceManager.GetString("Classifier of Enterprises ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firma manzili.
+        /// </summary>
+        internal static string Company_Address {
+            get {
+                return ResourceManager.GetString("Company Address", resourceCulture);
             }
         }
         
@@ -120,6 +174,15 @@ namespace DeLong.WPF.Resources {
         internal static string Expense {
             get {
                 return ResourceManager.GetString("Expense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excellga O&apos;tkazish.
+        /// </summary>
+        internal static string Export_to_Excel_ {
+            get {
+                return ResourceManager.GetString("Export to Excel ", resourceCulture);
             }
         }
         
@@ -237,6 +300,15 @@ namespace DeLong.WPF.Resources {
         internal static string SeriaPasport_ {
             get {
                 return ResourceManager.GetString("SeriaPasport ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INN.
+        /// </summary>
+        internal static string Tax_Identification_Number_ {
+            get {
+                return ResourceManager.GetString("Tax Identification Number ", resourceCulture);
             }
         }
         
