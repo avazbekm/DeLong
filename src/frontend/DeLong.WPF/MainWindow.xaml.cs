@@ -44,7 +44,13 @@ public partial class MainWindow : Window
         _customerPage.userDataGrid.Columns[1].Header = DeLong.WPF.Resources.Resource.Phone_;
         _customerPage.userDataGrid.Columns[2].Header = DeLong.WPF.Resources.Resource.Address_;
         _customerPage.userDataGrid.Columns[3].Header = DeLong.WPF.Resources.Resource.TelegramPhone_;
-        
+        _customerPage.userDataGrid.Columns[4].Header = DeLong.WPF.Resources.Resource.Tax_Identification_Number_;
+        _customerPage.userDataGrid.Columns[5].Header = DeLong.WPF.Resources.Resource.Classifier_of_Enterprises_;
+        _customerPage.userDataGrid.Columns[6].Header = DeLong.WPF.Resources.Resource.Bank__account_number;
+        _customerPage.userDataGrid.Columns[7].Header = DeLong.WPF.Resources.Resource.JSHSHIR_;
+        _customerPage.userDataGrid.Columns[8].Header = DeLong.WPF.Resources.Resource.Bank_;
+        _customerPage.userDataGrid.Columns[9].Header = DeLong.WPF.Resources.Resource.Company_Address;
+        _customerPage.userDataGrid.Columns[10].Header = DeLong.WPF.Resources.Resource.Action;
 
         languageComboBox.Text = DeLong.WPF.Resources.Resource.Language;
         btnMijoz.Content = DeLong.WPF.Resources.Resource.Customer;
@@ -55,8 +61,8 @@ public partial class MainWindow : Window
         btnChiqish.Content = DeLong.WPF.Resources.Resource.Exit;
         btnHisobot.Content = DeLong.WPF.Resources.Resource.Report;
         _customerPage.txtSearch.Text = DeLong.WPF.Resources.Resource.Search;
-        _customerPage.btnAdd.Content = DeLong.WPF.Resources.Resource.Search;
-        _customerPage.btnExcel.Content = DeLong.WPF.Resources.Resource.Search;
+        _customerPage.btnAdd.Content = DeLong.WPF.Resources.Resource.Add;
+        _customerPage.btnExcel.Content = DeLong.WPF.Resources.Resource.Export_to_Excel_;
 
     }
 
