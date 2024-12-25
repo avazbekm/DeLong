@@ -61,11 +61,272 @@ namespace DeLong.WPF.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amallar.
+        /// </summary>
+        internal static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qo&apos;shish.
+        /// </summary>
+        internal static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manzil.
+        /// </summary>
+        internal static string Address_ {
+            get {
+                return ResourceManager.GetString("Address ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank.
+        /// </summary>
+        internal static string Bank_ {
+            get {
+                return ResourceManager.GetString("Bank ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hisob raqam.
+        /// </summary>
+        internal static string Bank__account_number {
+            get {
+                return ResourceManager.GetString("Bank  account number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OKONX.
+        /// </summary>
+        internal static string Classifier_of_Enterprises_ {
+            get {
+                return ResourceManager.GetString("Classifier of Enterprises ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firma manzili.
+        /// </summary>
+        internal static string Company_Address {
+            get {
+                return ResourceManager.GetString("Company Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mijoz.
         /// </summary>
-        internal static string Client {
+        internal static string Customer {
             get {
-                return ResourceManager.GetString("Client", resourceCulture);
+                return ResourceManager.GetString("Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tug&apos;ilgan Sanasi.
+        /// </summary>
+        internal static string DateOfBirth_ {
+            get {
+                return ResourceManager.GetString("DateOfBirth ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amal qilish muddati.
+        /// </summary>
+        internal static string DateOfExpiry_ {
+            get {
+                return ResourceManager.GetString("DateOfExpiry ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pasport berigan sana.
+        /// </summary>
+        internal static string DateOfIssue_ {
+            get {
+                return ResourceManager.GetString("DateOfIssue ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiqish.
+        /// </summary>
+        internal static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chiqim.
+        /// </summary>
+        internal static string Expense {
+            get {
+                return ResourceManager.GetString("Expense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excellga O&apos;tkazish.
+        /// </summary>
+        internal static string Export_to_Excel_ {
+            get {
+                return ResourceManager.GetString("Export to Excel ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ism.
+        /// </summary>
+        internal static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jinsi.
+        /// </summary>
+        internal static string Gender_ {
+            get {
+                return ResourceManager.GetString("Gender ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kirim.
+        /// </summary>
+        internal static string Income {
+            get {
+                return ResourceManager.GetString("Income", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jismoniy shaxs identifikatsiya raqami.
+        /// </summary>
+        internal static string JSHSHIR_ {
+            get {
+                return ResourceManager.GetString("JSHSHIR ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Til tanlash.
+        /// </summary>
+        internal static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Familiya.
+        /// </summary>
+        internal static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Otasining Ismi.
+        /// </summary>
+        internal static string Patronomyc_ {
+            get {
+                return ResourceManager.GetString("Patronomyc ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefon.
+        /// </summary>
+        internal static string Phone_ {
+            get {
+                return ResourceManager.GetString("Phone ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mahsulot.
+        /// </summary>
+        internal static string Product {
+            get {
+                return ResourceManager.GetString("Product", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hisobot.
+        /// </summary>
+        internal static string Report {
+            get {
+                return ResourceManager.GetString("Report", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roli.
+        /// </summary>
+        internal static string Role_ {
+            get {
+                return ResourceManager.GetString("Role ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qidiruv.
+        /// </summary>
+        internal static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pasport Seriyasi.
+        /// </summary>
+        internal static string SeriaPasport_ {
+            get {
+                return ResourceManager.GetString("SeriaPasport ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INN.
+        /// </summary>
+        internal static string Tax_Identification_Number_ {
+            get {
+                return ResourceManager.GetString("Tax Identification Number ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telegram raqam.
+        /// </summary>
+        internal static string TelegramPhone_ {
+            get {
+                return ResourceManager.GetString("TelegramPhone ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ombor.
+        /// </summary>
+        internal static string Warehouse {
+            get {
+                return ResourceManager.GetString("Warehouse", resourceCulture);
             }
         }
     }

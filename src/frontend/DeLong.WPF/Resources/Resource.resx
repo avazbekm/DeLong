@@ -117,7 +117,94 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Client" xml:space="preserve">
+  <data name="Expense" xml:space="preserve">
+    <value>Chiqim</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Chiqish</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
     <value>Mijoz</value>
+  </data>
+  <data name="DateOfBirth " xml:space="preserve">
+    <value>Tug'ilgan Sanasi</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Ism</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Hisobot</value>
+  </data>
+  <data name="Income" xml:space="preserve">
+    <value>Kirim</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Familiya</value>
+  </data>
+  <data name="Patronomyc " xml:space="preserve">
+    <value>Otasining Ismi</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Mahsulot</value>
+  </data>
+  <data name="SeriaPasport " xml:space="preserve">
+    <value>Pasport Seriyasi</value>
+  </data>
+  <data name="Warehouse" xml:space="preserve">
+    <value>Ombor</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Til tanlash</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Qidiruv</value>
+  </data>
+  <data name="DateOfIssue " xml:space="preserve">
+    <value>Pasport berigan sana</value>
+  </data>
+  <data name="DateOfExpiry " xml:space="preserve">
+    <value>Amal qilish muddati</value>
+  </data>
+  <data name="Gender " xml:space="preserve">
+    <value>Jinsi</value>
+  </data>
+  <data name="Phone " xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="TelegramPhone " xml:space="preserve">
+    <value>Telegram raqam</value>
+  </data>
+  <data name="Address " xml:space="preserve">
+    <value>Manzil</value>
+  </data>
+  <data name="JSHSHIR " xml:space="preserve">
+    <value>Jismoniy shaxs identifikatsiya raqami</value>
+  </data>
+  <data name="Role " xml:space="preserve">
+    <value>Roli</value>
+  </data>
+  <data name="Tax Identification Number " xml:space="preserve">
+    <value>INN</value>
+  </data>
+  <data name="Classifier of Enterprises " xml:space="preserve">
+    <value>OKONX</value>
+  </data>
+  <data name="Bank  account number" xml:space="preserve">
+    <value>Hisob raqam</value>
+  </data>
+  <data name="Bank " xml:space="preserve">
+    <value>Bank</value>
+  </data>
+  <data name="Company Address" xml:space="preserve">
+    <value>Firma manzili</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Amallar</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Qo'shish</value>
+  </data>
+  <data name="Export to Excel " xml:space="preserve">
+    <value>Excellga O'tkazish</value>
   </data>
 </root>
