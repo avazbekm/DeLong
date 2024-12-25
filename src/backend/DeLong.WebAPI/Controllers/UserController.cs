@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
 using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Customers;
 using DeLong.Application.DTOs.Users;
 
 namespace DeLong.WebAPI.Controllers;
@@ -60,6 +59,15 @@ public class UserController : BaseController
             Data = await this.userService.RetrieveByIdAsync(id)
         });
 
+    [HttpGet("get/jshshir")]
+    public async Task<IActionResult> GetByJshshirAsync(string jshshir)
+    => Ok(new Response
+    {
+        StatusCode = 200,
+        Message = "Success",
+        Data = await this.userService.RetrieveByJSHSHIRAsync(jshshir)
+    });
+
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
         => Ok(new Response
@@ -67,6 +75,15 @@ public class UserController : BaseController
             StatusCode = 200,
             Message = "Success",
             Data = await this.userService.RetrieveAllAsync(@params, filter, search)
+        });
+
+    [HttpGet("get-allUsers")]
+    public async Task<IActionResult> GetAllsync()
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await this.userService.RetrieveAllAsync()
         });
 
 }

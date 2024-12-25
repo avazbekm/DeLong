@@ -80,7 +80,7 @@ namespace DeLong.Data.Migrations
                     Phone = table.Column<string>(type: "text", nullable: false),
                     TelegramPhone = table.Column<string>(type: "text", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: false),
-                    JSHSHIR = table.Column<long>(type: "bigint", nullable: false),
+                    JSHSHIR = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),

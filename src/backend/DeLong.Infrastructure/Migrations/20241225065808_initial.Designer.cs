@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeLong.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241219041939_initial")]
+    [Migration("20241225065808_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -457,8 +457,9 @@ namespace DeLong.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("JSHSHIR")
-                        .HasColumnType("bigint");
+                    b.Property<string>("JSHSHIR")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .IsRequired()

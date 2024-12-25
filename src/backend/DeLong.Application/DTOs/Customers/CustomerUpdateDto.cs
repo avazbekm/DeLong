@@ -8,7 +8,7 @@ public class CustomerUpdateDto
     public string Name { get; set; } = string.Empty;
     public int INN { get; set; }
     public string MFO { get; set; } = string.Empty;
-    public long BankAccount { get; set; }
+    public string BankAccount { get; set; } = string.Empty;
     public string BankName { get; set; } = string.Empty;
     public string OKONX { get; set; } = string.Empty;
     public string YurAddress { get; set; } = string.Empty;

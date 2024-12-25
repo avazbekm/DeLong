@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeLong.Data", "src\backend\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeLong.WPF", "src\frontend\DeLong.WPF\DeLong.WPF.csproj", "{8CFD9097-B583-4AAA-B3C4-C425BA33EC5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeLong.WebAPI", "src\backend\DeLong.WebAPI\DeLong.WebAPI.csproj", "{B5C84E61-DCCA-4ACB-9F2D-C7084F325997}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeLong.WebAPI", "src\backend\DeLong.WebAPI\DeLong.WebAPI.csproj", "{B5C84E61-DCCA-4ACB-9F2D-C7084F325997}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delong.ApiService", "src\frontend\Delong.ApiService\Delong.ApiService.csproj", "{5862CB14-EFEB-4B43-82EF-323BF2C58A87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{B5C84E61-DCCA-4ACB-9F2D-C7084F325997}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5C84E61-DCCA-4ACB-9F2D-C7084F325997}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5C84E61-DCCA-4ACB-9F2D-C7084F325997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5862CB14-EFEB-4B43-82EF-323BF2C58A87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5862CB14-EFEB-4B43-82EF-323BF2C58A87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5862CB14-EFEB-4B43-82EF-323BF2C58A87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5862CB14-EFEB-4B43-82EF-323BF2C58A87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{65289B7D-B8C8-42F8-BE1D-78F3A2874315} = {8637A282-02F0-45F2-8176-53DB4F2A0A36}
 		{8CFD9097-B583-4AAA-B3C4-C425BA33EC5C} = {6A901D2D-D7EC-4E05-9DDF-6D62EB2BF11F}
 		{B5C84E61-DCCA-4ACB-9F2D-C7084F325997} = {8637A282-02F0-45F2-8176-53DB4F2A0A36}
+		{5862CB14-EFEB-4B43-82EF-323BF2C58A87} = {6A901D2D-D7EC-4E05-9DDF-6D62EB2BF11F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ED99E97A-67B7-4AB1-93B4-A5D8B4FDBFCC}

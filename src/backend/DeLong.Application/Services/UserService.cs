@@ -5,7 +5,6 @@ using DeLong.Domain.Configurations;
 using DeLong.Application.DTOs.Users;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
-using DeLong.Application.DTOs.Customers;
 using DeLong.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -88,7 +87,7 @@ public class UserService : IUserService
         return result;
     }
 
-    public async ValueTask<UserResultDto> RetrieveByJSHSHIRAsync(long Jshshir)
+    public async ValueTask<UserResultDto> RetrieveByJSHSHIRAsync(string Jshshir)
     {
         User existUser = await this.userRepository.GetAsync(user => user.JSHSHIR.Equals(Jshshir))
             ?? throw new NotFoundException($"This customer is not found with JSHSHIR = {Jshshir}");

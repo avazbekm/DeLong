@@ -454,8 +454,9 @@ namespace DeLong.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("JSHSHIR")
-                        .HasColumnType("bigint");
+                    b.Property<string>("JSHSHIR")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .IsRequired()

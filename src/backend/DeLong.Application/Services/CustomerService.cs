@@ -87,7 +87,7 @@ public class CustomerService:ICustomerService
         return result;
     }
 
-    public async ValueTask<CustomerResultDto> RetrieveByPhoneAsync(int INN)
+    public async ValueTask<CustomerResultDto> RetrieveByInnAsync(int INN)
     {
         Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.INN.Equals(INN))
             ?? throw new NotFoundException($"This customer is not found with phone = {INN}");

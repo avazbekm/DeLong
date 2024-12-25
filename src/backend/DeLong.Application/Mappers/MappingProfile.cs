@@ -25,9 +25,9 @@ public class MappingProfile : Profile
         CreateMap<Customer, CustomerCreationDto>().ReverseMap();
 
         //User
-        CreateMap<User, UserResultDto>();
-        CreateMap<UserUpdateDto,User>();
-        CreateMap<User, UserCreationDto>();
+        CreateMap<User, UserResultDto>().ReverseMap();
+        CreateMap<UserUpdateDto,User>().ReverseMap();
+        CreateMap<User, UserCreationDto>().ReverseMap();
 
         //Asset
         CreateMap<Asset, AssetResultDto>().ReverseMap();

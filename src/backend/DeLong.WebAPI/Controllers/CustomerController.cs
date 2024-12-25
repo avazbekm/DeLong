@@ -59,6 +59,15 @@ public class CustomerController : BaseController
             Data = await this.customerService.RetrieveByIdAsync(id)
         });
 
+    [HttpGet("get/INN")]
+    public async Task<IActionResult> GetByInnAsync(int inn)
+       => Ok(new Response
+       {
+           StatusCode = 200,
+           Message = "Success",
+           Data = await this.customerService.RetrieveByInnAsync(inn)
+       });
+
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
         => Ok(new Response
@@ -66,6 +75,15 @@ public class CustomerController : BaseController
             StatusCode = 200,
             Message = "Success",
             Data = await this.customerService.RetrieveAllAsync(@params, filter, search)
+        }); 
+    
+    [HttpGet("get-allCustomers")]
+    public async Task<IActionResult> GetAllsync()
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await this.customerService.RetrieveAllAsync()
         });
 
 }
