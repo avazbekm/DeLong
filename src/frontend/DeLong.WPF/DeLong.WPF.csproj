@@ -12,7 +12,6 @@
     <PackageReference Include="IKVM" Version="8.10.3" />
     <PackageReference Include="MaterialDesignColors" Version="3.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
-    <PackageReference Include="Surviveplus.WpfLocalization" Version="1.0.4.2" />
   </ItemGroup>
 
   <ItemGroup>
