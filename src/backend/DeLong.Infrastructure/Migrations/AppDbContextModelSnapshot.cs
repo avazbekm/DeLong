@@ -123,8 +123,9 @@ namespace DeLong.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("BankAccount")
-                        .HasColumnType("bigint");
+                    b.Property<string>("BankAccount")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("BankName")
                         .IsRequired()
@@ -133,11 +134,14 @@ namespace DeLong.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("INN")
+                    b.Property<int?>("INN")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("JSHSHIR")
+                        .HasColumnType("text");
 
                     b.Property<string>("MFO")
                         .IsRequired()
@@ -148,6 +152,9 @@ namespace DeLong.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OKONX")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
 

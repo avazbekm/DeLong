@@ -68,6 +68,15 @@ public class CustomerController : BaseController
            Data = await this.customerService.RetrieveByInnAsync(inn)
        });
 
+    [HttpGet("get/Jshshir")]
+    public async Task<IActionResult> GetByJshshirAsync(string jshshir)
+       => Ok(new Response
+       {
+           StatusCode = 200,
+           Message = "Success",
+           Data = await this.customerService.RetrieveByJshshirAsync(jshshir)
+       });
+
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
         => Ok(new Response

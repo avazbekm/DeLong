@@ -23,9 +23,18 @@ public class CustomerService:ICustomerService
 
     public async ValueTask<CustomerResultDto> AddAsync(CustomerCreationDto dto)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(u => u.INN.Equals(dto.INN));
-        if (existCustomer is not null)
-            throw new AlreadyExistException($"This customer is already exists with INN = {dto.INN}");
+        if (dto.JSHSHIR.Equals(""))
+        {
+            Customer existCustomer = await this.customerRepository.GetAsync(u => u.INN.Equals(dto.INN));
+            if (existCustomer is not null)
+                throw new AlreadyExistException($"This customer is already exists with INN = {dto.INN}");
+        }
+        else if (dto.INN.Equals(0))
+        {
+            Customer existCustomer = await this.customerRepository.GetAsync(u => u.JSHSHIR.Equals(dto.JSHSHIR));
+            if (existCustomer is not null)
+                throw new AlreadyExistException($"This customer is already exists with JSHSHIR = {dto.JSHSHIR}");
+        }
 
         var mappedCustomer = this.mapper.Map<Customer>(dto);
         await this.customerRepository.CreateAsync(mappedCustomer);
@@ -91,6 +100,15 @@ public class CustomerService:ICustomerService
     {
         Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.INN.Equals(INN))
             ?? throw new NotFoundException($"This customer is not found with phone = {INN}");
+
+        var result = this.mapper.Map<CustomerResultDto>(existCustomer);
+        return result;
+    }
+
+    public async ValueTask<CustomerResultDto> RetrieveByJshshirAsync(string jshshir)
+    {
+        Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.JSHSHIR.Equals(jshshir))
+            ?? throw new NotFoundException($"This customer is not found with JSHSHIR = {jshshir}");
 
         var result = this.mapper.Map<CustomerResultDto>(existCustomer);
         return result;
