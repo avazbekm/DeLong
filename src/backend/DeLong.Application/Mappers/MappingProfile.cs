@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DeLong.Domain.Entities;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Application.DTOs.Users;
 using DeLong.Application.DTOs.Assets;
 using DeLong.Application.DTOs.Stocks;
 using DeLong.Application.DTOs.Invoices;
@@ -11,7 +13,6 @@ using DeLong.Application.DTOs.Warehouses;
 using DeLong.Application.DTOs.InvoiceItems;
 using DeLong.Application.DTOs.Transactions;
 using DeLong.Application.DTOs.CashRegisters;
-using DeLong.Application.DTOs.Users;
 
 namespace DeLong.Application.Mappers;
 
@@ -78,6 +79,11 @@ public class MappingProfile : Profile
         CreateMap<Warehouse, WarehouseResultDto>().ReverseMap();
         CreateMap<Warehouse, WarehouseUpdatedDto>().ReverseMap();
         CreateMap<Warehouse, WarehouseCreationDto>().ReverseMap();
+
+        //Price
+        CreateMap<Price, PriceResultDto>().ReverseMap();
+        CreateMap<Price, PriceUpdateDto>().ReverseMap();
+        CreateMap<Price, PriceCreationDto>().ReverseMap();
 
     }
 }
