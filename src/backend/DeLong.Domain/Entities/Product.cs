@@ -11,4 +11,6 @@ public class Product : Auditable
     public required Category Category { get; set; }
 
     public bool IsActive { get; set; }
+  
+    public ICollection<Price> Prices { get; set; } = new List<Price>();
 }
