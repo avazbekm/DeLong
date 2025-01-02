@@ -10,8 +10,5 @@ public class Product : Auditable
     public long CategoryId { get; set; }
     public required Category Category { get; set; }
 
-    public decimal Price { get; set; }
-    public string UnitOfMeasure { get; set; } = string.Empty; // kg,dona,karobka,litr
     public bool IsActive { get; set; }
 }
-

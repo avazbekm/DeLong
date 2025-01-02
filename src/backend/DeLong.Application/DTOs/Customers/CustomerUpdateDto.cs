@@ -17,5 +17,4 @@ public class CustomerUpdateDto
 
     // firma rahbari malumotlari
     public long UserId { get; set; }
-    public UserResultDto User { get; set; }
 }
