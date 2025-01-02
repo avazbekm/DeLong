@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Price> Prices { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<Stock> Stocks { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
@@ -60,5 +61,11 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(t => t.SupplierId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Price>()
+            .HasOne(p => p.Product)
+            .WithMany(p => p.Prices)
+            .HasForeignKey(p => p.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
