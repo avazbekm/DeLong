@@ -60,12 +60,12 @@ public class PriceController:BaseController
             });
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
-            => Ok(new Response
-            {
-                StatusCode = 200,
-                Message = "Success",
-                Data = await this.priceService.RetrieveAllAsync(@params, filter, search)
-            });
+        public async Task<IActionResult> GetAllsync()
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await this.priceService.RetrieveAllAsync()
+        });
 }
 

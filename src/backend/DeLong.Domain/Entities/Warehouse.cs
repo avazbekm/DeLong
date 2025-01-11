@@ -9,4 +9,3 @@ public class Warehouse : Auditable
     public string ManagerName { get; set; } = string.Empty;
     public ICollection<CashRegister> CashRegisters { get; set; }
 }
-

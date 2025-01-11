@@ -82,7 +82,7 @@ public class CategoryService : ICategoryService
     {
         var categories = await this.categoryRepository.GetAll()
             .ToListAsync();
-        var result = this.mapper.Map<IEnumerable<CategoryResultDto>>(categories);
+        var result = this.mapper.Map<List<CategoryResultDto>>(categories);
         return result;
     }
 }

@@ -67,6 +67,16 @@ namespace DeLong.WebAPI.Controllers
                 Message = "Success",
                 Data = await this.productService.RetrieveAllAsync(@params, filter, search)
             });
+       
+        [HttpGet("get-allProducts")]
+        public async Task<IActionResult> GetAllsync()
+            => Ok(new Response
+            {
+                StatusCode = 200,
+                Message = "Success",
+                Data = await this.productService.RetrieveAllAsync()
+            });
+
     }
 
 }
