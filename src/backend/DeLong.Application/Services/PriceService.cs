@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.Prices;
-using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
@@ -22,7 +22,10 @@ public class PriceService:IPriceServer
 
     public async ValueTask<PriceResultDto> AddAsync(PriceCreationDto dto)
     {
-        Price existPrices = await this.priceRepository.GetAsync(u => u.ProductId.Equals(dto.ProductId));
+        Price existPrices = await this.priceRepository.GetAsync(u =>
+            u.ProductId.Equals(dto.ProductId) &&
+            u.ArrivalPrice.Equals(dto.ArrivalPrice) &&
+            u.SellingPrice.Equals(dto.SellingPrice));
         if (existPrices is not null)
             throw new AlreadyExistException($"This Price is already exists with ProductId = {dto.ProductId}");
 
@@ -81,6 +84,13 @@ public class PriceService:IPriceServer
     public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync()
     {
         var prices = await this.priceRepository.GetAll()
+            .ToListAsync();
+        var result = this.mapper.Map<IEnumerable<PriceResultDto>>(prices);
+        return result;
+    }
+    public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(long productId)
+    {
+        var prices = await this.priceRepository.GetAll(p => p.ProductId.Equals(productId))
             .ToListAsync();
         var result = this.mapper.Map<IEnumerable<PriceResultDto>>(prices);
         return result;

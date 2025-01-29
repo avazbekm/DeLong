@@ -1,8 +1,7 @@
-﻿using DeLong.Domain.Configurations;
-using DeLong.Service.DTOs.Prices;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Prices;
 
 namespace DeLong.WebAPI.Controllers;
 
@@ -67,5 +66,14 @@ public class PriceController:BaseController
             Message = "Success",
             Data = await this.priceService.RetrieveAllAsync()
         });
+
+        [HttpGet("get-allProductId")]
+        public async Task<IActionResult> GetAllsync(long productId)
+            => Ok(new Response
+            {
+                StatusCode = 200,
+                Message = "Success",
+                Data = await this.priceService.RetrieveAllAsync(productId)
+            });
 }
 

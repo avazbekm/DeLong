@@ -171,8 +171,7 @@ namespace DeLong.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    WarehouseId = table.Column<int>(type: "integer", nullable: false),
-                    WarehouseId1 = table.Column<long>(type: "bigint", nullable: false),
+                    WarehouseId = table.Column<long>(type: "bigint", nullable: false),
                     Balance = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -182,8 +181,8 @@ namespace DeLong.Data.Migrations
                 {
                     table.PrimaryKey("PK_CashRegisters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CashRegisters_Warehouses_WarehouseId1",
-                        column: x => x.WarehouseId1,
+                        name: "FK_CashRegisters_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
                         principalTable: "Warehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -198,7 +197,7 @@ namespace DeLong.Data.Migrations
                     ArrivalPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     SellingPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     UnitOfMeasure = table.Column<string>(type: "text", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -358,9 +357,9 @@ namespace DeLong.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CashRegisters_WarehouseId1",
+                name: "IX_CashRegisters_WarehouseId",
                 table: "CashRegisters",
-                column: "WarehouseId1");
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_UserId",

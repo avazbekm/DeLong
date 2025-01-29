@@ -11,4 +11,5 @@ public interface IPriceServer
     ValueTask<PriceResultDto> RetrieveByIdAsync(long id);
     ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
     ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync();
+    ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(long productId);
 }

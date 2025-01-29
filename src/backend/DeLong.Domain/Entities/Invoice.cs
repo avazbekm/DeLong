@@ -1,5 +1,5 @@
-﻿using DeLong.Domain.Common;
-using DeLong.Domain.Enums;
+﻿using DeLong.Domain.Enums;
+using DeLong.Domain.Common;
 
 namespace DeLong.Domain.Entities;
 

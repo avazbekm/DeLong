@@ -72,15 +72,12 @@ namespace DeLong.Data.Migrations
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("WarehouseId")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("WarehouseId1")
+                    b.Property<long>("WarehouseId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId1");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("CashRegisters");
                 });
@@ -272,8 +269,8 @@ namespace DeLong.Data.Migrations
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("numeric");
@@ -567,7 +564,7 @@ namespace DeLong.Data.Migrations
                 {
                     b.HasOne("DeLong.Domain.Entities.Warehouse", "Warehouse")
                         .WithMany("CashRegisters")
-                        .HasForeignKey("WarehouseId1")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

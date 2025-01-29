@@ -1,7 +1,6 @@
 ﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
 using DeLong.Application.DTOs.InvoiceItems;
 
 namespace DeLong.WebAPI.Controllers
@@ -60,12 +59,12 @@ namespace DeLong.WebAPI.Controllers
             });
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
+        public async Task<IActionResult> GetAllsync()
             => Ok(new Response
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.invoiceItemService.RetrieveAllAsync(@params, filter, search)
+                Data = await this.invoiceItemService.RetrieveAllAsync()
             });
     }
 

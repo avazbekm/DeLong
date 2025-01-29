@@ -60,12 +60,12 @@ namespace DeLong.WebAPI.Controllers
             });
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
+        public async Task<IActionResult> GetAllsync()
             => Ok(new Response
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.invoiceService.RetrieveAllAsync(@params, filter, search)
+                Data = await this.invoiceService.RetrieveAllAsync()
             });
     }
 
