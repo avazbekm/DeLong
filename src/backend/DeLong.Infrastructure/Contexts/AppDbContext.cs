@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<InvoiceItem> InvoiceItems { get; set; }
     public DbSet<CashRegister> CashRegisters { get; set; }
+    public DbSet<KursDollar> KursDollars { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -220,10 +219,8 @@ namespace DeLong.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    WarehouseId = table.Column<int>(type: "integer", nullable: false),
-                    WarehouseId1 = table.Column<long>(type: "bigint", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    ProductId1 = table.Column<long>(type: "bigint", nullable: true),
+                    WarehouseId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<decimal>(type: "numeric", nullable: false),
                     MinStockLevel = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -234,13 +231,14 @@ namespace DeLong.Data.Migrations
                 {
                     table.PrimaryKey("PK_Stocks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Stocks_Products_ProductId1",
-                        column: x => x.ProductId1,
+                        name: "FK_Stocks_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Stocks_Warehouses_WarehouseId1",
-                        column: x => x.WarehouseId1,
+                        name: "FK_Stocks_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
                         principalTable: "Warehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -329,10 +327,8 @@ namespace DeLong.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    InvoiceId = table.Column<int>(type: "integer", nullable: false),
-                    InvoiceId1 = table.Column<long>(type: "bigint", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    ProductId1 = table.Column<long>(type: "bigint", nullable: false),
+                    InvoiceId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<decimal>(type: "numeric", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -343,14 +339,14 @@ namespace DeLong.Data.Migrations
                 {
                     table.PrimaryKey("PK_InvoiceItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_InvoiceItems_Invoices_InvoiceId1",
-                        column: x => x.InvoiceId1,
+                        name: "FK_InvoiceItems_Invoices_InvoiceId",
+                        column: x => x.InvoiceId,
                         principalTable: "Invoices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_InvoiceItems_Products_ProductId1",
-                        column: x => x.ProductId1,
+                        name: "FK_InvoiceItems_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -367,14 +363,14 @@ namespace DeLong.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InvoiceItems_InvoiceId1",
+                name: "IX_InvoiceItems_InvoiceId",
                 table: "InvoiceItems",
-                column: "InvoiceId1");
+                column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InvoiceItems_ProductId1",
+                name: "IX_InvoiceItems_ProductId",
                 table: "InvoiceItems",
-                column: "ProductId1");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_CustomerId",
@@ -392,14 +388,14 @@ namespace DeLong.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stocks_ProductId1",
+                name: "IX_Stocks_ProductId",
                 table: "Stocks",
-                column: "ProductId1");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stocks_WarehouseId1",
+                name: "IX_Stocks_WarehouseId",
                 table: "Stocks",
-                column: "WarehouseId1");
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CustomerId",

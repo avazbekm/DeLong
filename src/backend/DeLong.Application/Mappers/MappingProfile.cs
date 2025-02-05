@@ -13,6 +13,7 @@ using DeLong.Application.DTOs.Warehouses;
 using DeLong.Application.DTOs.InvoiceItems;
 using DeLong.Application.DTOs.Transactions;
 using DeLong.Application.DTOs.CashRegisters;
+using DeLong.Service.DTOs.KursDollar;
 
 namespace DeLong.Application.Mappers;
 
@@ -85,5 +86,9 @@ public class MappingProfile : Profile
         CreateMap<Price, PriceUpdateDto>().ReverseMap();
         CreateMap<Price, PriceCreationDto>().ReverseMap();
 
+        //DollarKurs
+        CreateMap<KursDollar, KursDollarResultDto>().ReverseMap();
+        CreateMap<KursDollarUpdateDto, KursDollar>().ReverseMap();
+        CreateMap<KursDollar, KursDollarCreationDto>().ReverseMap();
     }
 }

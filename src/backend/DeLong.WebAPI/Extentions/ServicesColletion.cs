@@ -22,6 +22,7 @@ public static class ServicesColletion
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IInvoiceItemService, InvoiceItemService>();
         services.AddScoped<ICashRegisterService, CashRegisterService>();
+        services.AddScoped<IKursDollarService, KursDollarService>();
         
 
         services.AddAutoMapper(typeof(MappingProfile));
