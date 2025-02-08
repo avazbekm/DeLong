@@ -6,8 +6,7 @@ namespace DeLong.Service.Interfaces;
 public interface IKursDollarService
 {
     ValueTask<KursDollarResultDto> AddAsync(KursDollarCreationDto dto);
-    ValueTask<KursDollarResultDto> ModifyAsync(KursDollarUpdateDto dto);
     ValueTask<bool> RemoveAsync(long id);
-    ValueTask<KursDollarResultDto> RetrieveByIdAsync(long id);
+    ValueTask<KursDollarResultDto> RetrieveByIdAsync();
     ValueTask<IEnumerable<KursDollarResultDto>> RetrieveAllAsync();
 }

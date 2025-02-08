@@ -23,13 +23,13 @@ public class KursDollarController : BaseController
         });
 
 
-    [HttpGet("get/{id:long}")]
-    public async Task<IActionResult> GetByIdAsync(long id)
+    [HttpGet("get")]
+    public async Task<IActionResult> GetByIdAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.kursDollarService.RetrieveByIdAsync(id)
+            Data = await this.kursDollarService.RetrieveByIdAsync()
         });
 
     [HttpGet("get-all")]

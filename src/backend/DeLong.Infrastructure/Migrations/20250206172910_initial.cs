@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -43,6 +44,24 @@ namespace DeLong.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KursDollars",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SellingDollar = table.Column<decimal>(type: "numeric", nullable: false),
+                    AdmissionDollar = table.Column<decimal>(type: "numeric", nullable: false),
+                    TodayDate = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KursDollars", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -434,6 +453,9 @@ namespace DeLong.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "InvoiceItems");
+
+            migrationBuilder.DropTable(
+                name: "KursDollars");
 
             migrationBuilder.DropTable(
                 name: "Prices");

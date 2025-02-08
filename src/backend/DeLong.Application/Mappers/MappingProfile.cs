@@ -88,7 +88,6 @@ public class MappingProfile : Profile
 
         //DollarKurs
         CreateMap<KursDollar, KursDollarResultDto>().ReverseMap();
-        CreateMap<KursDollarUpdateDto, KursDollar>().ReverseMap();
         CreateMap<KursDollar, KursDollarCreationDto>().ReverseMap();
     }
 }

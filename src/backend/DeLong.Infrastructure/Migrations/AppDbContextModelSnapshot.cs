@@ -243,6 +243,38 @@ namespace DeLong.Data.Migrations
                     b.ToTable("InvoiceItems");
                 });
 
+            modelBuilder.Entity("DeLong.Domain.Entities.KursDollar", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("AdmissionDollar")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("SellingDollar")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("TodayDate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KursDollars");
+                });
+
             modelBuilder.Entity("DeLong.Domain.Entities.Price", b =>
                 {
                     b.Property<long>("Id")

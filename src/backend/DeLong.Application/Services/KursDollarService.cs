@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.KursDollar;
-using DeLong.Service.DTOs.Prices;
 using DeLong.Service.Interfaces;
+using DeLong.Application.Interfaces;
+using DeLong.Application.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Service.DTOs.KursDollar;
 
 namespace DeLong.Service.Services;
 
@@ -20,7 +19,7 @@ public class KursDollarService : IKursDollarService
     }
     public async ValueTask<KursDollarResultDto> AddAsync(KursDollarCreationDto dto)
     {
-
+        dto.TodayDate = DateTime.Now.ToString("dd.MM.yyyy");
         var mappedKursDollar = this.mapper.Map<KursDollar>(dto);
         await this.kursDollarRepository.CreateAsync(mappedKursDollar);
         await this.kursDollarRepository.SaveChanges();
@@ -29,22 +28,22 @@ public class KursDollarService : IKursDollarService
         return result;
     }
 
-    public ValueTask<KursDollarResultDto> ModifyAsync(KursDollarUpdateDto dto)
-    {
-        throw new NotImplementedException();
-    }
-
     public ValueTask<bool> RemoveAsync(long id)
     {
         throw new NotImplementedException();
     }
 
-    public async ValueTask<KursDollarResultDto> RetrieveByIdAsync(long id)
+    public async ValueTask<KursDollarResultDto> RetrieveByIdAsync()
     {
-        KursDollar existKursDollar = await this.kursDollarRepository.GetAsync(u => u.Id.Equals(id))
-       ?? throw new NotFoundException($"This Price is not found with ID = {id}");
 
-        var result = this.mapper.Map<KursDollarResultDto>(existKursDollar);
+        var price = await this.kursDollarRepository.GetAll()
+                        .OrderByDescending(a => a.CreatedAt)
+                        .FirstOrDefaultAsync();
+
+        if (price == null)
+            throw new NotFoundException($"Dollar kurs kiritilmagan.");
+
+        var result = this.mapper.Map<KursDollarResultDto>(price);
         return result;
     }
 
