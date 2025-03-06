@@ -1,19 +1,24 @@
 ﻿using AutoMapper;
 using DeLong.Domain.Entities;
+using DeLong.Service.DTOs.Sale;
+using DeLong.Service.DTOs.Debts;
 using DeLong.Service.DTOs.Prices;
+using DeLong.Service.DTOs.Employee;
+using DeLong.Service.DTOs.Payments;
+using DeLong.Service.DTOs.SaleItems;
 using DeLong.Application.DTOs.Users;
 using DeLong.Application.DTOs.Assets;
+using DeLong.Service.DTOs.KursDollar;
 using DeLong.Application.DTOs.Stocks;
-using DeLong.Application.DTOs.Invoices;
+using DeLong.Service.DTOs.DebtPayments;
 using DeLong.Application.DTOs.Products;
 using DeLong.Application.DTOs.Suppliers;
 using DeLong.Application.DTOs.Customers;
 using DeLong.Application.DTOs.Categories;
 using DeLong.Application.DTOs.Warehouses;
-using DeLong.Application.DTOs.InvoiceItems;
 using DeLong.Application.DTOs.Transactions;
 using DeLong.Application.DTOs.CashRegisters;
-using DeLong.Service.DTOs.KursDollar;
+using DeLong_Desktop.ApiService.DTOs.Discounts;
 
 namespace DeLong.Application.Mappers;
 
@@ -45,16 +50,6 @@ public class MappingProfile : Profile
         CreateMap<Category, CategoryResultDto>().ReverseMap();
         CreateMap<Category, CategoryUpdateDto>().ReverseMap();
         CreateMap<Category, CategoryCreationDto>().ReverseMap();
-
-        //InvoiceItem
-        CreateMap<InvoiceItem, InvoiceItemResultDto>().ReverseMap();
-        CreateMap<InvoiceItem, InvoiceItemUpdateDto>().ReverseMap();
-        CreateMap<InvoiceItem, InvoiceItemCreationDto>().ReverseMap();
-
-        //Invoice
-        CreateMap<Invoice, InvoiceResultDto>().ReverseMap();
-        CreateMap<Invoice, InvoiceUpdateDto>().ReverseMap();
-        CreateMap<Invoice, InvoiceCreationDto>().ReverseMap();
 
         //Product
         CreateMap<Product, ProductResultDto>().ReverseMap();
@@ -89,5 +84,41 @@ public class MappingProfile : Profile
         //DollarKurs
         CreateMap<KursDollar, KursDollarResultDto>().ReverseMap();
         CreateMap<KursDollar, KursDollarCreationDto>().ReverseMap();
+
+        // Discount uchun mappingx
+        CreateMap<Discount, DiscountResultDto>().ReverseMap();
+        CreateMap<DiscountCreationDto, Discount>().ReverseMap();
+        CreateMap<DiscountUpdateDto, Discount>().ReverseMap();
+
+        //Employee
+        CreateMap<Employee, EmployeeResultDto>().ReverseMap();
+        CreateMap<EmployeeUpdateDto, Employee>().ReverseMap();
+        CreateMap<Employee, EmployeeCreationDto>().ReverseMap();
+
+        // Sale
+        CreateMap<Sale, SaleCreationDto>().ReverseMap();
+        CreateMap<Sale, SaleUpdateDto>().ReverseMap();
+        CreateMap<Sale, SaleResultDto>().ReverseMap();
+
+        // Payment
+        // Payment
+        CreateMap<Payment, PaymentCreationDto>().ReverseMap();
+        CreateMap<Payment, PaymentUpdateDto>().ReverseMap();
+        CreateMap<Payment, PaymentResultDto>(); // Qo‘shimcha qoida kerak emas, standart mapping ishlaydi
+
+        // Debt
+        CreateMap<Debt, DebtCreationDto>().ReverseMap();
+        CreateMap<Debt, DebtUpdateDto>().ReverseMap();
+        CreateMap<Debt, DebtResultDto>().ReverseMap();
+
+        // DebtPayment
+        CreateMap<DebtPayment, DebtPaymentCreationDto>().ReverseMap();
+        CreateMap<DebtPayment, DebtPaymentUpdateDto>().ReverseMap();
+        CreateMap<DebtPayment, DebtPaymentResultDto>().ReverseMap();
+
+        // SaleItem mappings
+        CreateMap<SaleItem, SaleItemResultDto>().ReverseMap();
+        CreateMap<SaleItem, SaleItemUpdateDto>().ReverseMap();
+        CreateMap<SaleItem, SaleItemCreationDto>().ReverseMap();
     }
 }

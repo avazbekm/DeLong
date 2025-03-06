@@ -2,7 +2,10 @@
 
 public enum Role
 {
-    User,
-    Admin,
-    SuperAdmin
+    Mijoz,
+    Agent,
+    Omborchi,
+    Sotuvchi,
+    Boshqaruvchi,
+    Admin
 }

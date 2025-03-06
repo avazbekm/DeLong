@@ -11,14 +11,18 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Price> Prices { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
-    public DbSet<Stock> Stocks { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
-    public DbSet<Invoice> Invoices { get; set; }
-    public DbSet<InvoiceItem> InvoiceItems { get; set; }
     public DbSet<CashRegister> CashRegisters { get; set; }
     public DbSet<KursDollar> KursDollars { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Sale> Sales { get; set; }
+    public DbSet<SaleItem> SaleItems { get; set; }
+    public DbSet<Debt> Debts { get; set; }
+    public DbSet<DebtPayment> DebtPayments { get; set; }
+    public DbSet<Discount> Discounts { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -33,7 +37,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Invoice>()
+        modelBuilder.Entity<Sale>()
             .HasOne(i => i.Customer)
             .WithMany()
             .HasForeignKey(i => i.CustomerId)
@@ -62,11 +66,5 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(t => t.SupplierId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Price>()
-            .HasOne(p => p.Product)
-            .WithMany(p => p.Prices)
-            .HasForeignKey(p => p.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

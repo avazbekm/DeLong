@@ -1,7 +1,6 @@
 ﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
 using DeLong.Application.DTOs.Categories;
 
 namespace DeLong.WebAPI.Controllers

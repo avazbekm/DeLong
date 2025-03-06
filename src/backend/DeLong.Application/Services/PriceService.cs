@@ -24,7 +24,7 @@ public class PriceService:IPriceServer
     {
         Price existPrices = await this.priceRepository.GetAsync(u =>
             u.ProductId.Equals(dto.ProductId) &&
-            u.ArrivalPrice.Equals(dto.ArrivalPrice) &&
+            u.CostPrice.Equals(dto.CostPrice) &&
             u.SellingPrice.Equals(dto.SellingPrice));
         if (existPrices is not null)
             throw new AlreadyExistException($"This Price is already exists with ProductId = {dto.ProductId}");

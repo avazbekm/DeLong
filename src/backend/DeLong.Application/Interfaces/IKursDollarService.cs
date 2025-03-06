@@ -1,5 +1,4 @@
-﻿using DeLong.Application.DTOs.Invoices;
-using DeLong.Service.DTOs.KursDollar;
+﻿using DeLong.Service.DTOs.KursDollar;
 
 namespace DeLong.Service.Interfaces;
 
