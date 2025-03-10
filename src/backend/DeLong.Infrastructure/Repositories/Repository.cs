@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using DeLong.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DeLong.Infrastructure.Repositories;
 
@@ -66,5 +67,10 @@ public class Repository<T> : IRepository<T> where T : Auditable
     public async Task SaveChanges()
     {
         await appDbContext.SaveChangesAsync();
+    }
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
+    {
+        return await appDbContext.Database.BeginTransactionAsync();
     }
 }

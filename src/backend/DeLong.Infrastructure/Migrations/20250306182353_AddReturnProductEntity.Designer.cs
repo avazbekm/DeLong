@@ -3,6 +3,7 @@ using System;
 using DeLong.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeLong.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250306182353_AddReturnProductEntity")]
+    partial class AddReturnProductEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -730,14 +733,13 @@ namespace DeLong.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CustomerId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
@@ -752,12 +754,11 @@ namespace DeLong.Data.Migrations
                     b.Property<decimal>("Quantity")
                         .HasColumnType("numeric");
 
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("TransactionType")
                         .HasColumnType("integer");
-
-                    b.Property<string>("UnitOfMeasure")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -765,12 +766,21 @@ namespace DeLong.Data.Migrations
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("WarehouseIdTo")
+                    b.Property<long?>("WarehouseIdFrom")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("WarehouseIdTo")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("WarehouseIdFrom");
 
                     b.HasIndex("WarehouseIdTo");
 
@@ -1029,19 +1039,39 @@ namespace DeLong.Data.Migrations
 
             modelBuilder.Entity("DeLong.Domain.Entities.Transaction", b =>
                 {
+                    b.HasOne("DeLong.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("DeLong.Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DeLong.Domain.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DeLong.Domain.Entities.Warehouse", "WarehouseFrom")
+                        .WithMany()
+                        .HasForeignKey("WarehouseIdFrom")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("DeLong.Domain.Entities.Warehouse", "WarehouseTo")
                         .WithMany()
                         .HasForeignKey("WarehouseIdTo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("WarehouseFrom");
 
                     b.Navigation("WarehouseTo");
                 });

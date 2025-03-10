@@ -1,17 +1,13 @@
-﻿using DeLong.Domain.Entities;
-using DeLong.Domain.Enums;
+﻿using DeLong.Domain.Enums;
+using DeLong.Service.DTOs.TransactionItems;
 
 namespace DeLong.Application.DTOs.Transactions;
 
 public class TransactionUpdateDto
 {
-    public long Id { get; set; }
-    public long? WarehouseIdFrom { get; set; } // qaysidir ombordan chiqishi
-    public long? WarehouseIdTo { get; set; }  // qaysidir omborga kelishi
-    public long ProductId { get; set; }
-    public decimal PriceProduct { get; set; } // maxsulot narxi
-    public TransactionType TransactionType { get; set; } // kirim, chiqim, qaytarish 
-    public decimal Quantity { get; set; }  // maxsulot soni
-    public long? CustomerId { get; set; }  //  mijozlar
-    public long? SupplierId { get; set; } // yetkazib beruvchi
+    public long Id { get; set; } // Yangilanadigan transaksiyaning identifikatori
+    public long? WarehouseIdTo { get; set; }   // Yangilanishi mumkin bo‘lgan kirim ombori
+    public List<TransactionItemUpdateDto> Items { get; set; } = new List<TransactionItemUpdateDto>(); // Mahsulotlar ro‘yxati
+    public TransactionType? TransactionType { get; set; } // Yangilanishi mumkin bo‘lgan turi
+    public string Comment { get; set; } = string.Empty;   // Yangilanishi mumkin
 }

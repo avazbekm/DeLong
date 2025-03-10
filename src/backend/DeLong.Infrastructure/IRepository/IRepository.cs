@@ -1,4 +1,5 @@
 ﻿using DeLong.Domain.Common;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace DeLong.Application.Interfaces;
@@ -12,4 +13,7 @@ public interface IRepository<T> where T : Auditable
     Task<T> GetAsync(Expression<Func<T, bool>> expression, string[] includes = null);
     IQueryable<T> GetAll(Expression<Func<T, bool>> expression = null, bool isNoTracked = true, string[] includes = null);
     Task SaveChanges();
+
+    // Tranzaksiya metodlari (YANGI QO‘SHILDI)
+    Task<IDbContextTransaction> BeginTransactionAsync();
 }

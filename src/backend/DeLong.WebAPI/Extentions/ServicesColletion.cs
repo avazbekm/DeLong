@@ -28,7 +28,9 @@ public static class ServicesColletion
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IDebtPaymentService, DebtPaymentService>();
         services.AddScoped<ICashRegisterService, CashRegisterService>();
-        
+        services.AddScoped<IReturnProductService, ReturnProductService>();
+        services.AddScoped<ITransactionItemService, TransactionItemService>();
+
 
         services.AddAutoMapper(typeof(MappingProfile));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

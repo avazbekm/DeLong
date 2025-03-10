@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DeLong.Service.DTOs;
 using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.Sale;
 using DeLong.Service.DTOs.Debts;
@@ -19,6 +20,7 @@ using DeLong.Application.DTOs.Warehouses;
 using DeLong.Application.DTOs.Transactions;
 using DeLong.Application.DTOs.CashRegisters;
 using DeLong_Desktop.ApiService.DTOs.Discounts;
+using DeLong.Service.DTOs.TransactionItems;
 
 namespace DeLong.Application.Mappers;
 
@@ -26,71 +28,76 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        //Customer
+        // Customer
         CreateMap<Customer, CustomerResultDto>().ReverseMap();
         CreateMap<Customer, CustomerUpdateDto>().ReverseMap();
         CreateMap<Customer, CustomerCreationDto>().ReverseMap();
 
-        //User
+        // User
         CreateMap<User, UserResultDto>().ReverseMap();
-        CreateMap<UserUpdateDto,User>().ReverseMap();
+        CreateMap<UserUpdateDto, User>().ReverseMap();
         CreateMap<User, UserCreationDto>().ReverseMap();
 
-        //Asset
+        // Asset
         CreateMap<Asset, AssetResultDto>().ReverseMap();
         CreateMap<Asset, AssetUpdateDto>().ReverseMap();
         CreateMap<Asset, AssetCreationDto>().ReverseMap();
 
-        //CashRegister
+        // CashRegister
         CreateMap<CashRegister, CashRegisterResultDto>().ReverseMap();
         CreateMap<CashRegister, CashRegisterUpdateDto>().ReverseMap();
         CreateMap<CashRegister, CashRegisterCreationDto>().ReverseMap();
 
-        //Category
+        // Category
         CreateMap<Category, CategoryResultDto>().ReverseMap();
         CreateMap<Category, CategoryUpdateDto>().ReverseMap();
         CreateMap<Category, CategoryCreationDto>().ReverseMap();
 
-        //Product
+        // Product
         CreateMap<Product, ProductResultDto>().ReverseMap();
         CreateMap<Product, ProductUpdateDto>().ReverseMap();
         CreateMap<Product, ProductCreationDto>().ReverseMap();
 
-        //Stock
+        // Stock
         CreateMap<Stock, StockResultDto>().ReverseMap();
         CreateMap<Stock, StockUpdateDto>().ReverseMap();
         CreateMap<Stock, StockCreationDto>().ReverseMap();
 
-        //Supplier
+        // Supplier
         CreateMap<Supplier, SupplierResultDto>().ReverseMap();
         CreateMap<Supplier, SupplierUpdateDto>().ReverseMap();
         CreateMap<Supplier, SupplierCreationDto>().ReverseMap();
 
-        //Transaction
+        // Transaction
         CreateMap<Transaction, TransactionResultDto>().ReverseMap();
         CreateMap<Transaction, TransactionUpdateDto>().ReverseMap();
-        CreateMap<Transaction, TransactionCreationDto>().ReverseMap();
+        CreateMap<Transaction, TransactionCreationDto>().ReverseMap(); 
+        
+        // TransactionItem
+        CreateMap<TransactionItem, TransactionItemResultDto>().ReverseMap();
+        CreateMap<TransactionItem, TransactionItemUpdateDto>().ReverseMap();
+        CreateMap<TransactionItem, TransactionItemCreationDto>().ReverseMap();
 
-        //Warehouse
+        // Warehouse
         CreateMap<Warehouse, WarehouseResultDto>().ReverseMap();
         CreateMap<Warehouse, WarehouseUpdatedDto>().ReverseMap();
         CreateMap<Warehouse, WarehouseCreationDto>().ReverseMap();
 
-        //Price
+        // Price
         CreateMap<Price, PriceResultDto>().ReverseMap();
         CreateMap<Price, PriceUpdateDto>().ReverseMap();
         CreateMap<Price, PriceCreationDto>().ReverseMap();
 
-        //DollarKurs
+        // DollarKurs
         CreateMap<KursDollar, KursDollarResultDto>().ReverseMap();
         CreateMap<KursDollar, KursDollarCreationDto>().ReverseMap();
 
-        // Discount uchun mappingx
+        // Discount uchun mapping
         CreateMap<Discount, DiscountResultDto>().ReverseMap();
         CreateMap<DiscountCreationDto, Discount>().ReverseMap();
         CreateMap<DiscountUpdateDto, Discount>().ReverseMap();
 
-        //Employee
+        // Employee
         CreateMap<Employee, EmployeeResultDto>().ReverseMap();
         CreateMap<EmployeeUpdateDto, Employee>().ReverseMap();
         CreateMap<Employee, EmployeeCreationDto>().ReverseMap();
@@ -101,10 +108,9 @@ public class MappingProfile : Profile
         CreateMap<Sale, SaleResultDto>().ReverseMap();
 
         // Payment
-        // Payment
         CreateMap<Payment, PaymentCreationDto>().ReverseMap();
         CreateMap<Payment, PaymentUpdateDto>().ReverseMap();
-        CreateMap<Payment, PaymentResultDto>(); // Qo‘shimcha qoida kerak emas, standart mapping ishlaydi
+        CreateMap<Payment, PaymentResultDto>();
 
         // Debt
         CreateMap<Debt, DebtCreationDto>().ReverseMap();
@@ -120,5 +126,10 @@ public class MappingProfile : Profile
         CreateMap<SaleItem, SaleItemResultDto>().ReverseMap();
         CreateMap<SaleItem, SaleItemUpdateDto>().ReverseMap();
         CreateMap<SaleItem, SaleItemCreationDto>().ReverseMap();
+
+        // ReturnProduct mappings (YANGI QO‘SHILDI)
+        CreateMap<ReturnProduct, ReturnProductCreationDto>().ReverseMap();
+        CreateMap<ReturnProduct, ReturnProductUpdateDto>().ReverseMap();
+        CreateMap<ReturnProduct, ReturnProductResultDto>().ReverseMap();
     }
 }

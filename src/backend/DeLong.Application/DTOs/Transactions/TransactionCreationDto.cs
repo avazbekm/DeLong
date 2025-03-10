@@ -1,17 +1,12 @@
 ﻿using DeLong.Domain.Enums;
+using DeLong.Service.DTOs.TransactionItems;
 
 namespace DeLong.Application.DTOs.Transactions;
 
 public class TransactionCreationDto
 {
-    public long? WarehouseIdFrom { get; set; } // qaysidir ombordan chiqishi
-    public long? WarehouseIdTo { get; set; }  // qaysidir omborga kelishi
-    public long ProductId { get; set; }
-    public decimal PriceProduct { get; set; } // maxsulot narxi
-
-    public TransactionType TransactionType { get; set; } // kirim, chiqim, qaytarish 
-    public decimal Quantity { get; set; }  // maxsulot soni
-
-    public long? CustomerId { get; set; }  //  mijozlar
-    public long? SupplierId { get; set; } // yetkazib beruvchi
+    public long WarehouseIdTo { get; set; }   // Kirim ombori
+    public List<TransactionItemCreationDto> Items { get; set; } = new List<TransactionItemCreationDto>(); // Mahsulotlar ro‘yxati
+    public TransactionType TransactionType { get; set; }
+    public string Comment { get; set; } = string.Empty;
 }

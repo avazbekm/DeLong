@@ -23,6 +23,7 @@ public class AppDbContext : DbContext
     public DbSet<Debt> Debts { get; set; }
     public DbSet<DebtPayment> DebtPayments { get; set; }
     public DbSet<Discount> Discounts { get; set; }
+    public DbSet<ReturnProduct> ReturnProducts { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -44,27 +45,9 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.WarehouseFrom)
-            .WithMany()
-            .HasForeignKey(t => t.WarehouseIdFrom)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Transaction>()
             .HasOne(t => t.WarehouseTo)
             .WithMany()
             .HasForeignKey(t => t.WarehouseIdTo)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.Customer)
-            .WithMany()
-            .HasForeignKey(t => t.CustomerId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.Supplier)
-            .WithMany()
-            .HasForeignKey(t => t.SupplierId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -6,40 +6,56 @@ using DeLong.Application.DTOs.Transactions;
 
 namespace DeLong.WebAPI.Controllers;
 
-public class TransactionController : ControllerBase
+public class TransactionController : BaseController
 {
     private readonly ITransactionService transactionService;
+
     public TransactionController(ITransactionService transactionService)
     {
         this.transactionService = transactionService;
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> AddAsync(TransactionCreationDto dto)
-        => Ok(new Response
+    public async Task<IActionResult> AddAsync([FromBody] TransactionCreationDto dto)
+    {
+        if (dto == null || dto.Items == null || !dto.Items.Any())
+        {
+            return Ok(new Response
+            {
+                StatusCode = 400,
+                Message = "Transaction ma'lumotlari yoki mahsulotlar ro'yxati null bo'lmasligi kerak.",
+                Data = null
+            });
+        }
+
+        return Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
             Data = await this.transactionService.AddAsync(dto)
         });
+    }
 
     [HttpPut("update")]
-    public async Task<IActionResult> UpdateAsync(TransactionUpdateDto dto)
-        => Ok(new Response
+    public async Task<IActionResult> UpdateAsync([FromBody] TransactionUpdateDto dto)
+    {
+        if (dto == null)
+        {
+            return Ok(new Response
+            {
+                StatusCode = 400,
+                Message = "Transaction ma'lumotlari null bo'lmasligi kerak.",
+                Data = null
+            });
+        }
+
+        return Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
             Data = await this.transactionService.ModifyAsync(dto)
         });
-
-    [HttpDelete("delete/{id:long}")]
-    public async Task<IActionResult> DeleteAsync(long id)
-        => Ok(new Response
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = await this.transactionService.RemoveAsync(id)
-        });
+    }
 
     [HttpDelete("remove/{id:long}")]
     public async Task<IActionResult> DestroyAsync(long id)
@@ -60,12 +76,11 @@ public class TransactionController : ControllerBase
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
+    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, Filter filter)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionService.RetrieveAllAsync(@params, filter, search)
+            Data = await this.transactionService.RetrieveAllAsync()
         });
 }
-

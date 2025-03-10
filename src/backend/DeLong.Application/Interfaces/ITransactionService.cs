@@ -9,6 +9,5 @@ public interface ITransactionService
     ValueTask<TransactionResultDto> ModifyAsync(TransactionUpdateDto dto);
     ValueTask<bool> RemoveAsync(long id);
     ValueTask<TransactionResultDto> RetrieveByIdAsync(long id);
-    ValueTask<IEnumerable<TransactionResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
     ValueTask<IEnumerable<TransactionResultDto>> RetrieveAllAsync();
 }
