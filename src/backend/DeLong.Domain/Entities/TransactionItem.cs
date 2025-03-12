@@ -4,6 +4,7 @@ namespace DeLong.Domain.Entities;
 
 public class TransactionItem: Auditable
 {
+    public long TransactionId { get; set; }
     public long ProductId { get; set; }
     public required Product Product { get; set; }
     public decimal Quantity { get; set; }
