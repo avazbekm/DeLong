@@ -15,46 +15,22 @@ public class TransactionItemController : BaseController
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> AddAsync([FromBody] TransactionItemCreationDto dto)
-    {
-        if (dto == null)
-        {
-            return Ok(new Response
-            {
-                StatusCode = 400,
-                Message = "TransactionItem ma'lumotlari null bo'lmasligi kerak.",
-                Data = null
-            });
-        }
-
-        return Ok(new Response
+    public async Task<IActionResult> AddAsync(TransactionItemCreationDto dto)
+        => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
             Data = await this.transactionItemService.AddAsync(dto)
         });
-    }
 
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync([FromBody] TransactionItemUpdateDto dto)
-    {
-        if (dto == null)
-        {
-            return Ok(new Response
-            {
-                StatusCode = 400,
-                Message = "TransactionItem ma'lumotlari null bo'lmasligi kerak.",
-                Data = null
-            });
-        }
-
-        return Ok(new Response
+        => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
             Data = await this.transactionItemService.ModifyAsync(dto)
         });
-    }
 
     [HttpDelete("remove/{id:long}")]
     public async Task<IActionResult> DestroyAsync(long id)

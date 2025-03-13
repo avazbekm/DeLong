@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<TransactionItem> TransactionItems { get; set; }
     public DbSet<CashRegister> CashRegisters { get; set; }
     public DbSet<KursDollar> KursDollars { get; set; }
     public DbSet<Employee> Employees { get; set; }

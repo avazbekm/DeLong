@@ -17,45 +17,21 @@ public class TransactionController : BaseController
 
     [HttpPost("create")]
     public async Task<IActionResult> AddAsync([FromBody] TransactionCreationDto dto)
-    {
-        if (dto == null || dto.Items == null || !dto.Items.Any())
-        {
-            return Ok(new Response
-            {
-                StatusCode = 400,
-                Message = "Transaction ma'lumotlari yoki mahsulotlar ro'yxati null bo'lmasligi kerak.",
-                Data = null
-            });
-        }
-
-        return Ok(new Response
+        => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
             Data = await this.transactionService.AddAsync(dto)
         });
-    }
 
     [HttpPut("update")]
     public async Task<IActionResult> UpdateAsync([FromBody] TransactionUpdateDto dto)
-    {
-        if (dto == null)
-        {
-            return Ok(new Response
-            {
-                StatusCode = 400,
-                Message = "Transaction ma'lumotlari null bo'lmasligi kerak.",
-                Data = null
-            });
-        }
-
-        return Ok(new Response
+        => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
             Data = await this.transactionService.ModifyAsync(dto)
         });
-    }
 
     [HttpDelete("remove/{id:long}")]
     public async Task<IActionResult> DestroyAsync(long id)
