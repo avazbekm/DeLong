@@ -21,10 +21,6 @@ public class TransactionItemService : ITransactionItemService
 
     public async ValueTask<TransactionItemResultDto> AddAsync(TransactionItemCreationDto dto)
     {
-        // ProductId bo'yicha takrorlanishni tekshirish
-        TransactionItem existItem = await this.transactionItemRepository.GetAsync(u => u.ProductId.Equals(dto.ProductId));
-        if (existItem != null)
-            throw new AlreadyExistException($"TransactionItem already exists with ProductId = {dto.ProductId}");
 
         var mappedItem = this.mapper.Map<TransactionItem>(dto);
         await this.transactionItemRepository.CreateAsync(mappedItem);
