@@ -14,17 +14,4 @@ public class Auditable
 
     public bool IsDeleted { get; set; }
 
-    // Konstruktor
-    public Auditable()
-    {
-        CreatedAt = GetUzbekistanTime();
-    }
-
-    // O‘zbekiston vaqtini olish uchun metod
-    private static DateTimeOffset GetUzbekistanTime()
-    {
-        // O‘zbekiston vaqti uchun TimeZoneInfo
-        TimeZoneInfo uzbTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time");
-        return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, uzbTimeZone);
-    }
 }

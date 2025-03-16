@@ -1,89 +1,88 @@
 ﻿using AutoMapper;
 using DeLong.Domain.Entities;
 using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
 using Microsoft.EntityFrameworkCore;
 using DeLong.Application.Exceptions;
-using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
 using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.Service.Services;
 
 #pragma warning disable // warninglarni o'chirish uchun
-public class CashRegisterService:ICashRegisterService
+public class CashRegisterService : ICashRegisterService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<CashRegister> cashRegisterRepository;
-    public CashRegisterService(IRepository<CashRegister> cashRegisterRepository, IMapper mapper)
+    private readonly IRepository<CashRegister> _repository;
+    private readonly IMapper _mapper;
+
+    public CashRegisterService(IRepository<CashRegister> repository, IMapper mapper)
     {
-        this.mapper = mapper;
-        this.cashRegisterRepository = cashRegisterRepository;
+        _repository = repository;
+        _mapper = mapper;
     }
 
     public async ValueTask<CashRegisterResultDto> AddAsync(CashRegisterCreationDto dto)
     {
-        CashRegister existCashRegister = await this.cashRegisterRepository.GetAsync(u => u.WarehouseId.Equals(dto.WarehouseId));
-        if (existCashRegister is not null)
-            throw new AlreadyExistException($"This Cashregister is already exists with Id = {dto.WarehouseId}");
+        var mappedCashRegister = _mapper.Map<CashRegister>(dto);
+        await _repository.CreateAsync(mappedCashRegister);
+        await _repository.SaveChanges();
 
-        var mappedCashRegisters = this.mapper.Map<CashRegister>(dto);
-        await this.cashRegisterRepository.CreateAsync(mappedCashRegisters);
-        await this.cashRegisterRepository.SaveChanges();
-
-        var result = this.mapper.Map<CashRegisterResultDto>(mappedCashRegisters);
-        return result;
+        return _mapper.Map<CashRegisterResultDto>(mappedCashRegister);
     }
 
     public async ValueTask<CashRegisterResultDto> ModifyAsync(CashRegisterUpdateDto dto)
     {
-        CashRegister existCashRegister = await this.cashRegisterRepository.GetAsync(u => u.Id.Equals(dto.Id))
-            ?? throw new NotFoundException($"This CashRegister is not found with ID = {dto.Id}");
+        var existCashRegister = await _repository.GetAsync(r => r.Id == dto.Id)
+            ?? throw new NotFoundException($"CashRegister not found with ID = {dto.Id}");
 
-        var mappedCashRegister = this.mapper.Map(dto, existCashRegister);
-        this.cashRegisterRepository.Update(mappedCashRegister);
-        await this.cashRegisterRepository.SaveChanges();
+        _mapper.Map(dto, existCashRegister);
+        _repository.Update(existCashRegister);
+        await _repository.SaveChanges();
 
-        var result = this.mapper.Map<CashRegisterResultDto>(mappedCashRegister);
-        return result;
+        return _mapper.Map<CashRegisterResultDto>(existCashRegister);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        CashRegister existCashRegisters = await this.cashRegisterRepository.GetAsync(u => u.Id.Equals(id))
-            ?? throw new NotFoundException($"This CashRegisters is not found with ID = {id}");
+        var existCashRegister = await _repository.GetAsync(r => r.Id == id)
+            ?? throw new NotFoundException($"CashRegister not found with ID = {id}");
 
-        this.cashRegisterRepository.Delete(existCashRegisters);
-        await this.cashRegisterRepository.SaveChanges();
+        _repository.Delete(existCashRegister);
+        await _repository.SaveChanges();
         return true;
     }
 
     public async ValueTask<CashRegisterResultDto> RetrieveByIdAsync(long id)
     {
-        CashRegister existCashRegister = await this.cashRegisterRepository.GetAsync(u => u.Id.Equals(id))
-            ?? throw new NotFoundException($"This cashregister is not found with ID = {id}");
+        var existCashRegister = await _repository.GetAsync(r => r.Id == id)
+            ?? throw new NotFoundException($"CashRegister not found with ID = {id}");
 
-        var result = this.mapper.Map<CashRegisterResultDto>(existCashRegister);
-        return result;
-    }
-
-    public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
-    {
-        var cashregisters = await this.cashRegisterRepository.GetAll()
-            .ToPaginate(@params)
-            .OrderBy(filter)
-            .ToListAsync();
-
-        var result = cashregisters.Where(cashregister => cashregister.WarehouseId.ToString().Contains(search, StringComparison.OrdinalIgnoreCase));
-        var mappedCashRegisters = this.mapper.Map<List<CashRegisterResultDto>>(result);
-        return mappedCashRegisters;
+        return _mapper.Map<CashRegisterResultDto>(existCashRegister);
     }
 
     public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllAsync()
     {
-        var cashregisters = await this.cashRegisterRepository.GetAll()
+        var cashRegisters = await _repository.GetAll()
+            .Where(r => !r.IsDeleted) // Soft delete tekshiruvi
             .ToListAsync();
-        var result = this.mapper.Map<IEnumerable<CashRegisterResultDto>>(cashregisters);
-        return result;
+
+        return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
+    }
+
+    public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByUserIdAsync(long userId)
+    {
+        var cashRegisters = await _repository.GetAll()
+            .Where(r => r.UserId == userId && !r.IsDeleted)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
+    }
+
+    public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByWarehouseIdAsync(long warehouseId)
+    {
+        var cashRegisters = await _repository.GetAll()
+            .Where(r => r.WarehouseId == warehouseId && !r.IsDeleted)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
     }
 }

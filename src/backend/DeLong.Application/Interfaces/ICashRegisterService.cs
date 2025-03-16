@@ -10,6 +10,7 @@ public interface ICashRegisterService
     ValueTask<CashRegisterResultDto> ModifyAsync(CashRegisterUpdateDto dto);
     ValueTask<bool> RemoveAsync(long id);
     ValueTask<CashRegisterResultDto> RetrieveByIdAsync(long id);
-    ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
     ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllAsync();
+    ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByUserIdAsync(long userId);
+    ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByWarehouseIdAsync(long warehouseId);
 }

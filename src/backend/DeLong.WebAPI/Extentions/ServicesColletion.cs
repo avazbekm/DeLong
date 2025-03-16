@@ -28,6 +28,8 @@ public static class ServicesColletion
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IDebtPaymentService, DebtPaymentService>();
         services.AddScoped<ICashRegisterService, CashRegisterService>();
+        services.AddScoped<ICashTransferService, CashTransferService>();
+        services.AddScoped<ICashWarehouseService, CashWarehouseService>();
         services.AddScoped<IReturnProductService, ReturnProductService>();
         services.AddScoped<ITransactionItemService, TransactionItemService>();
 

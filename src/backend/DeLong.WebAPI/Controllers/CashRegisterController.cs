@@ -1,19 +1,17 @@
-﻿using DeLong.Application.DTOs.CashRegisters;
-using DeLong.Application.DTOs.Customers;
-using DeLong.Domain.Configurations;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Http;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.WebAPI.Controllers
 {
     public class CashRegisterController : BaseController
     {
-        private readonly ICashRegisterService cashRegisterService;
-        public CashRegisterController(ICashRegisterService cashRegisterService)
+        private readonly ICashRegisterService _service;
+
+        public CashRegisterController(ICashRegisterService service)
         {
-            this.cashRegisterService = cashRegisterService;
+            _service = service;
         }
 
         [HttpPost("create")]
@@ -22,7 +20,7 @@ namespace DeLong.WebAPI.Controllers
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.cashRegisterService.AddAsync(dto)
+                Data = await _service.AddAsync(dto)
             });
 
         [HttpPut("update")]
@@ -31,16 +29,7 @@ namespace DeLong.WebAPI.Controllers
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.cashRegisterService.ModifyAsync(dto)
-            });
-
-        [HttpDelete("delete/{id:long}")]
-        public async Task<IActionResult> DeleteAsync(long id)
-            => Ok(new Response
-            {
-                StatusCode = 200,
-                Message = "Success",
-                Data = await this.cashRegisterService.RemoveAsync(id)
+                Data = await _service.ModifyAsync(dto)
             });
 
         [HttpDelete("remove/{id:long}")]
@@ -49,7 +38,7 @@ namespace DeLong.WebAPI.Controllers
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.cashRegisterService.RemoveAsync(id)
+                Data = await _service.RemoveAsync(id)
             });
 
         [HttpGet("get/{id:long}")]
@@ -58,16 +47,34 @@ namespace DeLong.WebAPI.Controllers
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.cashRegisterService.RetrieveByIdAsync(id)
+                Data = await _service.RetrieveByIdAsync(id)
             });
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, Filter filter)
+        public async Task<IActionResult> GetAllAsync()
             => Ok(new Response
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data =await this.cashRegisterService.RetrieveAllAsync(@params, filter)
+                Data = await _service.RetrieveAllAsync()
+            });
+
+        [HttpGet("get-by-user/{userId:long}")]
+        public async Task<IActionResult> GetByUserIdAsync(long userId)
+            => Ok(new Response
+            {
+                StatusCode = 200,
+                Message = "Success",
+                Data = await _service.RetrieveAllByUserIdAsync(userId)
+            });
+
+        [HttpGet("get-by-warehouse/{warehouseId:long}")]
+        public async Task<IActionResult> GetByWarehouseIdAsync(long warehouseId)
+            => Ok(new Response
+            {
+                StatusCode = 200,
+                Message = "Success",
+                Data = await _service.RetrieveAllByWarehouseIdAsync(warehouseId)
             });
     }
 }

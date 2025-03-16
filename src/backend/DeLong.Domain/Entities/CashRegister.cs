@@ -15,15 +15,10 @@ public class CashRegister : Auditable
     public decimal UsdBalance { get; set; }  // dollar mablag' qoldiq
     public decimal DebtAmount { get; set; } // Nasiya summasi
 
-    public DateTimeOffset OpenedAt { get; set; } = GetUzbekistanTime();
+    public DateTimeOffset OpenedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ClosedAt { get; set; }
 
     // Ombordan kirim va omborga chiqimlar bilan bog‘lanish uchun
     public List<CashTransfer> Transfers { get; set; } = new();
 
-    private static DateTimeOffset GetUzbekistanTime()
-    {
-        TimeZoneInfo uzbTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time");
-        return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, uzbTimeZone);
-    }
 }

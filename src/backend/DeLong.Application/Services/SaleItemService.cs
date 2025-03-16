@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
 using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
