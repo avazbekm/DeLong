@@ -20,4 +20,3 @@ public class CashRegisterResultDto
 
     public List<CashTransferResultDto> Transfers { get; set; } = new(); // Transferlar ro‘yxati
 }
-

@@ -1,6 +1,4 @@
-﻿using DeLong.Service.DTOs.CashTransfers;
-
-public class CashRegisterCreationDto
+﻿public class CashRegisterCreationDto
 {
     public long UserId { get; set; } // Kassani ochgan kassir ID si
     public long WarehouseId { get; set; } // Omborni bog‘lash uchun ID
