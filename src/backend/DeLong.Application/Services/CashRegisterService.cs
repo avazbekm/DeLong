@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
 using DeLong.Application.DTOs.CashRegisters;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace DeLong.Service.Services;
 
@@ -84,5 +86,14 @@ public class CashRegisterService : ICashRegisterService
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
+    }
+
+    public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveOpenRegistersAsync()
+    {
+        var openRegisters = await _repository.GetAll()
+            .Where(r => r.ClosedAt == null && !r.IsDeleted) // Ochiq va o‘chirilmagan kassalar
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<CashRegisterResultDto>>(openRegisters);
     }
 }

@@ -50,12 +50,16 @@ public class CashWarehouseService : ICashWarehouseService
         return true;
     }
 
-    public async ValueTask<CashWarehouseResultDto> RetrieveByIdAsync(long id)
+    public async ValueTask<CashWarehouseResultDto> RetrieveByIdAsync()
     {
-        var existCashWarehouse = await _repository.GetAsync(w => w.Id == id)
-            ?? throw new NotFoundException($"CashWarehouse not found with ID = {id}");
+        // Id o‘rniga eng oxirgi qo‘shilgan zaxira omborini olamiz
+        var latestCashWarehouse = await _repository.GetAll()
+            .Where(w => !w.IsDeleted) // Agar IsDeleted property bo‘lsa
+            .OrderByDescending(w => w.CreatedAt) // CreatedAt bo‘yicha eng so‘nggi
+            .FirstOrDefaultAsync()
+            ?? throw new NotFoundException("Hech qanday zaxira ombori topilmadi");
 
-        return _mapper.Map<CashWarehouseResultDto>(existCashWarehouse);
+        return _mapper.Map<CashWarehouseResultDto>(latestCashWarehouse);
     }
 
     public async ValueTask<IEnumerable<CashWarehouseResultDto>> RetrieveAllAsync()

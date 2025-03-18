@@ -1,8 +1,8 @@
 ﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
-using DeLong.Service.DTOs.CashWarehouse;
 using DeLong.WebAPI.Controllers;
+using DeLong.Service.DTOs.CashWarehouse;
 
 public class CashWarehouseController : BaseController
 {
@@ -40,13 +40,13 @@ public class CashWarehouseController : BaseController
             Data = await _service.RemoveAsync(id)
         });
 
-    [HttpGet("get/{id:long}")]
-    public async Task<IActionResult> GetByIdAsync(long id)
+    [HttpGet("get")]
+    public async Task<IActionResult> GetByIdAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _service.RetrieveByIdAsync(id)
+            Data = await _service.RetrieveByIdAsync()
         });
 
     [HttpGet("get-all")]

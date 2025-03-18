@@ -76,5 +76,14 @@ namespace DeLong.WebAPI.Controllers
                 Message = "Success",
                 Data = await _service.RetrieveAllByWarehouseIdAsync(warehouseId)
             });
+
+        [HttpGet("get-open")]
+        public async Task<IActionResult> GetOpenRegistersAsync()
+            => Ok(new Response
+            {
+                StatusCode = 200,
+                Message = "Success",
+                Data = await _service.RetrieveOpenRegistersAsync()
+            });
     }
 }
