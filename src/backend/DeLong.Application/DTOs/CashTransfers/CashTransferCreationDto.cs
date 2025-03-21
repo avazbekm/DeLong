@@ -1,4 +1,5 @@
 ﻿using DeLong.Domain.Entities;
+using DeLong.Domain.Enums;
 
 namespace DeLong.Service.DTOs.CashTransfers;
 
@@ -10,5 +11,6 @@ public class CashTransferCreationDto
     public string Currency { get; set; } = string.Empty;
     public decimal Amount { get; set; }
     public string Note { get; set; } = string.Empty;
+    public CashTransferType TransferType { get; set; } // Yangi qo‘shildi
     public DateTimeOffset TransferDate { get; set; }
 }

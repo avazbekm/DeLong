@@ -13,7 +13,6 @@ public class CashRegister : Auditable
     public decimal UzsBalance { get; set; }  // so'm mablag' qoldiq
     public decimal UzpBalance { get; set; }  // plastik mablag' qoldiq
     public decimal UsdBalance { get; set; }  // dollar mablag' qoldiq
-    public decimal DebtAmount { get; set; } // Nasiya summasi
 
     public DateTimeOffset OpenedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? ClosedAt { get; set; }
