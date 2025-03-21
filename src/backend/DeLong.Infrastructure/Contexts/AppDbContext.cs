@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public DbSet<Asset> Assets { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Price> Prices { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
@@ -35,6 +36,8 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<RefreshToken>().HasIndex(rt => rt.Token).IsUnique();
+
         modelBuilder.Entity<Category>()
             .HasMany(c => c.Products)
             .WithOne(p => p.Category)
