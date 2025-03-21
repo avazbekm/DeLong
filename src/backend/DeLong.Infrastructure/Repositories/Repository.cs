@@ -21,20 +21,20 @@ public class Repository<T> : IRepository<T> where T : Auditable
 
     public async Task CreateAsync(T entity)
     {
-        entity.CreatedAt = DateTime.UtcNow;
+        entity.CreatedAt = DateTimeOffset.UtcNow;
         await dbSet.AddAsync(entity);
     }
 
     public void Update(T entity)
     {
-        entity.UpdatedAt = DateTime.UtcNow;
+        entity.UpdatedAt = DateTimeOffset.UtcNow;
         appDbContext.Entry(entity).State = EntityState.Modified;
     }
 
     public void Delete(T entity)
     {
         entity.IsDeleted = true;
-        entity.UpdatedAt = DateTime.UtcNow;
+        entity.UpdatedAt = DateTimeOffset.UtcNow;
         appDbContext.Entry(entity).State = EntityState.Modified;
     }
 
