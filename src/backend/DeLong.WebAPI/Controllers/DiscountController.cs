@@ -1,7 +1,7 @@
-﻿using DeLong.WebAPI.Models; // Response modeli uchun
-using Microsoft.AspNetCore.Mvc;
-using DeLong.Service.Interfaces;
+﻿using DeLong.Service.Interfaces;
+using DeLong.WebAPI.Models; // Response modeli uchun
 using DeLong_Desktop.ApiService.DTOs.Discounts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 

@@ -1,7 +1,7 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using DeLong.Service.DTOs.DebtPayments;
 using DeLong.Service.Interfaces;
-using DeLong.Service.DTOs.DebtPayments;
+using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 

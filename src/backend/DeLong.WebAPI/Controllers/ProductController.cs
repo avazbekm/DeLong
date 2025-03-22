@@ -1,8 +1,8 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using DeLong.Service.Interfaces;
+﻿using DeLong.Application.DTOs.Products;
 using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Products;
+using DeLong.Service.Interfaces;
+using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers
 {
@@ -67,7 +67,7 @@ namespace DeLong.WebAPI.Controllers
                 Message = "Success",
                 Data = await this.productService.RetrieveAllAsync(@params, filter, search)
             });
-       
+
         [HttpGet("get-allProducts")]
         public async Task<IActionResult> GetAllsync()
             => Ok(new Response

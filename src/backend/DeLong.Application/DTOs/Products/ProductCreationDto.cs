@@ -1,6 +1,4 @@
-﻿using DeLong.Domain.Entities;
-
-namespace DeLong.Application.DTOs.Products;
+﻿namespace DeLong.Application.DTOs.Products;
 
 public class ProductCreationDto
 {

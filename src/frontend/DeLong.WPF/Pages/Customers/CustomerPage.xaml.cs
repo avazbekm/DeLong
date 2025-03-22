@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using DeLong.WPF.Windows.Customers;
+using System.Windows;
 using System.Windows.Controls;
-using DeLong.WPF.Windows.Customers;
 
 namespace DeLong.WPF.Pages.Customers;
 

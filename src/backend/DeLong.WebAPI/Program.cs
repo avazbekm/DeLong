@@ -1,12 +1,12 @@
-﻿using Serilog;
+﻿using DeLong.Infrastructure.Contexts;
+using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Extentions;
 using DeLong.WebAPI.Middlewares;
-using Microsoft.EntityFrameworkCore;
-using DeLong.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
-using DeLong.Service.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

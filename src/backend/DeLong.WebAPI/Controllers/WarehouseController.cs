@@ -1,7 +1,7 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using DeLong.Application.DTOs.Warehouses;
 using DeLong.Service.Interfaces;
-using DeLong.Application.DTOs.Warehouses;
+using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers
 {

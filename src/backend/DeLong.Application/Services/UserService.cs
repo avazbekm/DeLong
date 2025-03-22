@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
 using DeLong.Application.DTOs.Users;
 using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using DeLong.Application.Extensions;
+using DeLong.Application.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;

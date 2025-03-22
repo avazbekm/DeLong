@@ -1,5 +1,5 @@
-﻿using DeLong.WebAPI.Models;
-using DeLong.Application.Exceptions;
+﻿using DeLong.Application.Exceptions;
+using DeLong.WebAPI.Models;
 
 namespace DeLong.WebAPI.Middlewares;
 

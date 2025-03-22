@@ -1,5 +1,4 @@
 ﻿using DeLong.Domain.Common;
-using System.ComponentModel.DataAnnotations;
 
 namespace DeLong.Domain.Entities;
 

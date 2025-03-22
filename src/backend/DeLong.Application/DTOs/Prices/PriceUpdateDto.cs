@@ -1,6 +1,4 @@
-﻿using DeLong.Domain.Entities;
-
-namespace DeLong.Service.DTOs.Prices;
+﻿namespace DeLong.Service.DTOs.Prices;
 
 public class PriceUpdateDto
 {

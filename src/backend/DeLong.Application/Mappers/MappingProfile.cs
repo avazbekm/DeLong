@@ -1,27 +1,27 @@
 ﻿using AutoMapper;
-using DeLong.Service.DTOs;
-using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.Sale;
-using DeLong.Service.DTOs.Debts;
-using DeLong.Service.DTOs.Prices;
-using DeLong.Service.DTOs.Employee;
-using DeLong.Service.DTOs.Payments;
-using DeLong.Service.DTOs.SaleItems;
-using DeLong.Application.DTOs.Users;
 using DeLong.Application.DTOs.Assets;
-using DeLong.Service.DTOs.KursDollar;
-using DeLong.Application.DTOs.Stocks;
-using DeLong.Service.DTOs.DebtPayments;
-using DeLong.Application.DTOs.Products;
-using DeLong.Application.DTOs.Suppliers;
+using DeLong.Application.DTOs.CashRegisters;
+using DeLong.Application.DTOs.Categories;
 using DeLong.Application.DTOs.Customers;
+using DeLong.Application.DTOs.Products;
+using DeLong.Application.DTOs.Stocks;
+using DeLong.Application.DTOs.Suppliers;
+using DeLong.Application.DTOs.Transactions;
+using DeLong.Application.DTOs.Users;
+using DeLong.Application.DTOs.Warehouses;
+using DeLong.Domain.Entities;
+using DeLong.Service.DTOs;
 using DeLong.Service.DTOs.CashTransfers;
 using DeLong.Service.DTOs.CashWarehouse;
-using DeLong.Application.DTOs.Categories;
-using DeLong.Application.DTOs.Warehouses;
-using DeLong.Application.DTOs.Transactions;
+using DeLong.Service.DTOs.DebtPayments;
+using DeLong.Service.DTOs.Debts;
+using DeLong.Service.DTOs.Employee;
+using DeLong.Service.DTOs.KursDollar;
+using DeLong.Service.DTOs.Payments;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Service.DTOs.Sale;
+using DeLong.Service.DTOs.SaleItems;
 using DeLong.Service.DTOs.TransactionItems;
-using DeLong.Application.DTOs.CashRegisters;
 using DeLong_Desktop.ApiService.DTOs.Discounts;
 
 namespace DeLong.Application.Mappers;
@@ -48,8 +48,8 @@ public class MappingProfile : Profile
         // CashRegister
         CreateMap<CashRegister, CashRegisterResultDto>().ReverseMap();
         CreateMap<CashRegister, CashRegisterUpdateDto>().ReverseMap();
-        CreateMap<CashRegister, CashRegisterCreationDto>().ReverseMap();    
-        
+        CreateMap<CashRegister, CashRegisterCreationDto>().ReverseMap();
+
         // CashTransfer
         CreateMap<CashTransfer, CashTransferResultDto>().ReverseMap();
         CreateMap<CashTransfer, CashTransferUpdateDto>().ReverseMap();
@@ -59,7 +59,7 @@ public class MappingProfile : Profile
         CreateMap<CashWarehouse, CashWarehouseResultDto>().ReverseMap();
         CreateMap<CashWarehouse, CashWarehouseUpdateDto>().ReverseMap();
         CreateMap<CashWarehouse, CashWarehouseCreationDto>().ReverseMap();
-        
+
         // Category
         CreateMap<Category, CategoryResultDto>().ReverseMap();
         CreateMap<Category, CategoryUpdateDto>().ReverseMap();
@@ -83,8 +83,8 @@ public class MappingProfile : Profile
         // Transaction
         CreateMap<Transaction, TransactionResultDto>().ReverseMap();
         CreateMap<Transaction, TransactionUpdateDto>().ReverseMap();
-        CreateMap<Transaction, TransactionCreationDto>().ReverseMap(); 
-        
+        CreateMap<Transaction, TransactionCreationDto>().ReverseMap();
+
         // TransactionItem
         CreateMap<TransactionItem, TransactionItemResultDto>().ReverseMap();
         CreateMap<TransactionItem, TransactionItemUpdateDto>().ReverseMap();

@@ -1,8 +1,8 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using DeLong.Service.Interfaces;
+﻿using DeLong.Application.DTOs.Customers;
 using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Customers;
+using DeLong.Service.Interfaces;
+using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
@@ -84,8 +84,8 @@ public class CustomerController : BaseController
             StatusCode = 200,
             Message = "Success",
             Data = await this.customerService.RetrieveAllAsync(@params, filter, search)
-        }); 
-    
+        });
+
     [HttpGet("get-allCustomers")]
     public async Task<IActionResult> GetAllsync()
         => Ok(new Response

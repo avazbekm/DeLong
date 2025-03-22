@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using DeLong.Service.DTOs.Prices;
-using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Domain.Entities;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
 
-public class PriceService:IPriceServer
+public class PriceService : IPriceServer
 {
     private readonly IMapper mapper;
     private readonly IRepository<Price> priceRepository;

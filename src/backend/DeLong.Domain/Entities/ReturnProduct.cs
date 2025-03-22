@@ -14,7 +14,7 @@ public class ReturnProduct : Auditable
     public long ProductId { get; set; }
     public string ProductName { get; set; } = string.Empty;
     public decimal Quatity { get; set; }
-    public string UnitOfMeasure {  get; set; } =string.Empty;
+    public string UnitOfMeasure { get; set; } = string.Empty;
     public decimal ReturnSumma { get; set; }
     public string Reason { get; set; } = string.Empty; // Qaytish sababi
 }

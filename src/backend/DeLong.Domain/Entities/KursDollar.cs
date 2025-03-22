@@ -6,5 +6,5 @@ public class KursDollar : Auditable
 {
     public decimal SellingDollar { get; set; }
     public decimal AdmissionDollar { get; set; }
-    public string TodayDate { get; set; } =string.Empty;
+    public string TodayDate { get; set; } = string.Empty;
 }

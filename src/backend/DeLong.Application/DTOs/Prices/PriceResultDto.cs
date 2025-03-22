@@ -4,7 +4,7 @@ namespace DeLong.Service.DTOs.Prices;
 
 public class PriceResultDto
 {
-    public long Id {  get; set; }
+    public long Id { get; set; }
     public long ProductId { get; set; }
     public decimal CostPrice { get; set; }  // Kelish narxi
     public decimal SellingPrice { get; set; }  // Sotish narxi

@@ -1,6 +1,4 @@
-﻿using DeLong.Application.DTOs.Users;
-
-namespace DeLong.Application.DTOs.Customers;
+﻿namespace DeLong.Application.DTOs.Customers;
 
 public class CustomerUpdateDto
 {

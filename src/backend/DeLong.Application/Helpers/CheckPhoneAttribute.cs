@@ -1,10 +1,10 @@
 ﻿using DeLong.Application.Exceptions;
-using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace DeLong.Application.Helpers;
 #pragma warning disable
-public class CheckPhoneAttribute:ValidationAttribute
+public class CheckPhoneAttribute : ValidationAttribute
 {
     public override bool IsValid(object value)
     {

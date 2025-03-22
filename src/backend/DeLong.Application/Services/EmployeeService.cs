@@ -1,10 +1,9 @@
-﻿using BCrypt.Net;
-using AutoMapper;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using DeLong.Service.DTOs.Employee;
+﻿using AutoMapper;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
+using DeLong.Domain.Entities;
+using DeLong.Service.DTOs.Employee;
+using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;

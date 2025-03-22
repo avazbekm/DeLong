@@ -1,9 +1,9 @@
-﻿using DeLong.Domain.Common;
-using System.Linq.Expressions;
-using DeLong.Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using DeLong.Application.Interfaces;
+using DeLong.Domain.Common;
 using DeLong.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq.Expressions;
 
 namespace DeLong.Infrastructure.Repositories;
 
@@ -51,12 +51,12 @@ public class Repository<T> : IRepository<T> where T : Auditable
         if (includes is not null)
             foreach (var item in includes)
                 query = query.Include(item);
-        return query.Where(a=>!a.IsDeleted);
+        return query.Where(a => !a.IsDeleted);
     }
 
     public async Task<T> GetAsync(Expression<Func<T, bool>> expression, string[] includes = null)
     {
-        IQueryable<T> query = dbSet.AsQueryable().Where(a=>!a.IsDeleted);
+        IQueryable<T> query = dbSet.AsQueryable().Where(a => !a.IsDeleted);
         if (includes is not null)
             foreach (var include in includes)
                 query = query.Include(include);

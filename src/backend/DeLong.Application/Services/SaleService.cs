@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.Sale;
 using DeLong.Service.Interfaces;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
