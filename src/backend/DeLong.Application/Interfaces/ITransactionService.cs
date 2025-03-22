@@ -1,5 +1,4 @@
-﻿using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Transactions;
+﻿using DeLong.Application.DTOs.Transactions;
 
 namespace DeLong.Service.Interfaces;
 

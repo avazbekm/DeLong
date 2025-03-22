@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Customers;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Services;
 
 #pragma warning disable // warninglarni o'chirish uchun
-public class CustomerService:ICustomerService
+public class CustomerService : ICustomerService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Customer> customerRepository;

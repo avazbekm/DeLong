@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Products;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using DeLong.Application.DTOs.Products;
 
 namespace DeLong.Service.Services;
 
-public class ProductService:IProductService
+public class ProductService : IProductService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Product> productRepository;

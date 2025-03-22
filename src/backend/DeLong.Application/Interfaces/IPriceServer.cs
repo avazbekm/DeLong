@@ -1,5 +1,5 @@
-﻿using DeLong.Service.DTOs.Prices;
-using DeLong.Domain.Configurations;
+﻿using DeLong.Domain.Configurations;
+using DeLong.Service.DTOs.Prices;
 
 namespace DeLong.Service.Interfaces;
 

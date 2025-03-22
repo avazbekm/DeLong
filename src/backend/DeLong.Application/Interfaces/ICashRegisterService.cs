@@ -1,5 +1,4 @@
-﻿using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.CashRegisters;
+﻿using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.Service.Interfaces;
 

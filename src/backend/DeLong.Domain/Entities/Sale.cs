@@ -1,9 +1,9 @@
-﻿using DeLong.Domain.Enums;
-using DeLong.Domain.Common;
+﻿using DeLong.Domain.Common;
+using DeLong.Domain.Enums;
 
 namespace DeLong.Domain.Entities;
 
-public class Sale:Auditable
+public class Sale : Auditable
 {
     public long? CustomerId { get; set; }
     public Customer? Customer { get; set; }

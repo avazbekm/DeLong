@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using DeLong.WPF.Pages.Customers;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
-using DeLong.WPF.Pages.Customers;
 
 
 namespace DeLong.WPF;
@@ -40,7 +40,7 @@ public partial class MainWindow : Window
         {
             _customerPage = new CustomerPage();
         }
-        _customerPage.userDataGrid.Columns[0].Header= DeLong.WPF.Resources.Resource.FirstName;
+        _customerPage.userDataGrid.Columns[0].Header = DeLong.WPF.Resources.Resource.FirstName;
         _customerPage.userDataGrid.Columns[1].Header = DeLong.WPF.Resources.Resource.Phone_;
         _customerPage.userDataGrid.Columns[2].Header = DeLong.WPF.Resources.Resource.Address_;
         _customerPage.userDataGrid.Columns[3].Header = DeLong.WPF.Resources.Resource.TelegramPhone_;
