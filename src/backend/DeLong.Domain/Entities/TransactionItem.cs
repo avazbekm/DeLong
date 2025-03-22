@@ -2,7 +2,7 @@
 
 namespace DeLong.Domain.Entities;
 
-public class TransactionItem: Auditable
+public class TransactionItem : Auditable
 {
     public long TransactionId { get; set; }
     public long ProductId { get; set; }

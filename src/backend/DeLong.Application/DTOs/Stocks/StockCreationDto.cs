@@ -1,6 +1,4 @@
-﻿using DeLong.Domain.Entities;
-
-namespace DeLong.Application.DTOs.Stocks;
+﻿namespace DeLong.Application.DTOs.Stocks;
 
 public class StockCreationDto
 {
