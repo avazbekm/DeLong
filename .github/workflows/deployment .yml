@@ -45,3 +45,23 @@ jobs:
         run: |
           docker build --platform linux/amd64 -t $DOCKER_USERNAME/$PROJECT -f ./src/backend/DeLong.WebAPI/Dockerfile .
           docker push $DOCKER_USERNAME/$PROJECT
+
+  deploy:
+    name: Deploy to AWS
+    needs: dockerize
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into AWS Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/app
+            docker-compose down
+            docker image prune -f
+            docker-compose pull
+            docker-compose up -d
