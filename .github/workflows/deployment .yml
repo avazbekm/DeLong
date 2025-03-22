@@ -23,3 +23,25 @@ jobs:
 
       - name: Build .NET App
         run: dotnet build --no-restore
+
+  dockerize:
+    name: Dockerize Backend
+    needs: build
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      PROJECT: ${{ secrets.PROJECT }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build --platform linux/amd64 -t $DOCKER_USERNAME/$PROJECT -f ./src/backend/DeLong.WebAPI/Dockerfile .
+          docker push $DOCKER_USERNAME/$PROJECT
