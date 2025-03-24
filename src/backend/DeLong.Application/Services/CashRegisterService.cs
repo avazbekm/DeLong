@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
 using DeLong.Application.DTOs.CashRegisters;
-using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace DeLong.Service.Services;
 
@@ -24,7 +22,17 @@ public class CashRegisterService : ICashRegisterService
 
     public async ValueTask<CashRegisterResultDto> AddAsync(CashRegisterCreationDto dto)
     {
-        var mappedCashRegister = _mapper.Map<CashRegister>(dto);
+        var cashRegister = new CashRegister
+        {
+            UserId = dto.UserId,
+            WarehouseId = dto.WarehouseId,
+            UzsBalance = dto.UzsBalance,
+            UzpBalance = dto.UzpBalance,
+            UsdBalance = dto.UsdBalance,
+            OpenedAt = DateTimeOffset.UtcNow, // Backend’da qo‘yiladi
+            ClosedAt = null // Yangi kassa ochilganda null
+        };
+        var mappedCashRegister = _mapper.Map<CashRegister>(cashRegister);
         await _repository.CreateAsync(mappedCashRegister);
         await _repository.SaveChanges();
 

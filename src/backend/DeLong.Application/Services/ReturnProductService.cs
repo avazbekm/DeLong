@@ -34,7 +34,7 @@ public class ReturnProductService : IReturnProductService
                     throw new NotFoundException($"Mahsulot topilmadi (ProductId: {dto.ProductId})");
                 }
 
-                price.Quantity += dto.Quatity;
+                price.Quantity += dto.Quantity;
                 priceRepository.Update(price);
 
                 // Qaytgan mahsulotni saqlash
@@ -67,8 +67,8 @@ public class ReturnProductService : IReturnProductService
                 }
 
                 // Oldingi miqdor va yangi miqdor farqini hisoblash
-                var oldQuantity = returnProduct.Quatity;
-                var quantityDifference = dto.Quatity - oldQuantity;
+                var oldQuantity = returnProduct.Quantity;
+                var quantityDifference = dto.Quantity - oldQuantity;
 
                 // Mahsulot sonini yangilash
                 var price = await priceRepository.GetAsync(p => p.ProductId == dto.ProductId);
