@@ -29,25 +29,19 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
-    env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      PROJECT: ${{ secrets.PROJECT }}
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Debug Secrets
-        run: |
-          echo "DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}"
-          echo "DOCKER_PASSWORD length: ${#DOCKER_PASSWORD}"
+      - uses: actions/checkout@v4
 
       - name: Login to DockerHub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin || exit 1
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
 
       - name: Build and Push Docker Image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          PROJECT: ${{ secrets.PROJECT }}
         run: |
           docker build --platform linux/amd64 -t $DOCKER_USERNAME/$PROJECT -f ./src/backend/DeLong.WebAPI/Dockerfile .
           docker push $DOCKER_USERNAME/$PROJECT
