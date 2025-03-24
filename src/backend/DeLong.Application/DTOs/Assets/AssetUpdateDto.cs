@@ -1,4 +1,4 @@
-﻿ namespace DeLong.Application.DTOs.Assets;
+﻿namespace DeLong.Application.DTOs.Assets;
 
 public class AssetUpdateDto
 {

@@ -1,5 +1,4 @@
-﻿using DeLong.Domain.Entities;
-using DeLong.Domain.Enums;
+﻿using DeLong.Domain.Enums;
 
 namespace DeLong.Service.DTOs.CashTransfers;
 

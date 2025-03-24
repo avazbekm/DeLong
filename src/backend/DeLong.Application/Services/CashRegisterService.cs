@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
+using DeLong.Application.DTOs.CashRegisters;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
 using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
-using DeLong.Application.DTOs.CashRegisters;
-using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace DeLong.Service.Services;
 

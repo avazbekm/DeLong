@@ -1,8 +1,8 @@
-﻿using DeLong.Service.DTOs;
+﻿using DeLong.Domain.Configurations;
+using DeLong.Service.DTOs;
+using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using DeLong.Service.Interfaces;
-using DeLong.Domain.Configurations;
 
 namespace DeLong.WebAPI.Controllers;
 
