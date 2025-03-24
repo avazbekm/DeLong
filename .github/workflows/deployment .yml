@@ -38,8 +38,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Debug Secrets
+        run: |
+          echo "DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}"
+          echo "DOCKER_PASSWORD length: ${#DOCKER_PASSWORD}"
+
       - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin || exit 1
 
       - name: Build and Push Docker Image
         run: |
@@ -62,6 +68,6 @@ jobs:
           script: |
             cd ~/app
             docker-compose down
-            docker image prune -f
             docker-compose pull
+            docker image prune -f
             docker-compose up -d
