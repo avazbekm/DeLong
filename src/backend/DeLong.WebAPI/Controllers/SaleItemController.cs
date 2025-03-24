@@ -1,7 +1,7 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using DeLong.Domain.Configurations;
+﻿using DeLong.Domain.Configurations;
 using DeLong.Service.DTOs.SaleItems;
+using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 

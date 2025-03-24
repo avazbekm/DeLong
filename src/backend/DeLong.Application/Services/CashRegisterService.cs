@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using DeLong.Application.DTOs.CashRegisters;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
 using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;

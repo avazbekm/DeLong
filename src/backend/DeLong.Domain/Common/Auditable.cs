@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DeLong.Domain.Common;
+﻿namespace DeLong.Domain.Common;
 
 public class Auditable
 {

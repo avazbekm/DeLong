@@ -1,11 +1,11 @@
 ﻿using DeLong.Application.Exceptions;
-using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace DeLong.Application.Helpers;
 
 #pragma warning disable // warninglarni o'chirish uchun
-public class CheckEmailAttribute :ValidationAttribute
+public class CheckEmailAttribute : ValidationAttribute
 {
     public override bool IsValid(object value)
     {

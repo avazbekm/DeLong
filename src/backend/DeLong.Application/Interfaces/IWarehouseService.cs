@@ -1,5 +1,5 @@
-﻿using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Warehouses;
+﻿using DeLong.Application.DTOs.Warehouses;
+using DeLong.Domain.Configurations;
 
 namespace DeLong.Service.Interfaces;
 

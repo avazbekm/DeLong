@@ -1,5 +1,4 @@
 ﻿using DeLong.Application.DTOs.Users;
-using DeLong.Domain.Entities;
 
 namespace DeLong.Application.DTOs.Customers;
 
@@ -18,5 +17,5 @@ public class CustomerResultDto
 
     // firma rahbari malumotlari
     public long UserId { get; set; }
-    public UserResultDto User {  get; set; }
+    public UserResultDto User { get; set; }
 }
