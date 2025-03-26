@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeLong.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250224101117_Initial")]
+    [Migration("20250326185838_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -69,6 +69,120 @@ namespace DeLong.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("CashWarehouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("OpenedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("UsdBalance")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("UzpBalance")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("UzsBalance")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("WarehouseId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CashWarehouseId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("CashRegisters");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CashTransfer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("CashRegisterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("From")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("To")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("TransferDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TransferType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CashRegisterId");
+
+                    b.ToTable("CashTransfers");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CashWarehouse", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -93,14 +207,9 @@ namespace DeLong.Data.Migrations
                     b.Property<decimal>("UzsBalance")
                         .HasColumnType("numeric");
 
-                    b.Property<long>("WarehouseId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId");
-
-                    b.ToTable("CashRegisters");
+                    b.ToTable("CashWarehouses");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Category", b =>
@@ -219,10 +328,13 @@ namespace DeLong.Data.Migrations
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTimeOffset>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSettled")
                         .HasColumnType("boolean");
 
                     b.Property<decimal>("RemainingAmount")
@@ -267,8 +379,12 @@ namespace DeLong.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTimeOffset>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -281,6 +397,42 @@ namespace DeLong.Data.Migrations
                     b.HasIndex("DebtId");
 
                     b.ToTable("DebtPayments");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.Discount", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("SaleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleId");
+
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Employee", b =>
@@ -431,6 +583,9 @@ namespace DeLong.Data.Migrations
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("numeric");
 
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UnitOfMeasure")
                         .IsRequired()
                         .HasColumnType("text");
@@ -444,6 +599,8 @@ namespace DeLong.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Prices");
                 });
@@ -493,6 +650,95 @@ namespace DeLong.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.ReturnProduct", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("ReturnSumma")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("SaleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UnitOfMeasure")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ReturnProducts");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Sale", b =>
@@ -628,13 +874,50 @@ namespace DeLong.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CustomerId")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("WarehouseIdTo")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseIdTo");
+
+                    b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.TransactionItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
@@ -649,11 +932,12 @@ namespace DeLong.Data.Migrations
                     b.Property<decimal>("Quantity")
                         .HasColumnType("numeric");
 
-                    b.Property<long?>("SupplierId")
+                    b.Property<long>("TransactionId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("integer");
+                    b.Property<string>("UnitOfMeasure")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -661,25 +945,13 @@ namespace DeLong.Data.Migrations
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("WarehouseIdFrom")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("WarehouseIdTo")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("TransactionId");
 
-                    b.HasIndex("WarehouseIdFrom");
-
-                    b.HasIndex("WarehouseIdTo");
-
-                    b.ToTable("Transactions");
+                    b.ToTable("TransactionItems");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.User", b =>
@@ -798,13 +1070,36 @@ namespace DeLong.Data.Migrations
 
             modelBuilder.Entity("DeLong.Domain.Entities.CashRegister", b =>
                 {
+                    b.HasOne("DeLong.Domain.Entities.CashWarehouse", null)
+                        .WithMany("CashRegisters")
+                        .HasForeignKey("CashWarehouseId");
+
+                    b.HasOne("DeLong.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DeLong.Domain.Entities.Warehouse", "Warehouse")
                         .WithMany("CashRegisters")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("User");
+
                     b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CashTransfer", b =>
+                {
+                    b.HasOne("DeLong.Domain.Entities.CashRegister", "CashRegister")
+                        .WithMany("Transfers")
+                        .HasForeignKey("CashRegisterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CashRegister");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Customer", b =>
@@ -840,6 +1135,17 @@ namespace DeLong.Data.Migrations
                     b.Navigation("Debt");
                 });
 
+            modelBuilder.Entity("DeLong.Domain.Entities.Discount", b =>
+                {
+                    b.HasOne("DeLong.Domain.Entities.Sale", "Sale")
+                        .WithMany()
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sale");
+                });
+
             modelBuilder.Entity("DeLong.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("DeLong.Domain.Entities.Sale", "Sale")
@@ -858,6 +1164,12 @@ namespace DeLong.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DeLong.Domain.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Product", b =>
@@ -869,6 +1181,21 @@ namespace DeLong.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.ReturnProduct", b =>
+                {
+                    b.HasOne("DeLong.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("DeLong.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Sale", b =>
@@ -908,41 +1235,40 @@ namespace DeLong.Data.Migrations
 
             modelBuilder.Entity("DeLong.Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("DeLong.Domain.Entities.Customer", "Customer")
+                    b.HasOne("DeLong.Domain.Entities.Warehouse", "WarehouseTo")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("WarehouseIdTo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
+                    b.Navigation("WarehouseTo");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.TransactionItem", b =>
+                {
                     b.HasOne("DeLong.Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DeLong.Domain.Entities.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("DeLong.Domain.Entities.Warehouse", "WarehouseFrom")
-                        .WithMany()
-                        .HasForeignKey("WarehouseIdFrom")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("DeLong.Domain.Entities.Warehouse", "WarehouseTo")
-                        .WithMany()
-                        .HasForeignKey("WarehouseIdTo")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Customer");
+                    b.HasOne("DeLong.Domain.Entities.Transaction", null)
+                        .WithMany("Items")
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+                });
 
-                    b.Navigation("Supplier");
+            modelBuilder.Entity("DeLong.Domain.Entities.CashRegister", b =>
+                {
+                    b.Navigation("Transfers");
+                });
 
-                    b.Navigation("WarehouseFrom");
-
-                    b.Navigation("WarehouseTo");
+            modelBuilder.Entity("DeLong.Domain.Entities.CashWarehouse", b =>
+                {
+                    b.Navigation("CashRegisters");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Category", b =>
@@ -965,6 +1291,11 @@ namespace DeLong.Data.Migrations
                     b.Navigation("Debts");
 
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.Transaction", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Warehouse", b =>

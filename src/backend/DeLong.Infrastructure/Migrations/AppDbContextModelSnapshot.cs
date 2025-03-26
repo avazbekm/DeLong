@@ -580,6 +580,9 @@ namespace DeLong.Data.Migrations
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("numeric");
 
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UnitOfMeasure")
                         .IsRequired()
                         .HasColumnType("text");
@@ -593,6 +596,8 @@ namespace DeLong.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Prices");
                 });
@@ -1156,6 +1161,12 @@ namespace DeLong.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DeLong.Domain.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Product", b =>
