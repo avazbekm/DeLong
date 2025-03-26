@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -28,6 +29,26 @@ namespace DeLong.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Assets", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CashWarehouses",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UzsBalance = table.Column<decimal>(type: "numeric", nullable: false),
+                    UzpBalance = table.Column<decimal>(type: "numeric", nullable: false),
+                    UsdBalance = table.Column<decimal>(type: "numeric", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CashWarehouses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,6 +109,21 @@ namespace DeLong.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_KursDollars", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,10 +262,14 @@ namespace DeLong.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
                     WarehouseId = table.Column<long>(type: "bigint", nullable: false),
                     UzsBalance = table.Column<decimal>(type: "numeric", nullable: false),
                     UzpBalance = table.Column<decimal>(type: "numeric", nullable: false),
                     UsdBalance = table.Column<decimal>(type: "numeric", nullable: false),
+                    OpenedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    ClosedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CashWarehouseId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
@@ -240,6 +280,17 @@ namespace DeLong.Data.Migrations
                 {
                     table.PrimaryKey("PK_CashRegisters", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_CashRegisters_CashWarehouses_CashWarehouseId",
+                        column: x => x.CashWarehouseId,
+                        principalTable: "CashWarehouses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CashRegisters_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_CashRegisters_Warehouses_WarehouseId",
                         column: x => x.WarehouseId,
                         principalTable: "Warehouses",
@@ -248,11 +299,38 @@ namespace DeLong.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    WarehouseIdTo = table.Column<long>(type: "bigint", nullable: false),
+                    TransactionType = table.Column<int>(type: "integer", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Warehouses_WarehouseIdTo",
+                        column: x => x.WarehouseIdTo,
+                        principalTable: "Warehouses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Prices",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SupplierId = table.Column<long>(type: "bigint", nullable: true),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     CostPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     SellingPrice = table.Column<decimal>(type: "numeric", nullable: false),
@@ -273,6 +351,47 @@ namespace DeLong.Data.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Prices_Suppliers_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Suppliers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReturnProducts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: true),
+                    SaleId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductName = table.Column<string>(type: "text", nullable: false),
+                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    UnitOfMeasure = table.Column<string>(type: "text", nullable: false),
+                    ReturnSumma = table.Column<decimal>(type: "numeric", nullable: false),
+                    Reason = table.Column<string>(type: "text", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReturnProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReturnProducts_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ReturnProducts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -307,19 +426,19 @@ namespace DeLong.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transactions",
+                name: "CashTransfers",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    WarehouseIdFrom = table.Column<long>(type: "bigint", nullable: true),
-                    WarehouseIdTo = table.Column<long>(type: "bigint", nullable: true),
-                    ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    PriceProduct = table.Column<decimal>(type: "numeric", nullable: false),
-                    TransactionType = table.Column<int>(type: "integer", nullable: false),
-                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: true),
-                    SupplierId = table.Column<long>(type: "bigint", nullable: true),
+                    CashRegisterId = table.Column<long>(type: "bigint", nullable: false),
+                    From = table.Column<string>(type: "text", nullable: true),
+                    To = table.Column<string>(type: "text", nullable: true),
+                    Currency = table.Column<string>(type: "text", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Note = table.Column<string>(type: "text", nullable: false),
+                    TransferType = table.Column<int>(type: "integer", nullable: false),
+                    TransferDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
@@ -328,37 +447,47 @@ namespace DeLong.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.PrimaryKey("PK_CashTransfers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
+                        name: "FK_CashTransfers_CashRegisters_CashRegisterId",
+                        column: x => x.CashRegisterId,
+                        principalTable: "CashRegisters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TransactionItems",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TransactionId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    UnitOfMeasure = table.Column<string>(type: "text", nullable: false),
+                    PriceProduct = table.Column<decimal>(type: "numeric", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TransactionItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Products_ProductId",
+                        name: "FK_TransactionItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transactions_Suppliers_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Suppliers",
+                        name: "FK_TransactionItems_Transactions_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transactions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Warehouses_WarehouseIdFrom",
-                        column: x => x.WarehouseIdFrom,
-                        principalTable: "Warehouses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Warehouses_WarehouseIdTo",
-                        column: x => x.WarehouseIdTo,
-                        principalTable: "Warehouses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -369,7 +498,8 @@ namespace DeLong.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SaleId = table.Column<long>(type: "bigint", nullable: false),
                     RemainingAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    IsSettled = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
@@ -381,6 +511,31 @@ namespace DeLong.Data.Migrations
                     table.PrimaryKey("PK_Debts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Debts_Sales_SaleId",
+                        column: x => x.SaleId,
+                        principalTable: "Sales",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Discounts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SaleId = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Discounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Discounts_Sales_SaleId",
                         column: x => x.SaleId,
                         principalTable: "Sales",
                         principalColumn: "Id",
@@ -455,7 +610,8 @@ namespace DeLong.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DebtId = table.Column<long>(type: "bigint", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PaymentDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "text", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
@@ -474,9 +630,24 @@ namespace DeLong.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CashRegisters_CashWarehouseId",
+                table: "CashRegisters",
+                column: "CashWarehouseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CashRegisters_UserId",
+                table: "CashRegisters",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CashRegisters_WarehouseId",
                 table: "CashRegisters",
                 column: "WarehouseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CashTransfers_CashRegisterId",
+                table: "CashTransfers",
+                column: "CashRegisterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_UserId",
@@ -494,6 +665,11 @@ namespace DeLong.Data.Migrations
                 column: "SaleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Discounts_SaleId",
+                table: "Discounts",
+                column: "SaleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payments_SaleId",
                 table: "Payments",
                 column: "SaleId");
@@ -504,9 +680,30 @@ namespace DeLong.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Prices_SupplierId",
+                table: "Prices",
+                column: "SupplierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_Token",
+                table: "RefreshTokens",
+                column: "Token",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReturnProducts_CustomerId",
+                table: "ReturnProducts",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReturnProducts_UserId",
+                table: "ReturnProducts",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SaleItems_ProductId",
@@ -529,24 +726,14 @@ namespace DeLong.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_CustomerId",
-                table: "Transactions",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_ProductId",
-                table: "Transactions",
+                name: "IX_TransactionItems_ProductId",
+                table: "TransactionItems",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_SupplierId",
-                table: "Transactions",
-                column: "SupplierId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_WarehouseIdFrom",
-                table: "Transactions",
-                column: "WarehouseIdFrom");
+                name: "IX_TransactionItems_TransactionId",
+                table: "TransactionItems",
+                column: "TransactionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_WarehouseIdTo",
@@ -561,10 +748,13 @@ namespace DeLong.Data.Migrations
                 name: "Assets");
 
             migrationBuilder.DropTable(
-                name: "CashRegisters");
+                name: "CashTransfers");
 
             migrationBuilder.DropTable(
                 name: "DebtPayments");
+
+            migrationBuilder.DropTable(
+                name: "Discounts");
 
             migrationBuilder.DropTable(
                 name: "Employees");
@@ -579,28 +769,43 @@ namespace DeLong.Data.Migrations
                 name: "Prices");
 
             migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "ReturnProducts");
+
+            migrationBuilder.DropTable(
                 name: "SaleItems");
 
             migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "TransactionItems");
+
+            migrationBuilder.DropTable(
+                name: "CashRegisters");
 
             migrationBuilder.DropTable(
                 name: "Debts");
 
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "Suppliers");
 
             migrationBuilder.DropTable(
-                name: "Warehouses");
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
+
+            migrationBuilder.DropTable(
+                name: "CashWarehouses");
 
             migrationBuilder.DropTable(
                 name: "Sales");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Warehouses");
 
             migrationBuilder.DropTable(
                 name: "Customers");
