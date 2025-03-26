@@ -1,14 +1,14 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using DeLong.Service.Interfaces;
+﻿using DeLong.Application.DTOs.Products;
 using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Products;
+using DeLong.Service.Interfaces;
+using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
 [Authorize] // Faqat token bilan kirganlar ishlatadi
-public class ProductController : BaseController 
+public class ProductController : BaseController
 {
     private readonly IProductService _productService;
 

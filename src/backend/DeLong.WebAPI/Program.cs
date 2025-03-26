@@ -1,11 +1,11 @@
-﻿using Serilog;
-using System.Text;
+﻿using DeLong.Infrastructure.Contexts;
 using DeLong.WebAPI.Extentions;
 using DeLong.WebAPI.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using DeLong.Infrastructure.Contexts;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,7 +65,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });
@@ -96,6 +96,9 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
+
+// ✅ Avtomatik migratsiya
+app.MigrateDatabase();
 
 // ✅ Middleware va API konfiguratsiyasi
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
