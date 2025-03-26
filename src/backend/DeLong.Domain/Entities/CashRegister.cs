@@ -14,7 +14,7 @@ public class CashRegister : Auditable
     public decimal UzpBalance { get; set; }  // plastik mablag' qoldiq
     public decimal UsdBalance { get; set; }  // dollar mablag' qoldiq
 
-    public DateTimeOffset OpenedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset OpenedAt { get; set; }
     public DateTimeOffset? ClosedAt { get; set; }
 
     // Ombordan kirim va omborga chiqimlar bilan bog‘lanish uchun

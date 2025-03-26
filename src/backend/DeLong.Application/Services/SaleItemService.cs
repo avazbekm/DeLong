@@ -1,79 +1,88 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.SaleItems;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace DeLong.Service.Services;
 
-public class SaleItemService : ISaleItemService
+public class SaleItemService : AuditableService, ISaleItemService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<SaleItem> saleItemRepository;
+    private readonly IMapper _mapper;
+    private readonly IRepository<SaleItem> _saleItemRepository;
 
-    public SaleItemService(IRepository<SaleItem> saleItemRepository, IMapper mapper)
+    public SaleItemService(IRepository<SaleItem> saleItemRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.mapper = mapper;
-        this.saleItemRepository = saleItemRepository;
+        _mapper = mapper;
+        _saleItemRepository = saleItemRepository;
     }
 
     public async ValueTask<SaleItemResultDto> AddAsync(SaleItemCreationDto dto)
     {
-        var mappedSaleItem = this.mapper.Map<SaleItem>(dto);
-        await this.saleItemRepository.CreateAsync(mappedSaleItem);
-        await this.saleItemRepository.SaveChanges();
+        var mappedSaleItem = _mapper.Map<SaleItem>(dto);
+        SetCreatedFields(mappedSaleItem); // Auditable maydonlarni qo‘shish
 
-        return this.mapper.Map<SaleItemResultDto>(mappedSaleItem);
+        await _saleItemRepository.CreateAsync(mappedSaleItem);
+        await _saleItemRepository.SaveChanges();
+
+        return _mapper.Map<SaleItemResultDto>(mappedSaleItem);
     }
 
     public async ValueTask<SaleItemResultDto> ModifyAsync(SaleItemUpdateDto dto)
     {
-        var existSaleItem = await this.saleItemRepository.GetAsync(s => s.Id == dto.Id)
+        var existSaleItem = await _saleItemRepository.GetAsync(s => s.Id == dto.Id && !s.IsDeleted)
             ?? throw new NotFoundException($"SaleItem not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existSaleItem);
-        this.saleItemRepository.Update(existSaleItem);
-        await this.saleItemRepository.SaveChanges();
+        _mapper.Map(dto, existSaleItem);
+        SetUpdatedFields(existSaleItem); // Auditable maydonlarni yangilash
 
-        return this.mapper.Map<SaleItemResultDto>(existSaleItem);
+        _saleItemRepository.Update(existSaleItem);
+        await _saleItemRepository.SaveChanges();
+
+        return _mapper.Map<SaleItemResultDto>(existSaleItem);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        var existSaleItem = await this.saleItemRepository.GetAsync(s => s.Id == id)
+        var existSaleItem = await _saleItemRepository.GetAsync(s => s.Id == id && !s.IsDeleted)
             ?? throw new NotFoundException($"SaleItem not found with ID = {id}");
 
-        this.saleItemRepository.Delete(existSaleItem);
-        await this.saleItemRepository.SaveChanges();
+        existSaleItem.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existSaleItem); // Auditable maydonlarni yangilash
+
+        _saleItemRepository.Update(existSaleItem);
+        await _saleItemRepository.SaveChanges();
         return true;
     }
 
     public async ValueTask<SaleItemResultDto> RetrieveByIdAsync(long id)
     {
-        var existSaleItem = await this.saleItemRepository.GetAsync(s => s.Id == id)
+        var existSaleItem = await _saleItemRepository.GetAsync(s => s.Id == id && !s.IsDeleted)
             ?? throw new NotFoundException($"SaleItem not found with ID = {id}");
 
-        return this.mapper.Map<SaleItemResultDto>(existSaleItem);
+        return _mapper.Map<SaleItemResultDto>(existSaleItem);
     }
 
     public async ValueTask<IEnumerable<SaleItemResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter)
     {
-        var saleItems = await this.saleItemRepository.GetAll()
+        var saleItems = await _saleItemRepository.GetAll(s => !s.IsDeleted)
             .ToPaginate(@params)
             .OrderBy(filter)
             .ToListAsync();
 
-        return this.mapper.Map<IEnumerable<SaleItemResultDto>>(saleItems);
+        return _mapper.Map<IEnumerable<SaleItemResultDto>>(saleItems);
     }
 
     public async ValueTask<IEnumerable<SaleItemResultDto>> RetrieveAllBySaleIdAsync(long saleId)
     {
-        var saleItems = await this.saleItemRepository.GetAll().Where(s => s.SaleId.Equals(saleId))
+        var saleItems = await _saleItemRepository.GetAll(s => s.SaleId.Equals(saleId) && !s.IsDeleted)
             .ToListAsync();
 
-        return this.mapper.Map<IEnumerable<SaleItemResultDto>>(saleItems);
+        return _mapper.Map<IEnumerable<SaleItemResultDto>>(saleItems);
     }
 }

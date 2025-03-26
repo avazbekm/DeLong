@@ -1,77 +1,69 @@
-﻿using DeLong.Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using DeLong.WebAPI.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Application.Exceptions;
 
-[ApiController]
-[Route("api/auth")]
-public class AuthController : ControllerBase
+namespace DeLong.WebAPI.Controllers;
+
+public class AuthController : BaseController
 {
     private readonly ITokenService _tokenService;
-    private static Dictionary<string, string> refreshTokens = new Dictionary<string, string>(); // User -> Refresh Token
+    private readonly IEmployeeService _employeeService;
+    private readonly IUserService _userService;
 
-    public AuthController(ITokenService tokenService)
+    public AuthController(ITokenService tokenService, IEmployeeService employeeService, IUserService userService)
     {
         _tokenService = tokenService;
+        _employeeService = employeeService;
+        _userService = userService;
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginModel model)
+    public async Task<IActionResult> LoginAsync([FromBody] LoginModel model)
     {
-        if (model.Username == "admin" && model.Password == "1234")
+        try
         {
+            var employee = await _employeeService.VerifyEmployeeAsync(model.Username, model.Password);
+            var userRole = await _userService.RetrieveByIdAsync(employee.UserId);
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, model.Username)
+                new Claim("UserId", employee.UserId.ToString()),
+                new Claim("Username", employee.Username),
+                new Claim("WarehouseId", employee.WarehouseId.ToString()),
+                new Claim("Role", userRole.Role.ToString())
             };
 
             var accessToken = _tokenService.GenerateAccessToken(claims);
-            var refreshToken = _tokenService.GenerateRefreshToken();
 
-            // Refresh tokenni saqlaymiz (odatda DB yoki cache)
-            refreshTokens[model.Username] = refreshToken;
-
-            return Ok(new { accessToken, refreshToken });
-        }
-        return Unauthorized();
-    }
-
-    [HttpPost("refresh")]
-    public IActionResult Refresh([FromBody] RefreshRequest request)
-    {
-        if (refreshTokens.TryGetValue(request.Username, out var savedRefreshToken) && savedRefreshToken == request.RefreshToken)
-        {
-            var claims = new List<Claim>
+            return Ok(new Response
             {
-                new Claim(ClaimTypes.Name, request.Username)
-            };
-
-            var newAccessToken = _tokenService.GenerateAccessToken(claims);
-            var newRefreshToken = _tokenService.GenerateRefreshToken();
-
-            refreshTokens[request.Username] = newRefreshToken; // Eskisini almashtiramiz
-
-            return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken });
+                StatusCode = 200,
+                Message = "Success",
+                Data = accessToken
+            });
         }
-        return Unauthorized(new { message = "Refresh token noto‘g‘ri yoki eskirgan!" });
-    }
-
-    [Authorize]
-    [HttpGet("protected")]
-    public IActionResult GetProtectedData()
-    {
-        return Ok(new { message = "Siz himoyalangan API-ga muvaffaqiyatli kirdingiz!" });
+        catch (NotFoundException ex)
+        {
+            return Unauthorized(new Response
+            {
+                StatusCode = 401,
+                Message = ex.Message
+            });
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(new Response
+            {
+                StatusCode = 401,
+                Message = ex.Message
+            });
+        }
     }
 }
 
 public class LoginModel
 {
-    public string Username { get; set; }
-    public string Password { get; set; }
-}
-
-public class RefreshRequest
-{
-    public string Username { get; set; }
-    public string RefreshToken { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
 }

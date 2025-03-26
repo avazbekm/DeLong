@@ -1,8 +1,8 @@
-﻿using DeLong.Application.Interfaces;
-using DeLong.Application.Mappers;
-using DeLong.Infrastructure.Repositories;
+﻿using DeLong.Service.Services;
 using DeLong.Service.Interfaces;
-using DeLong.Service.Services;
+using DeLong.Application.Mappers;
+using DeLong.Application.Interfaces;
+using DeLong.Infrastructure.Repositories;
 
 namespace DeLong.WebAPI.Extentions;
 
@@ -14,6 +14,7 @@ public static class ServicesColletion
         services.AddScoped<IDebtService, DebtService>();
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<IPriceServer, PriceService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IStockService, StockService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IPaymentService, PaymentService>();

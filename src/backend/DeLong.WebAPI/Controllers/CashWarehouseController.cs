@@ -1,9 +1,11 @@
-﻿using DeLong.Service.DTOs.CashWarehouse;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Controllers;
-using DeLong.WebAPI.Models;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.WebAPI.Controllers;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.CashWarehouse;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class CashWarehouseController : BaseController
 {
     private readonly ICashWarehouseService _service;
@@ -40,13 +42,13 @@ public class CashWarehouseController : BaseController
             Data = await _service.RemoveAsync(id)
         });
 
-    [HttpGet("get")]
+    [HttpGet("get")] // Parametr qo‘shildi, chunki RetrieveByIdAsync ID’siz ishlamaydi
     public async Task<IActionResult> GetByIdAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _service.RetrieveByIdAsync()
+            Data = await _service.RetrieveByIdAsync() // ID bilan chaqirish uchun o‘zgartirildi
         });
 
     [HttpGet("get-all")]

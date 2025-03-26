@@ -1,12 +1,11 @@
-﻿using DeLong.Infrastructure.Contexts;
-using DeLong.Service.Interfaces;
+﻿using Serilog;
+using System.Text;
 using DeLong.WebAPI.Extentions;
 using DeLong.WebAPI.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Text;
+using DeLong.Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +36,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
 builder.Services.AddAuthorization();
+
+// JWT dagi id, usernamelarni olish uchun foydalaniladi.
+builder.Services.AddHttpContextAccessor();
 
 // ✅ Swagger uchun JWT qo'llab-quvvatlash
 builder.Services.AddSwaggerGen(c =>
@@ -69,7 +72,6 @@ builder.Services.AddSwaggerGen(c =>
 
 // ✅ Xizmatlarni ro'yxatdan o'tkazish
 builder.Services.AddControllers();
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddServices();

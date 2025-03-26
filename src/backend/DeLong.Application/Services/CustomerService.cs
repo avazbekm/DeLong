@@ -1,116 +1,123 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Customers;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Services;
 
 #pragma warning disable // warninglarni o'chirish uchun
-public class CustomerService : ICustomerService
+public class CustomerService : AuditableService, ICustomerService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<Customer> customerRepository;
-    public CustomerService(IRepository<Customer> customerRepository, IMapper mapper)
+    private readonly IMapper _mapper;
+    private readonly IRepository<Customer> _customerRepository;
+
+    public CustomerService(IRepository<Customer> customerRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.mapper = mapper;
-        this.customerRepository = customerRepository;
+        _mapper = mapper;
+        _customerRepository = customerRepository;
     }
 
     public async ValueTask<CustomerResultDto> AddAsync(CustomerCreationDto dto)
     {
-        if (dto.JSHSHIR.Equals(""))
+        if (string.IsNullOrEmpty(dto.JSHSHIR))
         {
-            Customer existCustomer = await this.customerRepository.GetAsync(u => u.INN.Equals(dto.INN));
+            Customer existCustomer = await _customerRepository.GetAsync(u => u.INN.Equals(dto.INN) && !u.IsDeleted);
             if (existCustomer is not null)
                 throw new AlreadyExistException($"This customer is already exists with INN = {dto.INN}");
         }
-        else if (dto.INN.Equals(0))
+        else if (dto.INN == 0 || !dto.INN.HasValue)
         {
-            Customer existCustomer = await this.customerRepository.GetAsync(u => u.JSHSHIR.Equals(dto.JSHSHIR));
+            Customer existCustomer = await _customerRepository.GetAsync(u => u.JSHSHIR.Equals(dto.JSHSHIR) && !u.IsDeleted);
             if (existCustomer is not null)
                 throw new AlreadyExistException($"This customer is already exists with JSHSHIR = {dto.JSHSHIR}");
         }
 
-        var mappedCustomer = this.mapper.Map<Customer>(dto);
-        await this.customerRepository.CreateAsync(mappedCustomer);
-        await this.customerRepository.SaveChanges();
+        var mappedCustomer = _mapper.Map<Customer>(dto);
+        SetCreatedFields(mappedCustomer); // Auditable maydonlarni qo‘shish
 
-        var result = this.mapper.Map<CustomerResultDto>(mappedCustomer);
-        return result;
+        await _customerRepository.CreateAsync(mappedCustomer);
+        await _customerRepository.SaveChanges();
+
+        return _mapper.Map<CustomerResultDto>(mappedCustomer);
     }
 
     public async ValueTask<CustomerResultDto> ModifyAsync(CustomerUpdateDto dto)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(u => u.Id.Equals(dto.Id))
+        Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(dto.Id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This customer is not found with ID = {dto.Id}");
 
-        var mappedCustomer = this.mapper.Map(dto, existCustomer);
-        this.customerRepository.Update(mappedCustomer);
-        await this.customerRepository.SaveChanges();
+        _mapper.Map(dto, existCustomer);
+        SetUpdatedFields(existCustomer); // Auditable maydonlarni yangilash
 
-        var result = this.mapper.Map<CustomerResultDto>(mappedCustomer);
-        return result;
+        _customerRepository.Update(existCustomer);
+        await _customerRepository.SaveChanges();
+
+        return _mapper.Map<CustomerResultDto>(existCustomer);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(u => u.Id.Equals(id))
+        Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This customer is not found with ID = {id}");
 
-        this.customerRepository.Delete(existCustomer);
-        await this.customerRepository.SaveChanges();
+        existCustomer.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existCustomer); // Auditable maydonlarni yangilash
+
+        _customerRepository.Update(existCustomer); // Delete o‘rniga Update
+        await _customerRepository.SaveChanges();
         return true;
     }
 
     public async ValueTask<CustomerResultDto> RetrieveByIdAsync(long id)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(u => u.Id.Equals(id))
+        Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This customer is not found with ID = {id}");
 
-        var result = this.mapper.Map<CustomerResultDto>(existCustomer);
-        return result;
+        return _mapper.Map<CustomerResultDto>(existCustomer);
     }
 
     public async ValueTask<IEnumerable<CustomerResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
     {
-        var customers = await this.customerRepository.GetAll()
+        var customersQuery = _customerRepository.GetAll(u => !u.IsDeleted)
             .ToPaginate(@params)
-            .OrderBy(filter)
-            .ToListAsync();
+            .OrderBy(filter);
 
-        var result = customers.Where(customer => customer.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
-        var mappedCustomers = this.mapper.Map<List<CustomerResultDto>>(result);
-        return mappedCustomers;
+        if (!string.IsNullOrEmpty(search))
+        {
+            customersQuery = customersQuery.Where(customer => customer.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+        }
+
+        var customers = await customersQuery.ToListAsync();
+        return _mapper.Map<List<CustomerResultDto>>(customers);
     }
 
     public async ValueTask<IEnumerable<CustomerResultDto>> RetrieveAllAsync()
     {
-        var customers = await this.customerRepository.GetAll()
+        var customers = await _customerRepository.GetAll(u => !u.IsDeleted)
             .ToListAsync();
-        var result = this.mapper.Map<IEnumerable<CustomerResultDto>>(customers);
-        return result;
+        return _mapper.Map<List<CustomerResultDto>>(customers);
     }
 
     public async ValueTask<CustomerResultDto> RetrieveByInnAsync(int INN)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.INN.Equals(INN))
-            ?? throw new NotFoundException($"This customer is not found with phone = {INN}");
+        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.INN.Equals(INN) && !customer.IsDeleted)
+            ?? throw new NotFoundException($"This customer is not found with INN = {INN}");
 
-        var result = this.mapper.Map<CustomerResultDto>(existCustomer);
-        return result;
+        return _mapper.Map<CustomerResultDto>(existCustomer);
     }
 
     public async ValueTask<CustomerResultDto> RetrieveByJshshirAsync(string jshshir)
     {
-        Customer existCustomer = await this.customerRepository.GetAsync(customer => customer.JSHSHIR.Equals(jshshir))
+        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.JSHSHIR.Equals(jshshir) && !customer.IsDeleted)
             ?? throw new NotFoundException($"This customer is not found with JSHSHIR = {jshshir}");
 
-        var result = this.mapper.Map<CustomerResultDto>(existCustomer);
-        return result;
+        return _mapper.Map<CustomerResultDto>(existCustomer);
     }
 }

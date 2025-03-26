@@ -4,26 +4,28 @@ using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.DebtPayments;
 using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
 
-public class DebtPaymentService : IDebtPaymentService
+public class DebtPaymentService : AuditableService, IDebtPaymentService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<DebtPayment> debtPaymentRepository;
-    private readonly IRepository<Debt> debtRepository;
+    private readonly IMapper _mapper;
+    private readonly IRepository<DebtPayment> _debtPaymentRepository;
+    private readonly IRepository<Debt> _debtRepository;
 
-    public DebtPaymentService(IRepository<DebtPayment> debtPaymentRepository, IMapper mapper, IRepository<Debt> debtRepository)
+    public DebtPaymentService(IRepository<DebtPayment> debtPaymentRepository, IMapper mapper, IRepository<Debt> debtRepository, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.mapper = mapper;
-        this.debtPaymentRepository = debtPaymentRepository;
-        this.debtRepository = debtRepository;
+        _mapper = mapper;
+        _debtPaymentRepository = debtPaymentRepository;
+        _debtRepository = debtRepository;
     }
 
     public async ValueTask<DebtPaymentResultDto> AddAsync(DebtPaymentCreationDto dto)
     {
-        var debt = await this.debtRepository.GetAsync(d => d.Id == dto.DebtId)
+        var debt = await _debtRepository.GetAsync(d => d.Id == dto.DebtId && !d.IsDeleted)
             ?? throw new NotFoundException($"Debt not found with ID = {dto.DebtId}");
 
         if (dto.Amount > debt.RemainingAmount)
@@ -31,32 +33,34 @@ public class DebtPaymentService : IDebtPaymentService
             throw new Exception("To‘lov summasi qarz qoldig‘idan ko‘p bo‘lishi mumkin emas!");
         }
 
-        var mappedDebtPayment = this.mapper.Map<DebtPayment>(dto);
+        var mappedDebtPayment = _mapper.Map<DebtPayment>(dto);
+        SetCreatedFields(mappedDebtPayment); // Auditable maydonlarni qo‘shish
 
-        await this.debtPaymentRepository.CreateAsync(mappedDebtPayment);
+        await _debtPaymentRepository.CreateAsync(mappedDebtPayment);
 
         // Qarz qoldig‘ini yangilash
         debt.RemainingAmount -= dto.Amount;
         debt.IsSettled = debt.RemainingAmount <= 0; // IsSettled ni yangilash
-        this.debtRepository.Update(debt);
+        SetUpdatedFields(debt); // Debt uchun auditable maydonlarni yangilash
+        _debtRepository.Update(debt);
 
         // Tranzaksiyalarni birlashtirish
-        await this.debtRepository.SaveChanges();
+        await _debtRepository.SaveChanges();
 
-        return this.mapper.Map<DebtPaymentResultDto>(mappedDebtPayment);
+        return _mapper.Map<DebtPaymentResultDto>(mappedDebtPayment);
     }
 
     public async ValueTask<IEnumerable<DebtPaymentResultDto>> RetrieveByDebtIdAsync(long debtId)
     {
-        var debtPayments = await this.debtPaymentRepository.GetAll(dp => dp.DebtId == debtId)
+        var debtPayments = await _debtPaymentRepository.GetAll(dp => dp.DebtId == debtId && !dp.IsDeleted)
             .ToListAsync();
-        return this.mapper.Map<IEnumerable<DebtPaymentResultDto>>(debtPayments);
+        return _mapper.Map<IEnumerable<DebtPaymentResultDto>>(debtPayments);
     }
 
     public async ValueTask<IEnumerable<DebtPaymentResultDto>> RetrieveAllAsync()
     {
-        var debtPayments = await this.debtPaymentRepository.GetAll()
+        var debtPayments = await _debtPaymentRepository.GetAll(dp => !dp.IsDeleted)
             .ToListAsync();
-        return this.mapper.Map<IEnumerable<DebtPaymentResultDto>>(debtPayments);
+        return _mapper.Map<IEnumerable<DebtPaymentResultDto>>(debtPayments);
     }
 }

@@ -1,19 +1,21 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.CashWarehouse;
-using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Service.DTOs.CashWarehouse;
 
 namespace DeLong.Service.Services;
 
-public class CashWarehouseService : ICashWarehouseService
+public class CashWarehouseService : AuditableService, ICashWarehouseService
 {
     private readonly IRepository<CashWarehouse> _repository;
     private readonly IMapper _mapper;
 
-    public CashWarehouseService(IRepository<CashWarehouse> repository, IMapper mapper)
+    public CashWarehouseService(IRepository<CashWarehouse> repository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
         _repository = repository;
         _mapper = mapper;
@@ -21,19 +23,23 @@ public class CashWarehouseService : ICashWarehouseService
 
     public async ValueTask<CashWarehouseResultDto> AddAsync(CashWarehouseCreationDto dto)
     {
-        var mappedCashWarehouse = _mapper.Map<CashWarehouse>(dto);
-        await _repository.CreateAsync(mappedCashWarehouse);
+        var cashWarehouse = _mapper.Map<CashWarehouse>(dto);
+        SetCreatedFields(cashWarehouse); // Auditable maydonlarni qo‘shish
+
+        await _repository.CreateAsync(cashWarehouse);
         await _repository.SaveChanges();
 
-        return _mapper.Map<CashWarehouseResultDto>(mappedCashWarehouse);
+        return _mapper.Map<CashWarehouseResultDto>(cashWarehouse);
     }
 
     public async ValueTask<CashWarehouseResultDto> ModifyAsync(CashWarehouseUpdateDto dto)
     {
-        var existCashWarehouse = await _repository.GetAsync(w => w.Id == dto.Id)
+        var existCashWarehouse = await _repository.GetAsync(w => w.Id == dto.Id && !w.IsDeleted)
             ?? throw new NotFoundException($"CashWarehouse not found with ID = {dto.Id}");
 
         _mapper.Map(dto, existCashWarehouse);
+        SetUpdatedFields(existCashWarehouse); // Auditable maydonlarni yangilash
+
         _repository.Update(existCashWarehouse);
         await _repository.SaveChanges();
 
@@ -42,10 +48,13 @@ public class CashWarehouseService : ICashWarehouseService
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        var existCashWarehouse = await _repository.GetAsync(w => w.Id == id)
+        var existCashWarehouse = await _repository.GetAsync(w => w.Id == id && !w.IsDeleted)
             ?? throw new NotFoundException($"CashWarehouse not found with ID = {id}");
 
-        _repository.Delete(existCashWarehouse);
+        existCashWarehouse.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existCashWarehouse); // Auditable maydonlarni yangilash
+
+        _repository.Update(existCashWarehouse);
         await _repository.SaveChanges();
         return true;
     }
@@ -53,8 +62,7 @@ public class CashWarehouseService : ICashWarehouseService
     public async ValueTask<CashWarehouseResultDto> RetrieveByIdAsync()
     {
         // Id o‘rniga eng oxirgi qo‘shilgan zaxira omborini olamiz
-        var latestCashWarehouse = await _repository.GetAll()
-            .Where(w => !w.IsDeleted) // Agar IsDeleted property bo‘lsa
+        var latestCashWarehouse = await _repository.GetAll(w => !w.IsDeleted)
             .OrderByDescending(w => w.CreatedAt) // CreatedAt bo‘yicha eng so‘nggi
             .FirstOrDefaultAsync()
             ?? throw new NotFoundException("Hech qanday zaxira ombori topilmadi");
@@ -64,8 +72,7 @@ public class CashWarehouseService : ICashWarehouseService
 
     public async ValueTask<IEnumerable<CashWarehouseResultDto>> RetrieveAllAsync()
     {
-        var cashWarehouses = await _repository.GetAll()
-            .Where(w => !w.IsDeleted)
+        var cashWarehouses = await _repository.GetAll(w => !w.IsDeleted)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashWarehouseResultDto>>(cashWarehouses);

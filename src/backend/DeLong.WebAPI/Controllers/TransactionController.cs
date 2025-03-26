@@ -2,17 +2,19 @@
 using DeLong.Domain.Configurations;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class TransactionController : BaseController
 {
-    private readonly ITransactionService transactionService;
+    private readonly ITransactionService _transactionService;
 
     public TransactionController(ITransactionService transactionService)
     {
-        this.transactionService = transactionService;
+        _transactionService = transactionService;
     }
 
     [HttpPost("create")]
@@ -21,7 +23,7 @@ public class TransactionController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionService.AddAsync(dto)
+            Data = await _transactionService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -30,7 +32,7 @@ public class TransactionController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionService.ModifyAsync(dto)
+            Data = await _transactionService.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -39,7 +41,7 @@ public class TransactionController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionService.RemoveAsync(id)
+            Data = await _transactionService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -48,15 +50,15 @@ public class TransactionController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionService.RetrieveByIdAsync(id)
+            Data = await _transactionService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, Filter filter)
+    public async Task<IActionResult> GetAllAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionService.RetrieveAllAsync()
+            Data = await _transactionService.RetrieveAllAsync() // Pagination va Filter qo‘llaniladi
         });
 }

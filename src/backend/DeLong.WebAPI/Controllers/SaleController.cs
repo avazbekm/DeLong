@@ -1,17 +1,19 @@
 ﻿using DeLong.Service.DTOs.Sale;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class SaleController : BaseController
 {
-    private readonly ISaleService saleService;
+    private readonly ISaleService _saleService;
 
     public SaleController(ISaleService saleService)
     {
-        this.saleService = saleService;
+        _saleService = saleService;
     }
 
     [HttpPost("create")]
@@ -20,7 +22,7 @@ public class SaleController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleService.AddAsync(dto)
+            Data = await _saleService.AddAsync(dto)
         });
 
     [HttpGet("get/{id:long}")]
@@ -29,15 +31,15 @@ public class SaleController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleService.RetrieveByIdAsync(id)
+            Data = await _saleService.RetrieveByIdAsync(id)
         });
 
-    [HttpGet("get-all")] // Yangi endpoint qo‘shildi
+    [HttpGet("get-all")]
     public async Task<IActionResult> GetAllAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleService.RetrieveAllAsync()
+            Data = await _saleService.RetrieveAllAsync()
         });
 }

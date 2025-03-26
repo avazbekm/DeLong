@@ -1,17 +1,19 @@
 ﻿using DeLong.Service.DTOs.Payments;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class PaymentController : BaseController
 {
-    private readonly IPaymentService paymentService;
+    private readonly IPaymentService _paymentService;
 
     public PaymentController(IPaymentService paymentService)
     {
-        this.paymentService = paymentService;
+        _paymentService = paymentService;
     }
 
     [HttpPost("create")]
@@ -20,7 +22,7 @@ public class PaymentController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.paymentService.AddAsync(dto)
+            Data = await _paymentService.AddAsync(dto)
         });
 
     [HttpGet("get-by-sale/{saleId:long}")]
@@ -29,7 +31,7 @@ public class PaymentController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.paymentService.RetrieveBySaleIdAsync(saleId)
+            Data = await _paymentService.RetrieveBySaleIdAsync(saleId)
         });
 
     [HttpGet("get-all")]
@@ -38,6 +40,6 @@ public class PaymentController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.paymentService.RetrieveAllAsync()
+            Data = await _paymentService.RetrieveAllAsync()
         });
 }

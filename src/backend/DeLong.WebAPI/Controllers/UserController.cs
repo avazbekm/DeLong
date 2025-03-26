@@ -1,17 +1,20 @@
-﻿using DeLong.Application.DTOs.Users;
-using DeLong.Domain.Configurations;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Users;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class UserController : BaseController
 {
-    private readonly IUserService userService;
+    private readonly IUserService _userService;
+
     public UserController(IUserService userService)
     {
-        this.userService = userService;
+        _userService = userService;
     }
 
     [HttpPost("create")]
@@ -20,7 +23,7 @@ public class UserController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.AddAsync(dto)
+            Data = await _userService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -29,7 +32,7 @@ public class UserController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.ModifyAsync(dto)
+            Data = await _userService.ModifyAsync(dto)
         });
 
     [HttpDelete("delete/{id:long}")]
@@ -38,7 +41,7 @@ public class UserController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.RemoveAsync(id)
+            Data = await _userService.RemoveAsync(id)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -47,7 +50,7 @@ public class UserController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.RemoveAsync(id)
+            Data = await _userService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -56,34 +59,33 @@ public class UserController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.RetrieveByIdAsync(id)
+            Data = await _userService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get/jshshir")]
     public async Task<IActionResult> GetByJshshirAsync(string jshshir)
-    => Ok(new Response
-    {
-        StatusCode = 200,
-        Message = "Success",
-        Data = await this.userService.RetrieveByJSHSHIRAsync(jshshir)
-    });
-
-    [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.RetrieveAllAsync(@params, filter, search)
+            Data = await _userService.RetrieveByJSHSHIRAsync(jshshir)
+        });
+
+    [HttpGet("get-all")]
+    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search = null)
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _userService.RetrieveAllAsync(@params, filter, search)
         });
 
     [HttpGet("get-allUsers")]
-    public async Task<IActionResult> GetAllsync()
+    public async Task<IActionResult> GetAllUsersAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.userService.RetrieveAllAsync()
+            Data = await _userService.RetrieveAllAsync()
         });
-
 }

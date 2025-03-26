@@ -1,11 +1,12 @@
-﻿using DeLong.Domain.Configurations;
-using DeLong.Service.DTOs;
-using DeLong.Service.Interfaces;
+﻿using DeLong.Service.DTOs;
 using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class ReturnProductController : BaseController
 {
     private readonly IReturnProductService _returnProductService;
@@ -52,7 +53,7 @@ public class ReturnProductController : BaseController
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, Filter filter)
+    public async Task<IActionResult> GetAllAsync()
         => Ok(new Response
         {
             StatusCode = 200,

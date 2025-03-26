@@ -1,16 +1,20 @@
-﻿using DeLong.Service.DTOs.Employee;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Employee;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
+
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class EmployeeController : BaseController
 {
-    private readonly IEmployeeService employeeService;
+    private readonly IEmployeeService _employeeService;
+
     public EmployeeController(IEmployeeService employeeService)
     {
-        this.employeeService = employeeService;
+        _employeeService = employeeService;
     }
 
     [HttpPost("create")]
@@ -19,7 +23,7 @@ public class EmployeeController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.employeeService.AddAsync(dto)
+            Data = await _employeeService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -28,7 +32,7 @@ public class EmployeeController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.employeeService.ModifyAsync(dto)
+            Data = await _employeeService.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -37,7 +41,7 @@ public class EmployeeController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.employeeService.RemoveAsync(id)
+            Data = await _employeeService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -46,15 +50,15 @@ public class EmployeeController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.employeeService.RetrieveByIdAsync(id)
+            Data = await _employeeService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync()
+    public async Task<IActionResult> GetAllAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.employeeService.RetrieveAllAsync()
+            Data = await _employeeService.RetrieveAllAsync()
         });
 }

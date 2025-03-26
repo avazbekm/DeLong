@@ -1,17 +1,19 @@
 ﻿using DeLong.Service.DTOs.TransactionItems;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class TransactionItemController : BaseController
 {
-    private readonly ITransactionItemService transactionItemService;
+    private readonly ITransactionItemService _transactionItemService;
 
     public TransactionItemController(ITransactionItemService transactionItemService)
     {
-        this.transactionItemService = transactionItemService;
+        _transactionItemService = transactionItemService;
     }
 
     [HttpPost("create")]
@@ -20,7 +22,7 @@ public class TransactionItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionItemService.AddAsync(dto)
+            Data = await _transactionItemService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -29,7 +31,7 @@ public class TransactionItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionItemService.ModifyAsync(dto)
+            Data = await _transactionItemService.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -38,7 +40,7 @@ public class TransactionItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionItemService.RemoveAsync(id)
+            Data = await _transactionItemService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -47,7 +49,7 @@ public class TransactionItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionItemService.RetrieveByIdAsync(id)
+            Data = await _transactionItemService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
@@ -56,18 +58,6 @@ public class TransactionItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.transactionItemService.RetrieveAllAsync()
+            Data = await _transactionItemService.RetrieveAllAsync()
         });
-
-    [HttpGet("get-by-transaction/{transactionId:long}")]
-    public async Task<IActionResult> GetByTransactionIdAsync(long transactionId)
-    {
-        // Hozircha service da bu metod yo‘q, shuning uchun placeholder qo‘yildi
-        return Ok(new Response
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = null
-        });
-    }
 }
