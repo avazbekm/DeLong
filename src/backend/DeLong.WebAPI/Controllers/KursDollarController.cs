@@ -1,16 +1,19 @@
 ﻿using DeLong.Service.DTOs.KursDollar;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class KursDollarController : BaseController
 {
-    private readonly IKursDollarService kursDollarService;
+    private readonly IKursDollarService _kursDollarService;
+
     public KursDollarController(IKursDollarService kursDollarService)
     {
-        this.kursDollarService = kursDollarService;
+        _kursDollarService = kursDollarService;
     }
 
     [HttpPost("create")]
@@ -19,9 +22,8 @@ public class KursDollarController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.kursDollarService.AddAsync(dto)
+            Data = await _kursDollarService.AddAsync(dto)
         });
-
 
     [HttpGet("get")]
     public async Task<IActionResult> GetByIdAsync()
@@ -29,16 +31,15 @@ public class KursDollarController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.kursDollarService.RetrieveByIdAsync()
+            Data = await _kursDollarService.RetrieveByIdAsync()
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync()
-    => Ok(new Response
-    {
-        StatusCode = 200,
-        Message = "Success",
-        Data = await this.kursDollarService.RetrieveAllAsync()
-    });
+    public async Task<IActionResult> GetAllAsync()
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _kursDollarService.RetrieveAllAsync()
+        });
 }
-

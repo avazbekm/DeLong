@@ -1,10 +1,12 @@
 ﻿using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models; // Response modeli uchun
 using DeLong_Desktop.ApiService.DTOs.Discounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class DiscountController : BaseController
 {
     private readonly IDiscountService _discountService;
@@ -65,6 +67,6 @@ public class DiscountController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this._discountService.RetrieveBySaleIdAsync(saleId)
+            Data = await _discountService.RetrieveBySaleIdAsync(saleId)
         });
 }

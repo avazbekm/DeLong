@@ -1,16 +1,19 @@
 ﻿using DeLong.Service.DTOs.Debts;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class DebtController : BaseController
 {
-    private readonly IDebtService debtService;
+    private readonly IDebtService _debtService;
+
     public DebtController(IDebtService debtService)
     {
-        this.debtService = debtService;
+        _debtService = debtService;
     }
 
     [HttpPost("create")]
@@ -19,7 +22,7 @@ public class DebtController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.debtService.AddAsync(dto)
+            Data = await _debtService.AddAsync(dto)
         });
 
     [HttpGet("get/{id:long}")]
@@ -28,7 +31,7 @@ public class DebtController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.debtService.RetrieveByIdAsync(id)
+            Data = await _debtService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
@@ -37,7 +40,7 @@ public class DebtController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.debtService.RetrieveAllAsync()
+            Data = await _debtService.RetrieveAllAsync()
         });
 
     [HttpGet("get-by-sale/{saleId:long}")]
@@ -46,7 +49,7 @@ public class DebtController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.debtService.RetrieveBySaleIdAsync(saleId)
+            Data = await _debtService.RetrieveBySaleIdAsync(saleId)
         });
 
     [HttpGet("get-all-grouped-by-customer")]
@@ -55,6 +58,6 @@ public class DebtController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.debtService.RetrieveAllGroupedByCustomerAsync()
+            Data = await _debtService.RetrieveAllGroupedByCustomerAsync()
         });
 }

@@ -1,88 +1,97 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Categories;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.Categories;
 
 namespace DeLong.Service.Services;
 
-public class CategoryService : ICategoryService
+public class CategoryService : AuditableService, ICategoryService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<Category> categoryRepository;
-    public CategoryService(IRepository<Category> categoryRepository, IMapper mapper)
+    private readonly IMapper _mapper;
+    private readonly IRepository<Category> _categoryRepository;
+
+    public CategoryService(IRepository<Category> categoryRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.mapper = mapper;
-        this.categoryRepository = categoryRepository;
+        _mapper = mapper;
+        _categoryRepository = categoryRepository;
     }
 
     public async ValueTask<CategoryResultDto> AddAsync(CategoryCreationDto dto)
     {
-        Category existCategory = await this.categoryRepository.GetAsync(u => u.Name.Equals(dto.Name));
+        Category existCategory = await _categoryRepository.GetAsync(u => u.Name.Equals(dto.Name) && !u.IsDeleted);
         if (existCategory is not null)
             throw new AlreadyExistException($"This Category is already exists with Name = {dto.Name}");
 
-        var mappedCategorys = this.mapper.Map<Category>(dto);
-        await this.categoryRepository.CreateAsync(mappedCategorys);
-        await this.categoryRepository.SaveChanges();
+        var mappedCategory = _mapper.Map<Category>(dto);
+        SetCreatedFields(mappedCategory); // Auditable maydonlarni qo‘shish
 
-        var result = this.mapper.Map<CategoryResultDto>(mappedCategorys);
-        return result;
+        await _categoryRepository.CreateAsync(mappedCategory);
+        await _categoryRepository.SaveChanges();
+
+        return _mapper.Map<CategoryResultDto>(mappedCategory);
     }
 
     public async ValueTask<CategoryResultDto> ModifyAsync(CategoryUpdateDto dto)
     {
-        Category existCategory = await this.categoryRepository.GetAsync(u => u.Id.Equals(dto.Id))
+        Category existCategory = await _categoryRepository.GetAsync(u => u.Id.Equals(dto.Id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This category is not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existCategory);
-        this.categoryRepository.Update(existCategory);
-        await this.categoryRepository.SaveChanges();
+        _mapper.Map(dto, existCategory);
+        SetUpdatedFields(existCategory); // Auditable maydonlarni yangilash
 
-        var result = this.mapper.Map<CategoryResultDto>(existCategory);
-        return result;
+        _categoryRepository.Update(existCategory);
+        await _categoryRepository.SaveChanges();
+
+        return _mapper.Map<CategoryResultDto>(existCategory);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        Category existCategory = await this.categoryRepository.GetAsync(u => u.Id.Equals(id))
+        Category existCategory = await _categoryRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This category is not found with ID = {id}");
 
-        this.categoryRepository.Delete(existCategory);
-        await this.categoryRepository.SaveChanges();
+        existCategory.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existCategory); // Auditable maydonlarni yangilash
+
+        _categoryRepository.Update(existCategory); // Delete o‘rniga Update
+        await _categoryRepository.SaveChanges();
         return true;
     }
 
     public async ValueTask<CategoryResultDto> RetrieveByIdAsync(long id)
     {
-        Category existCategory = await this.categoryRepository.GetAsync(u => u.Id.Equals(id))
+        Category existCategory = await _categoryRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This category is not found with ID = {id}");
 
-        var result = this.mapper.Map<CategoryResultDto>(existCategory);
-        return result;
+        return _mapper.Map<CategoryResultDto>(existCategory);
     }
 
     public async ValueTask<IEnumerable<CategoryResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
     {
-        var categories = await this.categoryRepository.GetAll()
+        var categoriesQuery = _categoryRepository.GetAll(u => !u.IsDeleted)
             .ToPaginate(@params)
-            .OrderBy(filter)
-            .ToListAsync();
+            .OrderBy(filter);
 
-        var result = categories.Where(category => category.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
-        var mappedCategories = this.mapper.Map<List<CategoryResultDto>>(result);
-        return mappedCategories;
+        if (!string.IsNullOrEmpty(search))
+        {
+            categoriesQuery = categoriesQuery.Where(category => category.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+        }
+
+        var categories = await categoriesQuery.ToListAsync();
+        return _mapper.Map<List<CategoryResultDto>>(categories);
     }
 
     public async ValueTask<IEnumerable<CategoryResultDto>> RetrieveAllAsync()
     {
-        var categories = await this.categoryRepository.GetAll()
+        var categories = await _categoryRepository.GetAll(u => !u.IsDeleted)
             .ToListAsync();
-        var result = this.mapper.Map<List<CategoryResultDto>>(categories);
-        return result;
+        return _mapper.Map<List<CategoryResultDto>>(categories);
     }
 }

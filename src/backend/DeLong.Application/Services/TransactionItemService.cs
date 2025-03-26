@@ -1,72 +1,76 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.TransactionItems;
-using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Service.DTOs.TransactionItems;
 
 namespace DeLong.Service.Services;
 
-public class TransactionItemService : ITransactionItemService
+public class TransactionItemService : AuditableService, ITransactionItemService
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<TransactionItem> transactionItemRepository;
+    private readonly IMapper _mapper;
+    private readonly IRepository<TransactionItem> _transactionItemRepository;
 
-    public TransactionItemService(IRepository<TransactionItem> transactionItemRepository, IMapper mapper)
+    public TransactionItemService(IRepository<TransactionItem> transactionItemRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.mapper = mapper;
-        this.transactionItemRepository = transactionItemRepository;
+        _mapper = mapper;
+        _transactionItemRepository = transactionItemRepository;
     }
 
     public async ValueTask<TransactionItemResultDto> AddAsync(TransactionItemCreationDto dto)
     {
+        var mappedItem = _mapper.Map<TransactionItem>(dto);
+        SetCreatedFields(mappedItem); // Auditable maydonlarni qo‘shish
 
-        var mappedItem = this.mapper.Map<TransactionItem>(dto);
-        await this.transactionItemRepository.CreateAsync(mappedItem);
-        await this.transactionItemRepository.SaveChanges();
-
-        var result = this.mapper.Map<TransactionItemResultDto>(mappedItem);
-        return result;
+        await _transactionItemRepository.CreateAsync(mappedItem);
+        await _transactionItemRepository.SaveChanges();
+        return _mapper.Map<TransactionItemResultDto>(mappedItem);
     }
 
     public async ValueTask<TransactionItemResultDto> ModifyAsync(TransactionItemUpdateDto dto)
     {
-        TransactionItem existItem = await this.transactionItemRepository.GetAsync(u => u.ProductId.Equals(dto.ProductId))
-            ?? throw new NotFoundException($"TransactionItem not found with ProductId = {dto.ProductId}");
+        var existItem = await _transactionItemRepository.GetAsync(u => u.Id == dto.Id && !u.IsDeleted)
+            ?? throw new NotFoundException($"TransactionItem not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existItem);
-        this.transactionItemRepository.Update(existItem);
-        await this.transactionItemRepository.SaveChanges();
+        _mapper.Map(dto, existItem);
+        SetUpdatedFields(existItem); // Auditable maydonlarni yangilash
 
-        var result = this.mapper.Map<TransactionItemResultDto>(existItem);
-        return result;
+        _transactionItemRepository.Update(existItem);
+        await _transactionItemRepository.SaveChanges();
+        return _mapper.Map<TransactionItemResultDto>(existItem);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        TransactionItem existItem = await this.transactionItemRepository.GetAsync(u => u.Id.Equals(id))
+        var existItem = await _transactionItemRepository.GetAsync(u => u.Id == id && !u.IsDeleted)
             ?? throw new NotFoundException($"TransactionItem not found with ID = {id}");
 
-        this.transactionItemRepository.Delete(existItem);
-        await this.transactionItemRepository.SaveChanges();
+        existItem.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existItem); // Auditable maydonlarni yangilash
+
+        _transactionItemRepository.Update(existItem);
+        await _transactionItemRepository.SaveChanges();
         return true;
     }
 
     public async ValueTask<TransactionItemResultDto> RetrieveByIdAsync(long id)
     {
-        TransactionItem existItem = await this.transactionItemRepository.GetAsync(u => u.Id.Equals(id))
+        var existItem = await _transactionItemRepository.GetAsync(u => u.Id == id && !u.IsDeleted,
+            includes: new[] { "Product" }) // Product ni include qilish
             ?? throw new NotFoundException($"TransactionItem not found with ID = {id}");
 
-        var result = this.mapper.Map<TransactionItemResultDto>(existItem);
-        return result;
+        return _mapper.Map<TransactionItemResultDto>(existItem);
     }
 
     public async ValueTask<IEnumerable<TransactionItemResultDto>> RetrieveAllAsync()
     {
-        var items = await this.transactionItemRepository.GetAll()
-            .Include(i => i.Product) // Product ni yuklash
+        var items = await _transactionItemRepository.GetAll(t => !t.IsDeleted,
+            includes: new[] { "Product" }) // Product ni include qilish
             .ToListAsync();
-        return this.mapper.Map<IEnumerable<TransactionItemResultDto>>(items);
+        return _mapper.Map<IEnumerable<TransactionItemResultDto>>(items);
     }
 }

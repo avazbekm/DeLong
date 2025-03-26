@@ -1,98 +1,109 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.Prices;
-using DeLong.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
 
-public class PriceService : IPriceServer
+public class PriceService : AuditableService, IPriceServer
 {
-    private readonly IMapper mapper;
-    private readonly IRepository<Price> priceRepository;
-    public PriceService(IRepository<Price> priceRepository, IMapper mapper)
+    private readonly IMapper _mapper;
+    private readonly IRepository<Price> _priceRepository;
+
+    public PriceService(IRepository<Price> priceRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.mapper = mapper;
-        this.priceRepository = priceRepository;
+        _mapper = mapper;
+        _priceRepository = priceRepository;
     }
 
     public async ValueTask<PriceResultDto> AddAsync(PriceCreationDto dto)
     {
-        Price existPrices = await this.priceRepository.GetAsync(u =>
+        var existPrices = await _priceRepository.GetAsync(u =>
             u.ProductId.Equals(dto.ProductId) &&
             u.CostPrice.Equals(dto.CostPrice) &&
-            u.SellingPrice.Equals(dto.SellingPrice));
+            u.SellingPrice.Equals(dto.SellingPrice) &&
+            !u.IsDeleted);
         if (existPrices is not null)
             throw new AlreadyExistException($"This Price is already exists with ProductId = {dto.ProductId}");
 
-        var mappedPrices = this.mapper.Map<Price>(dto);
-        await this.priceRepository.CreateAsync(mappedPrices);
-        await this.priceRepository.SaveChanges();
+        var mappedPrices = _mapper.Map<Price>(dto);
+        SetCreatedFields(mappedPrices); // Auditable maydonlarni qo‘shish
 
-        var result = this.mapper.Map<PriceResultDto>(mappedPrices);
-        return result;
+        await _priceRepository.CreateAsync(mappedPrices);
+        await _priceRepository.SaveChanges();
+
+        return _mapper.Map<PriceResultDto>(mappedPrices);
     }
 
     public async ValueTask<PriceResultDto> ModifyAsync(PriceUpdateDto dto)
     {
-        Price existPrices = await this.priceRepository.GetAsync(u => u.Id.Equals(dto.Id))
+        var existPrices = await _priceRepository.GetAsync(u => u.Id.Equals(dto.Id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This Price is not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existPrices);
-        this.priceRepository.Update(existPrices);
-        await this.priceRepository.SaveChanges();
+        _mapper.Map(dto, existPrices);
+        SetUpdatedFields(existPrices); // Auditable maydonlarni yangilash
 
-        var result = this.mapper.Map<PriceResultDto>(existPrices);
-        return result;
+        _priceRepository.Update(existPrices);
+        await _priceRepository.SaveChanges();
+
+        return _mapper.Map<PriceResultDto>(existPrices);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        Price existPrices = await this.priceRepository.GetAsync(u => u.Id.Equals(id))
+        var existPrices = await _priceRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This Price is not found with ID = {id}");
 
-        this.priceRepository.Delete(existPrices);
-        await this.priceRepository.SaveChanges();
+        existPrices.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existPrices); // Auditable maydonlarni yangilash
+
+        _priceRepository.Update(existPrices);
+        await _priceRepository.SaveChanges();
         return true;
     }
 
     public async ValueTask<PriceResultDto> RetrieveByIdAsync(long id)
     {
-        Price existPrices = await this.priceRepository.GetAsync(u => u.Id.Equals(id))
+        var existPrices = await _priceRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This Price is not found with ID = {id}");
 
-        var result = this.mapper.Map<PriceResultDto>(existPrices);
-        return result;
-    }
-
-    public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
-    {
-        var prices = await this.priceRepository.GetAll()
-            .ToPaginate(@params)
-            .OrderBy(filter)
-            .ToListAsync();
-
-        var result = prices.Where(price => price.Id.ToString().Contains(search, StringComparison.OrdinalIgnoreCase));
-        var mappedPrices = this.mapper.Map<List<PriceResultDto>>(result);
-        return mappedPrices;
+        return _mapper.Map<PriceResultDto>(existPrices);
     }
 
     public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync()
     {
-        var prices = await this.priceRepository.GetAll()
+        var prices = await _priceRepository.GetAll(p => !p.IsDeleted)
             .ToListAsync();
-        var result = this.mapper.Map<IEnumerable<PriceResultDto>>(prices);
-        return result;
+        return _mapper.Map<IEnumerable<PriceResultDto>>(prices);
     }
+
     public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(long productId)
     {
-        var prices = await this.priceRepository.GetAll(p => p.ProductId.Equals(productId))
+        var prices = await _priceRepository.GetAll(p => p.ProductId.Equals(productId) && !p.IsDeleted)
             .ToListAsync();
-        var result = this.mapper.Map<IEnumerable<PriceResultDto>>(prices);
-        return result;
+        return _mapper.Map<IEnumerable<PriceResultDto>>(prices);
+    }
+
+    // Pagination metodi ishlatilmagan, agar kerak bo‘lsa qo‘shish mumkin
+    public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
+    {
+        var pricesQuery = _priceRepository.GetAll(p => !p.IsDeleted)
+            .ToPaginate(@params)
+            .OrderBy(filter);
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            pricesQuery = pricesQuery.Where(price => price.Id.ToString().Contains(search, StringComparison.OrdinalIgnoreCase));
+        }
+
+        var prices = await pricesQuery.ToListAsync();
+        return _mapper.Map<IEnumerable<PriceResultDto>>(prices);
     }
 }

@@ -1,16 +1,19 @@
-﻿using DeLong.Service.DTOs.Prices;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Prices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class PriceController : BaseController
 {
-    private readonly IPriceServer priceService;
+    private readonly IPriceServer _priceService;
+
     public PriceController(IPriceServer priceService)
     {
-        this.priceService = priceService;
+        _priceService = priceService;
     }
 
     [HttpPost("create")]
@@ -19,7 +22,7 @@ public class PriceController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.priceService.AddAsync(dto)
+            Data = await _priceService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -28,16 +31,7 @@ public class PriceController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.priceService.ModifyAsync(dto)
-        });
-
-    [HttpDelete("delete/{id:long}")]
-    public async Task<IActionResult> DeleteAsync(long id)
-        => Ok(new Response
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = await this.priceService.RemoveAsync(id)
+            Data = await _priceService.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -46,7 +40,7 @@ public class PriceController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.priceService.RemoveAsync(id)
+            Data = await _priceService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -55,24 +49,24 @@ public class PriceController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.priceService.RetrieveByIdAsync(id)
+            Data = await _priceService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync()
-    => Ok(new Response
-    {
-        StatusCode = 200,
-        Message = "Success",
-        Data = await this.priceService.RetrieveAllAsync()
-    });
-
-    [HttpGet("get-allProductId")]
-    public async Task<IActionResult> GetAllsync(long productId)
+    public async Task<IActionResult> GetAllAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.priceService.RetrieveAllAsync(productId)
+            Data = await _priceService.RetrieveAllAsync()
+        });
+
+    [HttpGet("get-all-product/{productId:long}")]
+    public async Task<IActionResult> GetAllByProductIdAsync(long productId)
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _priceService.RetrieveAllAsync(productId)
         });
 }

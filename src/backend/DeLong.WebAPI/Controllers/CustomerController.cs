@@ -2,16 +2,19 @@
 using DeLong.Domain.Configurations;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class CustomerController : BaseController
 {
-    private readonly ICustomerService customerService;
+    private readonly ICustomerService _customerService;
+
     public CustomerController(ICustomerService customerService)
     {
-        this.customerService = customerService;
+        _customerService = customerService;
     }
 
     [HttpPost("create")]
@@ -20,7 +23,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.AddAsync(dto)
+            Data = await _customerService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -29,16 +32,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.ModifyAsync(dto)
-        });
-
-    [HttpDelete("delete/{id:long}")]
-    public async Task<IActionResult> DeleteAsync(long id)
-        => Ok(new Response
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = await this.customerService.RemoveAsync(id)
+            Data = await _customerService.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -47,7 +41,7 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RemoveAsync(id)
+            Data = await _customerService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -56,43 +50,42 @@ public class CustomerController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveByIdAsync(id)
+            Data = await _customerService.RetrieveByIdAsync(id)
         });
 
-    [HttpGet("get/INN")]
-    public async Task<IActionResult> GetByInnAsync(int inn)
-       => Ok(new Response
-       {
-           StatusCode = 200,
-           Message = "Success",
-           Data = await this.customerService.RetrieveByInnAsync(inn)
-       });
+    [HttpGet("get/INN/{INN:int}")]
+    public async Task<IActionResult> GetByInnAsync(int INN)
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _customerService.RetrieveByInnAsync(INN)
+        });
 
-    [HttpGet("get/Jshshir")]
+    [HttpGet("get/jshshir/{jshshir}")]
     public async Task<IActionResult> GetByJshshirAsync(string jshshir)
-       => Ok(new Response
-       {
-           StatusCode = 200,
-           Message = "Success",
-           Data = await this.customerService.RetrieveByJshshirAsync(jshshir)
-       });
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _customerService.RetrieveByJshshirAsync(jshshir)
+        });
 
     [HttpGet("get-all")]
-    public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
+    public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, [FromQuery] string search = null)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveAllAsync(@params, filter, search)
+            Data = await _customerService.RetrieveAllAsync(@params, filter, search)
         });
 
-    [HttpGet("get-allCustomers")]
-    public async Task<IActionResult> GetAllsync()
+    [HttpGet("get-all-customers")]
+    public async Task<IActionResult> GetAllCustomersAsync()
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.customerService.RetrieveAllAsync()
+            Data = await _customerService.RetrieveAllAsync()
         });
-
 }

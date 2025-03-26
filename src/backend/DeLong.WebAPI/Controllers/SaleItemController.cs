@@ -1,17 +1,19 @@
 ﻿using DeLong.Domain.Configurations;
 using DeLong.Service.DTOs.SaleItems;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
+[Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class SaleItemController : BaseController
 {
-    private readonly ISaleItemService saleItemService;
+    private readonly ISaleItemService _saleItemService;
 
     public SaleItemController(ISaleItemService saleItemService)
     {
-        this.saleItemService = saleItemService;
+        _saleItemService = saleItemService;
     }
 
     [HttpPost("create")]
@@ -20,7 +22,7 @@ public class SaleItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleItemService.AddAsync(dto)
+            Data = await _saleItemService.AddAsync(dto)
         });
 
     [HttpPut("update")]
@@ -29,7 +31,7 @@ public class SaleItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleItemService.ModifyAsync(dto)
+            Data = await _saleItemService.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -38,7 +40,7 @@ public class SaleItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleItemService.RemoveAsync(id)
+            Data = await _saleItemService.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -47,7 +49,7 @@ public class SaleItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleItemService.RetrieveByIdAsync(id)
+            Data = await _saleItemService.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
@@ -56,7 +58,7 @@ public class SaleItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleItemService.RetrieveAllAsync(@params, filter)
+            Data = await _saleItemService.RetrieveAllAsync(@params, filter)
         });
 
     [HttpGet("get-by-sale/{saleId:long}")]
@@ -65,6 +67,6 @@ public class SaleItemController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await this.saleItemService.RetrieveAllBySaleIdAsync(saleId)
+            Data = await _saleItemService.RetrieveAllBySaleIdAsync(saleId)
         });
 }

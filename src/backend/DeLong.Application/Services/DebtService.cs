@@ -4,77 +4,85 @@ using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.Debts;
 using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
 
-public class DebtService : IDebtService
+public class DebtService : AuditableService, IDebtService
 {
-    private readonly IRepository<Debt> debtRepository;
-    private readonly IMapper mapper;
+    private readonly IRepository<Debt> _debtRepository;
+    private readonly IMapper _mapper;
 
-    public DebtService(IRepository<Debt> debtRepository, IMapper mapper)
+    public DebtService(IRepository<Debt> debtRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : base(httpContextAccessor)
     {
-        this.debtRepository = debtRepository;
-        this.mapper = mapper;
+        _debtRepository = debtRepository;
+        _mapper = mapper;
     }
 
     public async ValueTask<DebtResultDto> AddAsync(DebtCreationDto dto)
     {
-        var newDebt = this.mapper.Map<Debt>(dto);
-        await this.debtRepository.CreateAsync(newDebt);
-        await this.debtRepository.SaveChanges();
-        return this.mapper.Map<DebtResultDto>(newDebt);
+        var newDebt = _mapper.Map<Debt>(dto);
+        newDebt.IsSettled = false; // Yangi qarz default holatda to‘lanmagan
+        SetCreatedFields(newDebt); // Auditable maydonlarni qo‘shish
+
+        await _debtRepository.CreateAsync(newDebt);
+        await _debtRepository.SaveChanges();
+        return _mapper.Map<DebtResultDto>(newDebt);
     }
 
     public async ValueTask<DebtResultDto> ModifyAsync(DebtUpdateDto dto)
     {
-        var existDebt = await this.debtRepository.GetAsync(d => d.Id == dto.Id)
+        var existDebt = await _debtRepository.GetAsync(d => d.Id == dto.Id && !d.IsDeleted)
             ?? throw new NotFoundException($"Debt not found with ID = {dto.Id}");
 
-        this.mapper.Map(dto, existDebt);
-        this.debtRepository.Update(existDebt);
-        await this.debtRepository.SaveChanges();
-        return this.mapper.Map<DebtResultDto>(existDebt);
+        _mapper.Map(dto, existDebt);
+        SetUpdatedFields(existDebt); // Auditable maydonlarni yangilash
+
+        _debtRepository.Update(existDebt);
+        await _debtRepository.SaveChanges();
+        return _mapper.Map<DebtResultDto>(existDebt);
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
-        var existDebt = await this.debtRepository.GetAsync(d => d.Id == id)
+        var existDebt = await _debtRepository.GetAsync(d => d.Id == id && !d.IsDeleted)
             ?? throw new NotFoundException($"Debt not found with ID = {id}");
 
-        this.debtRepository.Delete(existDebt);
-        await this.debtRepository.SaveChanges();
+        existDebt.IsDeleted = true; // Soft delete
+        SetUpdatedFields(existDebt); // Auditable maydonlarni yangilash
+
+        _debtRepository.Update(existDebt);
+        await _debtRepository.SaveChanges();
         return true;
     }
 
     public async ValueTask<DebtResultDto> RetrieveByIdAsync(long id)
     {
-        var existDebt = await this.debtRepository.GetAsync(d => d.Id == id)
+        var existDebt = await _debtRepository.GetAsync(d => d.Id == id && !d.IsDeleted)
             ?? throw new NotFoundException($"Debt not found with ID = {id}");
 
-        return this.mapper.Map<DebtResultDto>(existDebt);
+        return _mapper.Map<DebtResultDto>(existDebt);
     }
 
     public async ValueTask<IEnumerable<DebtResultDto>> RetrieveAllAsync()
     {
-        var debts = await this.debtRepository.GetAll()
-            .Where(d => !d.IsSettled) // Faqat to‘lanmagan qarzlarni qaytaramiz
+        var debts = await _debtRepository.GetAll(d => !d.IsDeleted && !d.IsSettled) // Faqat to‘lanmagan va o‘chirilmagan qarzlar
             .ToListAsync();
-        return this.mapper.Map<IEnumerable<DebtResultDto>>(debts);
+        return _mapper.Map<IEnumerable<DebtResultDto>>(debts);
     }
 
     public async ValueTask<IEnumerable<DebtResultDto>> RetrieveBySaleIdAsync(long saleId)
     {
-        var debts = await this.debtRepository.GetAll(d => d.SaleId == saleId && !d.IsSettled)
+        var debts = await _debtRepository.GetAll(d => d.SaleId == saleId && !d.IsSettled && !d.IsDeleted)
             .ToListAsync();
-        return this.mapper.Map<IEnumerable<DebtResultDto>>(debts);
+        return _mapper.Map<IEnumerable<DebtResultDto>>(debts);
     }
 
     public async ValueTask<Dictionary<string, List<DebtResultDto>>> RetrieveAllGroupedByCustomerAsync()
     {
-        var debts = await this.debtRepository.GetAll()
-            .Where(d => !d.IsSettled) // Faqat to‘lanmagan qarzlarni olamiz
+        var debts = await _debtRepository.GetAll(d => !d.IsSettled && !d.IsDeleted) // Faqat to‘lanmagan va o‘chirilmagan qarzlar
             .Include(d => d.Sale)
             .ThenInclude(s => s.User)
             .Include(d => d.Sale)
@@ -93,7 +101,7 @@ public class DebtService : IDebtService
             .Where(group => group.Any(debt => debt.RemainingAmount > 0))
             .ToDictionary(
                 group => group.Key,
-                group => this.mapper.Map<List<DebtResultDto>>(group.ToList())
+                group => _mapper.Map<List<DebtResultDto>>(group.ToList())
             );
 
         return groupedDebts;
