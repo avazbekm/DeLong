@@ -17,6 +17,7 @@ public class UserController : BaseController
         _userService = userService;
     }
 
+    [AllowAnonymous]
     [HttpPost("create")]
     public async Task<IActionResult> AddAsync(UserCreationDto dto)
         => Ok(new Response
