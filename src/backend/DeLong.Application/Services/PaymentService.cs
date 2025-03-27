@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
+using DeLong.Service.DTOs.Payments;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
-using DeLong.Service.DTOs.Payments;
-using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
