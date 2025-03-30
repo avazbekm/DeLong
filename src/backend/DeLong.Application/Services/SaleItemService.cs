@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using DeLong.Domain.Entities;
-using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.SaleItems;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
 

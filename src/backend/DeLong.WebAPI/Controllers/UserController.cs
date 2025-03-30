@@ -1,9 +1,9 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using DeLong.Service.Interfaces;
+﻿using DeLong.Application.DTOs.Users;
 using DeLong.Domain.Configurations;
-using DeLong.Application.DTOs.Users;
+using DeLong.Service.Interfaces;
+using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DeLong.WebAPI.Controllers;
 
@@ -17,6 +17,7 @@ public class UserController : BaseController
         _userService = userService;
     }
 
+    [AllowAnonymous]
     [HttpPost("create")]
     public async Task<IActionResult> AddAsync(UserCreationDto dto)
         => Ok(new Response

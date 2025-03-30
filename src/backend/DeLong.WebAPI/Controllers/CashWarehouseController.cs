@@ -1,9 +1,9 @@
-﻿using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
-using DeLong.WebAPI.Controllers;
+﻿using DeLong.Service.DTOs.CashWarehouse;
 using DeLong.Service.Interfaces;
-using DeLong.Service.DTOs.CashWarehouse;
+using DeLong.WebAPI.Controllers;
+using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 [Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class CashWarehouseController : BaseController
