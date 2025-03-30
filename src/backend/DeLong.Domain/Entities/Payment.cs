@@ -10,4 +10,5 @@ public class Payment : Auditable
 
     public decimal Amount { get; set; }
     public PaymentType Type { get; set; } // Cash, Card, Transfer, Credit, Dollar
+    public long BranchId { get; set; }
 }

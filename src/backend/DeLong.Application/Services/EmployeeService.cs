@@ -38,6 +38,18 @@ public class EmployeeService : AuditableService, IEmployeeService
         return _mapper.Map<EmployeeResultDto>(employee);
     }
 
+    public async ValueTask<bool> AnyEmployeesAsync()
+    {
+        return await _employeeRepository.GetAll().AnyAsync();
+    }
+
+    public async Task<long> CreateSeedEmployeeAsync(Employee employee)
+    {
+        var createdEmployee = _employeeRepository.CreateAsync(employee);
+        await _employeeRepository.SaveChanges();
+        return createdEmployee.Id;
+    }
+
     public async ValueTask<EmployeeResultDto> ModifyAsync(EmployeeUpdateDto dto)
     {
         var existingEmployee = await _employeeRepository.GetAsync(u => u.Id == dto.Id && !u.IsDeleted)
@@ -72,14 +84,16 @@ public class EmployeeService : AuditableService, IEmployeeService
 
     public async ValueTask<IEnumerable<EmployeeResultDto>> RetrieveAllAsync()
     {
-        var employees = await _employeeRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var employees = await _employeeRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<EmployeeResultDto>>(employees);
     }
 
     public async ValueTask<EmployeeResultDto> RetrieveByIdAsync(long id)
     {
-        var employee = await _employeeRepository.GetAsync(u => u.Id == id && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var employee = await _employeeRepository.GetAsync(u => u.Id == id && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This Employee is not found with ID = {id}");
 
         return _mapper.Map<EmployeeResultDto>(employee);
@@ -87,7 +101,8 @@ public class EmployeeService : AuditableService, IEmployeeService
 
     public async ValueTask<Employee> VerifyEmployeeAsync(string username, string password)
     {
-        var employee = await _employeeRepository.GetAsync(u => u.Username == username && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var employee = await _employeeRepository.GetAsync(u => u.Username == username && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"Employee with username {username} not found");
 
         if (!BCrypt.Net.BCrypt.Verify(password, employee.Password))

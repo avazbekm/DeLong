@@ -8,4 +8,5 @@ public class Discount : Auditable
     public Sale? Sale { get; set; } // Bog‘lanish uchun navigation property
 
     public decimal Amount { get; set; } // Chegirma summasi
+    public long BranchId { get; set; }
 }

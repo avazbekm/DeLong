@@ -8,4 +8,5 @@ public class AccountNumber : Auditable
     public long? CustomerId { get; set; }
     public decimal UzsBalance { get; set; }  // so'm mablag' qoldiq
     public decimal UsdBalance { get; set; }  // dollar mablag' qoldiq
+    public long BranchId { get; set; }
 }

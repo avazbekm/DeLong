@@ -7,7 +7,7 @@ public class CashTransfer : Auditable
 {
     public long CashRegisterId { get; set; }
     public CashRegister? CashRegister { get; set; }
-
+    public long BranchId { get; set; }
     public string? From { get; set; }
     public string? To { get; set; }
     public string Currency { get; set; } = string.Empty;

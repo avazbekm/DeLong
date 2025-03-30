@@ -25,6 +25,7 @@ public class SaleService : AuditableService, ISaleService
     {
         var newSale = _mapper.Map<Sale>(dto);
         SetCreatedFields(newSale); // Auditable maydonlarni qo‘shish (CreatedBy, CreatedAt)
+        newSale.BranchId = GetCurrentBranchId();
 
         await _saleRepository.CreateAsync(newSale);
         await _saleRepository.SaveChanges();

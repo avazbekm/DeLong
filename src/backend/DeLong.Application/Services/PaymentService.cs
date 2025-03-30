@@ -24,7 +24,7 @@ public class PaymentService : AuditableService, IPaymentService
     {
         var newPayment = _mapper.Map<Payment>(dto);
         SetCreatedFields(newPayment); // Auditable maydonlarni qo‘shish
-
+        newPayment.BranchId = GetCurrentBranchId();
         await _paymentRepository.CreateAsync(newPayment);
         await _paymentRepository.SaveChanges();
         return _mapper.Map<PaymentResultDto>(newPayment);
@@ -32,14 +32,16 @@ public class PaymentService : AuditableService, IPaymentService
 
     public async ValueTask<IEnumerable<PaymentResultDto>> RetrieveBySaleIdAsync(long saleId)
     {
-        var payments = await _paymentRepository.GetAll(p => p.SaleId == saleId && !p.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var payments = await _paymentRepository.GetAll(p => p.SaleId == saleId && !p.IsDeleted && p.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<PaymentResultDto>>(payments);
     }
 
     public async ValueTask<IEnumerable<PaymentResultDto>> RetrieveAllAsync()
     {
-        var payments = await _paymentRepository.GetAll(p => !p.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var payments = await _paymentRepository.GetAll(p => !p.IsDeleted && p.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<PaymentResultDto>>(payments);
     }

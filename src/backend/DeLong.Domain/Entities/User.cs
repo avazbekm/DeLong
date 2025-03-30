@@ -18,4 +18,5 @@ public class User : Auditable
     public string Address { get; set; } = string.Empty;
     public string JSHSHIR { get; set; } = string.Empty;
     public Role Role { get; set; }
+    public long BranchId { get; set; }
 }

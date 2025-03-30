@@ -1,28 +1,27 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Assets;
-using DeLong.Application.DTOs.CashRegisters;
-using DeLong.Application.DTOs.Categories;
-using DeLong.Application.DTOs.Customers;
-using DeLong.Application.DTOs.Products;
-using DeLong.Application.DTOs.Stocks;
-using DeLong.Application.DTOs.Suppliers;
-using DeLong.Application.DTOs.Transactions;
-using DeLong.Application.DTOs.Users;
-using DeLong.Application.DTOs.Warehouses;
-using DeLong.Domain.Entities;
 using DeLong.Service.DTOs;
-using DeLong.Service.DTOs.CashTransfers;
-using DeLong.Service.DTOs.CashWarehouse;
-using DeLong.Service.DTOs.DebtPayments;
-using DeLong.Service.DTOs.Debts;
-using DeLong.Service.DTOs.Employee;
-using DeLong.Service.DTOs.KursDollar;
-using DeLong.Service.DTOs.Payments;
-using DeLong.Service.DTOs.Prices;
+using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.Sale;
+using DeLong.Service.DTOs.Debts;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Service.DTOs.Employee;
+using DeLong.Service.DTOs.Payments;
 using DeLong.Service.DTOs.SaleItems;
+using DeLong.Application.DTOs.Users;
+using DeLong.Service.DTOs.KursDollar;
+using DeLong.Application.DTOs.Assets;
+using DeLong.Service.DTOs.DebtPayments;
+using DeLong.Application.DTOs.Products;
+using DeLong.Application.DTOs.Suppliers;
+using DeLong.Service.DTOs.CashTransfers;
+using DeLong.Application.DTOs.Customers;
+using DeLong.Service.DTOs.CashWarehouse;
+using DeLong.Application.DTOs.Categories;
 using DeLong.Service.DTOs.TransactionItems;
+using DeLong.Application.DTOs.Transactions;
+using DeLong.Application.DTOs.CashRegisters;
 using DeLong_Desktop.ApiService.DTOs.Discounts;
+using DeLong.Service.DTOs.Branchs;
 
 namespace DeLong.Application.Mappers;
 
@@ -70,11 +69,7 @@ public class MappingProfile : Profile
         CreateMap<Product, ProductUpdateDto>().ReverseMap();
         CreateMap<Product, ProductCreationDto>().ReverseMap();
 
-        // Stock
-        CreateMap<Stock, StockResultDto>().ReverseMap();
-        CreateMap<Stock, StockUpdateDto>().ReverseMap();
-        CreateMap<Stock, StockCreationDto>().ReverseMap();
-
+    
         // Supplier
         CreateMap<Supplier, SupplierResultDto>().ReverseMap();
         CreateMap<Supplier, SupplierUpdateDto>().ReverseMap();
@@ -91,9 +86,9 @@ public class MappingProfile : Profile
         CreateMap<TransactionItem, TransactionItemCreationDto>().ReverseMap();
 
         // Warehouse
-        CreateMap<Warehouse, WarehouseResultDto>().ReverseMap();
-        CreateMap<Warehouse, WarehouseUpdatedDto>().ReverseMap();
-        CreateMap<Warehouse, WarehouseCreationDto>().ReverseMap();
+        CreateMap<Branch, BranchResultDto>().ReverseMap();
+        CreateMap<Branch, BranchUpdateDto>().ReverseMap();
+        CreateMap<Branch, BranchCreationDto>().ReverseMap();
 
         // Price
         CreateMap<Price, PriceResultDto>().ReverseMap();

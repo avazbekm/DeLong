@@ -17,4 +17,5 @@ public class Customer : Auditable
     // firma rahbari malumotlari
     public long UserId { get; set; }
     public required User User { get; set; }
+    public long BranchId { get; set; }
 }

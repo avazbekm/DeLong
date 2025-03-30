@@ -35,7 +35,7 @@ public class DebtPaymentService : AuditableService, IDebtPaymentService
 
         var mappedDebtPayment = _mapper.Map<DebtPayment>(dto);
         SetCreatedFields(mappedDebtPayment); // Auditable maydonlarni qo‘shish
-
+        mappedDebtPayment.BranchId = GetCurrentBranchId();
         await _debtPaymentRepository.CreateAsync(mappedDebtPayment);
 
         // Qarz qoldig‘ini yangilash
@@ -52,14 +52,17 @@ public class DebtPaymentService : AuditableService, IDebtPaymentService
 
     public async ValueTask<IEnumerable<DebtPaymentResultDto>> RetrieveByDebtIdAsync(long debtId)
     {
-        var debtPayments = await _debtPaymentRepository.GetAll(dp => dp.DebtId == debtId && !dp.IsDeleted)
+        var branchId = GetCurrentBranchId();
+
+        var debtPayments = await _debtPaymentRepository.GetAll(dp => dp.DebtId == debtId && !dp.IsDeleted && dp.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<DebtPaymentResultDto>>(debtPayments);
     }
 
     public async ValueTask<IEnumerable<DebtPaymentResultDto>> RetrieveAllAsync()
     {
-        var debtPayments = await _debtPaymentRepository.GetAll(dp => !dp.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var debtPayments = await _debtPaymentRepository.GetAll(dp => !dp.IsDeleted && dp.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<DebtPaymentResultDto>>(debtPayments);
     }

@@ -41,15 +41,6 @@ namespace DeLong.WebAPI.Controllers
                 Data = await this.supplierService.RemoveAsync(id)
             });
 
-        [HttpDelete("remove/{id:long}")]
-        public async Task<IActionResult> DestroyAsync(long id)
-            => Ok(new Response
-            {
-                StatusCode = 200,
-                Message = "Success",
-                Data = await this.supplierService.RemoveAsync(id)
-            });
-
         [HttpGet("get/{id:long}")]
         public async Task<IActionResult> GetByIdAsync(long id)
             => Ok(new Response
@@ -60,12 +51,12 @@ namespace DeLong.WebAPI.Controllers
             });
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAllsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, string search)
+        public async Task<IActionResult> GetAllsync()
             => Ok(new Response
             {
                 StatusCode = 200,
                 Message = "Success",
-                Data = await this.supplierService.RetrieveAllAsync(@params, filter, search)
+                Data = await this.supplierService.RetrieveAllAsync()
             });
     }
 }

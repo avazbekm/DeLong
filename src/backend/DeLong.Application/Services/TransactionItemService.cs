@@ -25,7 +25,7 @@ public class TransactionItemService : AuditableService, ITransactionItemService
     {
         var mappedItem = _mapper.Map<TransactionItem>(dto);
         SetCreatedFields(mappedItem); // Auditable maydonlarni qo‘shish
-
+        mappedItem.BranchId = GetCurrentBranchId();
         await _transactionItemRepository.CreateAsync(mappedItem);
         await _transactionItemRepository.SaveChanges();
         return _mapper.Map<TransactionItemResultDto>(mappedItem);

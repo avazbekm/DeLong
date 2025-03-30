@@ -61,4 +61,15 @@ public class EmployeeController : BaseController
             Message = "Success",
             Data = await _employeeService.RetrieveAllAsync()
         });
+
+    [HttpGet("any")]
+    public async Task<IActionResult> AnyAsync()
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _employeeService.AnyEmployeesAsync()
+        });
+
+
 }

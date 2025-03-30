@@ -25,6 +25,7 @@ public class CashTransferService : AuditableService, ICashTransferService
     {
         var cashTransfer = _mapper.Map<CashTransfer>(dto);
         SetCreatedFields(cashTransfer); // Auditable maydonlarni qo‘shish
+        cashTransfer.BranchId=GetCurrentBranchId(); // branchId aniqlab berilyapti
 
         await _repository.CreateAsync(cashTransfer);
         await _repository.SaveChanges();
@@ -61,7 +62,8 @@ public class CashTransferService : AuditableService, ICashTransferService
 
     public async ValueTask<CashTransferResultDto> RetrieveByIdAsync(long id)
     {
-        var existCashTransfer = await _repository.GetAsync(t => t.Id == id && !t.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var existCashTransfer = await _repository.GetAsync(t => t.Id == id && !t.IsDeleted && t.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"CashTransfer not found with ID = {id}");
 
         return _mapper.Map<CashTransferResultDto>(existCashTransfer);
@@ -69,7 +71,8 @@ public class CashTransferService : AuditableService, ICashTransferService
 
     public async ValueTask<IEnumerable<CashTransferResultDto>> RetrieveAllAsync()
     {
-        var cashTransfers = await _repository.GetAll(t => !t.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var cashTransfers = await _repository.GetAll(t => !t.IsDeleted && t.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashTransferResultDto>>(cashTransfers);
@@ -77,7 +80,8 @@ public class CashTransferService : AuditableService, ICashTransferService
 
     public async ValueTask<IEnumerable<CashTransferResultDto>> RetrieveAllByCashRegisterIdAsync(long cashRegisterId)
     {
-        var cashTransfers = await _repository.GetAll(t => t.CashRegisterId == cashRegisterId && !t.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var cashTransfers = await _repository.GetAll(t => t.CashRegisterId == cashRegisterId && !t.IsDeleted && t.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashTransferResultDto>>(cashTransfers);

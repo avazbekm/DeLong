@@ -30,7 +30,7 @@ public class AuthController : BaseController
             {
                 new Claim("UserId", employee.UserId.ToString()),
                 new Claim("Username", employee.Username),
-                new Claim("WarehouseId", employee.WarehouseId.ToString()),
+                new Claim("BranchId", employee.BranchId.ToString()),
                 new Claim("Role", userRole.Role.ToString())
             };
 

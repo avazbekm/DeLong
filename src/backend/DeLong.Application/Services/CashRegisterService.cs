@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.CashRegisters;
+using DeLong.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using DeLong.Service.Interfaces;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.Service.Services;
 
@@ -26,8 +26,8 @@ public class CashRegisterService : AuditableService, ICashRegisterService
     {
         var cashRegister = new CashRegister
         {
-            UserId = dto.UserId,
-            WarehouseId = dto.WarehouseId,
+            UserId = GetCurrentUserId(),
+            BranchId = GetCurrentBranchId(),
             UzsBalance = dto.UzsBalance,
             UzpBalance = dto.UzpBalance,
             UsdBalance = dto.UsdBalance,
@@ -71,7 +71,9 @@ public class CashRegisterService : AuditableService, ICashRegisterService
 
     public async ValueTask<CashRegisterResultDto> RetrieveByIdAsync(long id)
     {
-        var existCashRegister = await _repository.GetAsync(r => r.Id == id && !r.IsDeleted)
+        var branchId = GetCurrentBranchId();
+
+        var existCashRegister = await _repository.GetAsync(r => r.Id == id && !r.IsDeleted && r.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"CashRegister not found with ID = {id}");
 
         return _mapper.Map<CashRegisterResultDto>(existCashRegister);
@@ -79,7 +81,8 @@ public class CashRegisterService : AuditableService, ICashRegisterService
 
     public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllAsync()
     {
-        var cashRegisters = await _repository.GetAll(r => !r.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var cashRegisters = await _repository.GetAll(r => !r.IsDeleted && r.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
@@ -87,15 +90,17 @@ public class CashRegisterService : AuditableService, ICashRegisterService
 
     public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByUserIdAsync(long userId)
     {
-        var cashRegisters = await _repository.GetAll(r => r.UserId == userId && !r.IsDeleted)
+
+        var branchId = GetCurrentBranchId();
+        var cashRegisters = await _repository.GetAll(r => r.UserId == userId && !r.IsDeleted && r.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
     }
 
-    public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByWarehouseIdAsync(long warehouseId)
+    public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveAllByWarehouseIdAsync(long branchId)
     {
-        var cashRegisters = await _repository.GetAll(r => r.WarehouseId == warehouseId && !r.IsDeleted)
+        var cashRegisters = await _repository.GetAll(r => r.BranchId == branchId && !r.IsDeleted)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashRegisterResultDto>>(cashRegisters);
@@ -103,7 +108,8 @@ public class CashRegisterService : AuditableService, ICashRegisterService
 
     public async ValueTask<IEnumerable<CashRegisterResultDto>> RetrieveOpenRegistersAsync()
     {
-        var openRegisters = await _repository.GetAll(r => r.ClosedAt == null && !r.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var openRegisters = await _repository.GetAll(r => r.ClosedAt == null && !r.IsDeleted && r.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashRegisterResultDto>>(openRegisters);

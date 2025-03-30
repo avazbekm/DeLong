@@ -26,7 +26,7 @@ public class DebtService : AuditableService, IDebtService
         var newDebt = _mapper.Map<Debt>(dto);
         newDebt.IsSettled = false; // Yangi qarz default holatda to‘lanmagan
         SetCreatedFields(newDebt); // Auditable maydonlarni qo‘shish
-
+        newDebt.BranchId = GetCurrentBranchId();
         await _debtRepository.CreateAsync(newDebt);
         await _debtRepository.SaveChanges();
         return _mapper.Map<DebtResultDto>(newDebt);
@@ -60,7 +60,8 @@ public class DebtService : AuditableService, IDebtService
 
     public async ValueTask<DebtResultDto> RetrieveByIdAsync(long id)
     {
-        var existDebt = await _debtRepository.GetAsync(d => d.Id == id && !d.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var existDebt = await _debtRepository.GetAsync(d => d.Id == id && !d.IsDeleted && d.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"Debt not found with ID = {id}");
 
         return _mapper.Map<DebtResultDto>(existDebt);
@@ -68,21 +69,24 @@ public class DebtService : AuditableService, IDebtService
 
     public async ValueTask<IEnumerable<DebtResultDto>> RetrieveAllAsync()
     {
-        var debts = await _debtRepository.GetAll(d => !d.IsDeleted && !d.IsSettled) // Faqat to‘lanmagan va o‘chirilmagan qarzlar
+        var branchId = GetCurrentBranchId();
+        var debts = await _debtRepository.GetAll(d => !d.IsDeleted && !d.IsSettled && d.BranchId.Equals(branchId)) // Faqat to‘lanmagan va o‘chirilmagan qarzlar
             .ToListAsync();
         return _mapper.Map<IEnumerable<DebtResultDto>>(debts);
     }
 
     public async ValueTask<IEnumerable<DebtResultDto>> RetrieveBySaleIdAsync(long saleId)
     {
-        var debts = await _debtRepository.GetAll(d => d.SaleId == saleId && !d.IsSettled && !d.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var debts = await _debtRepository.GetAll(d => d.SaleId == saleId && !d.IsSettled && !d.IsDeleted && d.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<DebtResultDto>>(debts);
     }
 
     public async ValueTask<Dictionary<string, List<DebtResultDto>>> RetrieveAllGroupedByCustomerAsync()
     {
-        var debts = await _debtRepository.GetAll(d => !d.IsSettled && !d.IsDeleted) // Faqat to‘lanmagan va o‘chirilmagan qarzlar
+        var branchId = GetCurrentBranchId();
+        var debts = await _debtRepository.GetAll(d => !d.IsSettled && !d.IsDeleted && d.BranchId.Equals(branchId)) // Faqat to‘lanmagan va o‘chirilmagan qarzlar
             .Include(d => d.Sale)
             .ThenInclude(s => s.User)
             .Include(d => d.Sale)

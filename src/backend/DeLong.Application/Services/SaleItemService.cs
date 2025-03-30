@@ -26,7 +26,7 @@ public class SaleItemService : AuditableService, ISaleItemService
     {
         var mappedSaleItem = _mapper.Map<SaleItem>(dto);
         SetCreatedFields(mappedSaleItem); // Auditable maydonlarni qo‘shish
-
+        mappedSaleItem.BranchId = GetCurrentBranchId();
         await _saleItemRepository.CreateAsync(mappedSaleItem);
         await _saleItemRepository.SaveChanges();
 
@@ -62,7 +62,8 @@ public class SaleItemService : AuditableService, ISaleItemService
 
     public async ValueTask<SaleItemResultDto> RetrieveByIdAsync(long id)
     {
-        var existSaleItem = await _saleItemRepository.GetAsync(s => s.Id == id && !s.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var existSaleItem = await _saleItemRepository.GetAsync(s => s.Id == id && !s.IsDeleted && s.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"SaleItem not found with ID = {id}");
 
         return _mapper.Map<SaleItemResultDto>(existSaleItem);
@@ -70,7 +71,8 @@ public class SaleItemService : AuditableService, ISaleItemService
 
     public async ValueTask<IEnumerable<SaleItemResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter)
     {
-        var saleItems = await _saleItemRepository.GetAll(s => !s.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var saleItems = await _saleItemRepository.GetAll(s => !s.IsDeleted && s.BranchId.Equals(branchId))
             .ToPaginate(@params)
             .OrderBy(filter)
             .ToListAsync();
@@ -80,7 +82,8 @@ public class SaleItemService : AuditableService, ISaleItemService
 
     public async ValueTask<IEnumerable<SaleItemResultDto>> RetrieveAllBySaleIdAsync(long saleId)
     {
-        var saleItems = await _saleItemRepository.GetAll(s => s.SaleId.Equals(saleId) && !s.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var saleItems = await _saleItemRepository.GetAll(s => s.SaleId.Equals(saleId) && !s.IsDeleted && s.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<SaleItemResultDto>>(saleItems);

@@ -10,4 +10,5 @@ public class DebtPayment : Auditable
     public decimal Amount { get; set; } // Qancha to‘ladi
     public DateTimeOffset PaymentDate { get; set; }
     public string PaymentMethod { get; set; } = string.Empty; // Yangi: "Cash", "Card", "Dollar"
+    public long BranchId { get; set; }
 }

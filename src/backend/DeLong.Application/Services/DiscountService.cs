@@ -25,7 +25,7 @@ public class DiscountService : AuditableService, IDiscountService
     {
         var discount = _mapper.Map<Discount>(dto);
         SetCreatedFields(discount); // Auditable maydonlarni qo‘shish
-
+        discount.BranchId = GetCurrentBranchId();
         await _discountRepository.CreateAsync(discount);
         await _discountRepository.SaveChanges();
         return _mapper.Map<DiscountResultDto>(discount);
@@ -59,7 +59,8 @@ public class DiscountService : AuditableService, IDiscountService
 
     public async ValueTask<DiscountResultDto> RetrieveByIdAsync(long id)
     {
-        var discount = await _discountRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var discount = await _discountRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This Discount is not found with ID = {id}");
 
         return _mapper.Map<DiscountResultDto>(discount);
@@ -67,14 +68,17 @@ public class DiscountService : AuditableService, IDiscountService
 
     public async ValueTask<IEnumerable<DiscountResultDto>> RetrieveAllAsync()
     {
-        var discounts = await _discountRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+
+        var discounts = await _discountRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<DiscountResultDto>>(discounts);
     }
 
     public async ValueTask<IEnumerable<DiscountResultDto>> RetrieveBySaleIdAsync(long saleId)
     {
-        var discounts = await _discountRepository.GetAll(d => d.SaleId == saleId && !d.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var discounts = await _discountRepository.GetAll(d => d.SaleId == saleId && !d.IsDeleted && d.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<DiscountResultDto>>(discounts);
     }

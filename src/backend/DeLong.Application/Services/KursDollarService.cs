@@ -26,7 +26,7 @@ public class KursDollarService : AuditableService, IKursDollarService
         dto.TodayDate = DateTime.Now.ToString("dd.MM.yyyy");
         var mappedKursDollar = _mapper.Map<KursDollar>(dto);
         SetCreatedFields(mappedKursDollar); // Auditable maydonlarni qo‘shish
-
+        mappedKursDollar.BranchId = GetCurrentBranchId();
         await _kursDollarRepository.CreateAsync(mappedKursDollar);
         await _kursDollarRepository.SaveChanges();
 
@@ -48,7 +48,8 @@ public class KursDollarService : AuditableService, IKursDollarService
 
     public async ValueTask<KursDollarResultDto> RetrieveByIdAsync()
     {
-        var price = await _kursDollarRepository.GetAll(k => !k.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var price = await _kursDollarRepository.GetAll(k => !k.IsDeleted && k.BranchId.Equals(branchId))
                         .OrderByDescending(a => a.CreatedAt)
                         .FirstOrDefaultAsync()
             ?? throw new NotFoundException($"Dollar kurs kiritilmagan.");
@@ -58,7 +59,8 @@ public class KursDollarService : AuditableService, IKursDollarService
 
     public async ValueTask<IEnumerable<KursDollarResultDto>> RetrieveAllAsync()
     {
-        var prices = await _kursDollarRepository.GetAll(k => !k.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var prices = await _kursDollarRepository.GetAll(k => !k.IsDeleted && k.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<KursDollarResultDto>>(prices);
     }
