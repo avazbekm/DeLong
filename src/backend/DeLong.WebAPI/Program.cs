@@ -100,7 +100,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
-
+app.MigrateDatabase();
 // Seed Data qo‘shish
 using (var scope = app.Services.CreateScope())
 {
