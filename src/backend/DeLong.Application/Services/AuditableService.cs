@@ -16,10 +16,21 @@ public abstract class AuditableService
     {
         var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst("UserId")?.Value;
         if (string.IsNullOrEmpty(userIdClaim))
-            throw new Exception("User not authenticated");
+        {
+            return _httpContextAccessor.HttpContext == null ? 0 : throw new Exception("User not authenticated");
+        }
         return long.Parse(userIdClaim);
     }
 
+    protected long GetCurrentBranchId()
+    {
+        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst("BranchId")?.Value;
+        if (string.IsNullOrEmpty(userIdClaim))
+        {
+            return _httpContextAccessor.HttpContext == null ? 0 : throw new Exception("BranchId not authenticated");
+        }
+        return long.Parse(userIdClaim);
+    }
     protected string GetCurrentRole()
     {
         var roleClaim = _httpContextAccessor.HttpContext?.User.FindFirst("Role")?.Value;
@@ -28,12 +39,21 @@ public abstract class AuditableService
         return roleClaim;
     }
 
+
     protected void SetCreatedFields(Auditable entity)
     {
         entity.CreatedBy = GetCurrentUserId();
         entity.CreatedAt = DateTimeOffset.UtcNow;
         entity.IsDeleted = false;
     }
+
+    protected void SetCreatedBranch(Auditable entity)
+    {
+        entity.CreatedBy = GetCurrentUserId();
+        entity.CreatedAt = DateTimeOffset.UtcNow;
+        entity.IsDeleted = false;
+    }
+
 
     protected void SetUpdatedFields(Auditable entity)
     {

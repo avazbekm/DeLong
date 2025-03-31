@@ -1,11 +1,15 @@
-﻿using DeLong.Infrastructure.Contexts;
+﻿using Serilog;
+using System.Text;
+using DeLong.Domain.Enums;
+using DeLong.Domain.Entities;
 using DeLong.WebAPI.Extentions;
 using DeLong.WebAPI.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Branchs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Text;
+using DeLong.Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,11 +100,89 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
-
-// ✅ Avtomatik migratsiya
 app.MigrateDatabase();
+// Seed Data qo‘shish
+using (var scope = app.Services.CreateScope())
+{
+    var employeeService = scope.ServiceProvider.GetRequiredService<IEmployeeService>();
+    var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+    var branchService = scope.ServiceProvider.GetRequiredService<IBranchService>();
 
-// ✅ Middleware va API konfiguratsiyasi
+    // 1. Avval filial qo‘shamiz
+    var branches = await branchService.RetrieveAllAsync();
+    long branchId;
+    if (!branches.Any())
+    {
+        var defaultBranch = new BranchCreationDto
+        {
+            BranchName = "Default Branch",
+            Location = "Default Location"
+        };
+        var createdBranch = await branchService.AddAsync(defaultBranch);
+        branchId = createdBranch.Id;
+        Console.WriteLine($"Standart filial qo‘shildi: {createdBranch.BranchName}, ID: {createdBranch.Id}");
+    }
+    else
+    {
+        branchId = (branches.FirstOrDefault())?.Id ?? throw new Exception("No branch found after retrieval");
+    }
+
+    // 2. Keyin user qo‘shamiz
+    long userId;
+    if (!await userService.AnyUsersAsync()) // AnyUsersAsync qo‘shish kerak
+    {
+        var adminSettings = builder.Configuration.GetSection("Admin");
+
+        var adminUser = new User
+        {
+            FirstName = adminSettings["FirstName"],
+            LastName = adminSettings["LastName"],
+            Patronomyc = string.Empty,
+            SeriaPasport = adminSettings["SeriaPasport"],
+            DateOfBirth = DateTimeOffset.Parse(adminSettings["DateOfBirth"]).ToUniversalTime(),
+            DateOfIssue = DateTimeOffset.UtcNow,
+            DateOfExpiry = DateTimeOffset.UtcNow.AddYears(10),
+            Gender = Gender.Erkak,
+            Phone = adminSettings["Phone"],
+            TelegramPhone = string.Empty,
+            Address = string.Empty,
+            JSHSHIR = "12345678912345",
+            Role = Role.Admin,
+            CreatedBy = 0, // Tizim tomonidan yaratilgan
+            CreatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = false,
+            BranchId = branchId
+        };
+        userService.CreateSeedUserAsync(adminUser);
+        var user = await userService.GetLastUser();
+        userId = user.Id;
+        Console.WriteLine($"Standart user qo‘shildi: {adminUser.FirstName} {adminUser.LastName}, ID: {userId}");
+    }
+    else
+    {
+        userId = (await userService.GetLastUser())?.Id ?? throw new Exception("No user found after retrieval");
+    }
+
+    // 3. Oxirida employee qo‘shamiz
+    if (!await employeeService.AnyEmployeesAsync())
+    {
+        var adminSettings = builder.Configuration.GetSection("Admin");
+
+        var adminEmployee = new Employee
+        {
+            UserId = userId,
+            BranchId = branchId,
+            Username = adminSettings["Username"],
+            Password = BCrypt.Net.BCrypt.HashPassword(adminSettings["Password"]),
+            CreatedBy = 0, // Tizim tomonidan yaratilgan
+            CreatedAt = DateTimeOffset.UtcNow,
+            IsDeleted = false
+        };
+        await employeeService.CreateSeedEmployeeAsync(adminEmployee);
+
+        Console.WriteLine("Standart admin qo‘shildi: " + adminSettings["Username"]);
+    }
+}// ✅ Middleware va API konfiguratsiyasi
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();

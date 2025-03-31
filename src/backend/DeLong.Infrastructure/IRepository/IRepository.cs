@@ -1,6 +1,6 @@
 ﻿using DeLong.Domain.Common;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DeLong.Application.Interfaces;
 

@@ -7,6 +7,7 @@ public class SaleItem : Auditable
     public long SaleId { get; set; }
     public required Sale Sale { get; set; }
 
+    public long BranchId { get; set; }
     public long ProductId { get; set; }
     public required Product Product { get; set; }
     public string UnitOfMeasure { get; set; } = string.Empty;

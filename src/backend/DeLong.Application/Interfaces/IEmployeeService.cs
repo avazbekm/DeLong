@@ -11,4 +11,6 @@ public interface IEmployeeService
     ValueTask<IEnumerable<EmployeeResultDto>> RetrieveAllAsync();
     ValueTask<EmployeeResultDto> RetrieveByIdAsync(long id);
     ValueTask<Employee> VerifyEmployeeAsync(string username, string password); // Yangi metod
+    ValueTask<bool> AnyEmployeesAsync();
+    Task<long> CreateSeedEmployeeAsync(Employee employee); // Seed uchun
 }

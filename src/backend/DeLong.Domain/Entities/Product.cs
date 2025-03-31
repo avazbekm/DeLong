@@ -11,6 +11,7 @@ public class Product : Auditable
     public required Category Category { get; set; }
     public decimal? MinStockLevel { get; set; }  // minimal qoldiqni belgilab qo'yish
     public bool IsActive { get; set; }
+    public long BranchId { get; set; }
 
     public ICollection<Price> Prices { get; set; } = new List<Price>();
 }

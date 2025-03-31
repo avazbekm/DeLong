@@ -1,9 +1,9 @@
-﻿using DeLong.Service.DTOs.CashTransfers;
+﻿using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Controllers;
-using DeLong.WebAPI.Models;
+using DeLong.Service.DTOs.CashTransfers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 [Authorize] // Faqat autentifikatsiya qilinganlar uchun
 public class CashTransferController : BaseController

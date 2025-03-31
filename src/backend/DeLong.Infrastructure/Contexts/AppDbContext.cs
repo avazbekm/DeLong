@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Price> Prices { get; set; }
-    public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<Branch> Branches { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
@@ -50,10 +50,5 @@ public class AppDbContext : DbContext
             .HasForeignKey(i => i.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.WarehouseTo)
-            .WithMany()
-            .HasForeignKey(t => t.WarehouseIdTo)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

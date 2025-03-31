@@ -41,7 +41,7 @@ public class CustomerService : AuditableService, ICustomerService
 
         var mappedCustomer = _mapper.Map<Customer>(dto);
         SetCreatedFields(mappedCustomer); // Auditable maydonlarni qo‘shish
-
+        mappedCustomer.BranchId = GetCurrentBranchId();
         await _customerRepository.CreateAsync(mappedCustomer);
         await _customerRepository.SaveChanges();
 
@@ -77,7 +77,8 @@ public class CustomerService : AuditableService, ICustomerService
 
     public async ValueTask<CustomerResultDto> RetrieveByIdAsync(long id)
     {
-        Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This customer is not found with ID = {id}");
 
         return _mapper.Map<CustomerResultDto>(existCustomer);
@@ -85,7 +86,8 @@ public class CustomerService : AuditableService, ICustomerService
 
     public async ValueTask<IEnumerable<CustomerResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
     {
-        var customersQuery = _customerRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var customersQuery = _customerRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToPaginate(@params)
             .OrderBy(filter);
 
@@ -100,14 +102,16 @@ public class CustomerService : AuditableService, ICustomerService
 
     public async ValueTask<IEnumerable<CustomerResultDto>> RetrieveAllAsync()
     {
-        var customers = await _customerRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var customers = await _customerRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<List<CustomerResultDto>>(customers);
     }
 
     public async ValueTask<CustomerResultDto> RetrieveByInnAsync(int INN)
     {
-        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.INN.Equals(INN) && !customer.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.INN.Equals(INN) && !customer.IsDeleted && customer.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This customer is not found with INN = {INN}");
 
         return _mapper.Map<CustomerResultDto>(existCustomer);
@@ -115,7 +119,8 @@ public class CustomerService : AuditableService, ICustomerService
 
     public async ValueTask<CustomerResultDto> RetrieveByJshshirAsync(string jshshir)
     {
-        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.JSHSHIR.Equals(jshshir) && !customer.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.JSHSHIR.Equals(jshshir) && !customer.IsDeleted && customer.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This customer is not found with JSHSHIR = {jshshir}");
 
         return _mapper.Map<CustomerResultDto>(existCustomer);

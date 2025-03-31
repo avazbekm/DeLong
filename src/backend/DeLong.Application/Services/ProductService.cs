@@ -31,7 +31,7 @@ public class ProductService : AuditableService, IProductService
 
         var mappedProduct = _mapper.Map<Product>(dto);
         SetCreatedFields(mappedProduct); // Auditable maydonlarni qo‘shish
-
+        mappedProduct.BranchId = GetCurrentBranchId();
         await _productRepository.CreateAsync(mappedProduct);
         await _productRepository.SaveChanges();
 
@@ -69,7 +69,8 @@ public class ProductService : AuditableService, IProductService
 
     public async ValueTask<ProductResultDto> RetrieveByIdAsync(long id)
     {
-        Product existProduct = await _productRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        Product existProduct = await _productRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This Product is not found with ID = {id}");
 
         var result = _mapper.Map<ProductResultDto>(existProduct);
@@ -90,7 +91,8 @@ public class ProductService : AuditableService, IProductService
 
     public async ValueTask<IEnumerable<ProductResultDto>> RetrieveAllAsync()
     {
-        var products = await _productRepository.GetAll(p => !p.IsDeleted) // Faqat o‘chirilmaganlar
+        var branchId = GetCurrentBranchId();
+        var products = await _productRepository.GetAll(p => !p.IsDeleted && p.BranchId.Equals(branchId)) // Faqat o‘chirilmaganlar
             .ToListAsync();
         var result = _mapper.Map<IEnumerable<ProductResultDto>>(products);
         return result;

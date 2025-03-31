@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
+using DeLong.Domain.Configurations;
 using DeLong.Application.DTOs.Users;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
@@ -31,6 +31,7 @@ public class UserService : AuditableService, IUserService
 
         var mappedUser = _mapper.Map<User>(dto);
         SetCreatedFields(mappedUser); // Auditable maydonlarni qo‘shish
+        mappedUser.BranchId = GetCurrentBranchId();
 
         await _userRepository.CreateAsync(mappedUser);
         await _userRepository.SaveChanges();
@@ -73,7 +74,8 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<UserResultDto> RetrieveByJSHSHIRAsync(string jshshir)
     {
-        var existUser = await _userRepository.GetAsync(u => u.JSHSHIR.Equals(jshshir) && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var existUser = await _userRepository.GetAsync(u => u.JSHSHIR.Equals(jshshir) && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This user is not found with JSHSHIR = {jshshir}");
 
         return _mapper.Map<UserResultDto>(existUser);
@@ -81,7 +83,8 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<IEnumerable<UserResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
     {
-        var query = _userRepository.GetAll(u => !u.IsDeleted);
+        var branchId = GetCurrentBranchId();
+        var query = _userRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId));
 
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -100,8 +103,33 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<IEnumerable<UserResultDto>> RetrieveAllAsync()
     {
-        var users = await _userRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var users = await _userRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<UserResultDto>>(users);
+    }
+
+    public void CreateSeedUserAsync(User user)
+    {
+        SetCreatedFields(user); // CreatedBy = 0 bo‘ladi
+        _userRepository.CreateAsync(user);
+        _userRepository.SaveChanges();
+    }
+
+    public async ValueTask<UserResultDto> GetLastUser()
+    {   
+        var lastUser = await _userRepository.GetAll(u => !u.IsDeleted)
+                .OrderByDescending(u => u.CreatedAt) // CreatedAt bo‘yicha teskari tartiblash
+                .FirstOrDefaultAsync();
+
+        if (lastUser == null)
+            throw new NotFoundException("Hech qanday user topilmadi");
+
+        return _mapper.Map<UserResultDto>(lastUser);
+    }
+
+    public async ValueTask<bool> AnyUsersAsync()
+    {
+        return await _userRepository.GetAll(u => !u.IsDeleted).AnyAsync();
     }
 }

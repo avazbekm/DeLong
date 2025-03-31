@@ -11,6 +11,7 @@ public class Sale : Auditable
     public long? UserId { get; set; }
     public User? User { get; set; }
 
+    public long BranchId { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal PaidAmount => Payments.Sum(p => p.Amount);
     public decimal RemainingAmount => TotalAmount - PaidAmount;

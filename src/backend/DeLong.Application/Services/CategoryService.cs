@@ -31,7 +31,7 @@ public class CategoryService : AuditableService, ICategoryService
 
         var mappedCategory = _mapper.Map<Category>(dto);
         SetCreatedFields(mappedCategory); // Auditable maydonlarni qo‘shish
-
+        mappedCategory.BranchId = GetCurrentBranchId();
         await _categoryRepository.CreateAsync(mappedCategory);
         await _categoryRepository.SaveChanges();
 
@@ -67,7 +67,8 @@ public class CategoryService : AuditableService, ICategoryService
 
     public async ValueTask<CategoryResultDto> RetrieveByIdAsync(long id)
     {
-        Category existCategory = await _categoryRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        Category existCategory = await _categoryRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This category is not found with ID = {id}");
 
         return _mapper.Map<CategoryResultDto>(existCategory);
@@ -90,7 +91,8 @@ public class CategoryService : AuditableService, ICategoryService
 
     public async ValueTask<IEnumerable<CategoryResultDto>> RetrieveAllAsync()
     {
-        var categories = await _categoryRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var categories = await _categoryRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<List<CategoryResultDto>>(categories);
     }

@@ -29,17 +29,20 @@ public class ReturnProductService : AuditableService, IReturnProductService
         {
             try
             {
+                var branchId = GetCurrentBranchId();
                 // Mahsulot narxini olish va sonini oshirish
-                var price = await _priceRepository.GetAsync(p => p.ProductId == dto.ProductId && !p.IsDeleted)
+                var price = await _priceRepository.GetAsync(p => p.ProductId == dto.ProductId && !p.IsDeleted && p.BranchId.Equals(branchId))
                     ?? throw new NotFoundException($"Mahsulot topilmadi (ProductId: {dto.ProductId})");
 
                 price.Quantity += dto.Quantity;
                 SetUpdatedFields(price); // Price uchun auditable maydonlarni yangilash
+                price.BranchId = GetCurrentBranchId();
                 _priceRepository.Update(price);
 
                 // Qaytgan mahsulotni saqlash
                 var returnProduct = _mapper.Map<ReturnProduct>(dto);
                 SetCreatedFields(returnProduct); // Auditable maydonlarni qo‘shish
+                returnProduct.BranchId = GetCurrentBranchId();
                 await _returnProductRepository.CreateAsync(returnProduct);
 
                 await _priceRepository.SaveChanges();
@@ -61,15 +64,17 @@ public class ReturnProductService : AuditableService, IReturnProductService
         {
             try
             {
-                var returnProduct = await _returnProductRepository.GetAsync(rp => rp.Id == dto.Id && !rp.IsDeleted)
+                var branchId = GetCurrentBranchId();
+                var returnProduct = await _returnProductRepository.GetAsync(rp => rp.Id == dto.Id && !rp.IsDeleted && rp.BranchId.Equals(branchId))
                     ?? throw new NotFoundException($"Qaytgan mahsulot topilmadi (Id: {dto.Id})");
 
                 // Oldingi miqdor va yangi miqdor farqini hisoblash
                 var oldQuantity = returnProduct.Quantity;
                 var quantityDifference = dto.Quantity - oldQuantity;
 
+
                 // Mahsulot sonini yangilash
-                var price = await _priceRepository.GetAsync(p => p.ProductId == dto.ProductId && !p.IsDeleted)
+                var price = await _priceRepository.GetAsync(p => p.ProductId == dto.ProductId && !p.IsDeleted && p.BranchId.Equals(branchId))
                     ?? throw new NotFoundException($"Mahsulot topilmadi (ProductId: {dto.ProductId})");
 
                 price.Quantity += quantityDifference;
@@ -109,7 +114,8 @@ public class ReturnProductService : AuditableService, IReturnProductService
 
     public async ValueTask<ReturnProductResultDto> RetrieveByIdAsync(long id)
     {
-        var returnProduct = await _returnProductRepository.GetAsync(rp => rp.Id == id && !rp.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var returnProduct = await _returnProductRepository.GetAsync(rp => rp.Id == id && !rp.IsDeleted && rp.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"Qaytgan mahsulot topilmadi (Id: {id})");
 
         return _mapper.Map<ReturnProductResultDto>(returnProduct);
@@ -117,21 +123,24 @@ public class ReturnProductService : AuditableService, IReturnProductService
 
     public async ValueTask<IEnumerable<ReturnProductResultDto>> RetrieveAllAsync()
     {
-        var returnProducts = await _returnProductRepository.GetAll(rp => !rp.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var returnProducts = await _returnProductRepository.GetAll(rp => !rp.IsDeleted && rp.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<ReturnProductResultDto>>(returnProducts);
     }
 
     public async ValueTask<IEnumerable<ReturnProductResultDto>> RetrieveBySaleIdAsync(long saleId)
     {
-        var returnProducts = await _returnProductRepository.GetAll(rp => rp.SaleId == saleId && !rp.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var returnProducts = await _returnProductRepository.GetAll(rp => rp.SaleId == saleId && !rp.IsDeleted && rp.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<ReturnProductResultDto>>(returnProducts);
     }
 
     public async ValueTask<IEnumerable<ReturnProductResultDto>> RetrieveByProductIdAsync(long productId)
     {
-        var returnProducts = await _returnProductRepository.GetAll(rp => rp.ProductId == productId && !rp.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var returnProducts = await _returnProductRepository.GetAll(rp => rp.ProductId == productId && !rp.IsDeleted && rp.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<ReturnProductResultDto>>(returnProducts);
     }

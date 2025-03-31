@@ -25,6 +25,7 @@ public class SaleService : AuditableService, ISaleService
     {
         var newSale = _mapper.Map<Sale>(dto);
         SetCreatedFields(newSale); // Auditable maydonlarni qo‘shish (CreatedBy, CreatedAt)
+        newSale.BranchId = GetCurrentBranchId();
 
         await _saleRepository.CreateAsync(newSale);
         await _saleRepository.SaveChanges();
@@ -38,7 +39,8 @@ public class SaleService : AuditableService, ISaleService
 
     public async ValueTask<SaleResultDto> RetrieveByIdAsync(long id)
     {
-        var sale = await _saleRepository.GetAsync(s => s.Id == id && !s.IsDeleted,
+        var branchId = GetCurrentBranchId();
+        var sale = await _saleRepository.GetAsync(s => s.Id == id && !s.IsDeleted && s.BranchId.Equals(branchId),
             includes: new[] { "Payments", "Debts", "Customer", "User" }) // Bog‘liq ma’lumotlarni include qilish
             ?? throw new NotFoundException($"Sale not found with ID = {id}");
 
@@ -53,7 +55,9 @@ public class SaleService : AuditableService, ISaleService
 
     public async ValueTask<IEnumerable<SaleResultDto>> RetrieveAllAsync()
     {
-        var sales = await _saleRepository.GetAll(s => !s.IsDeleted,
+        var branchId = GetCurrentBranchId();
+
+        var sales = await _saleRepository.GetAll(s => !s.IsDeleted && s.BranchId.Equals(branchId),
             includes: new[] { "Payments", "Debts", "Customer", "User" }) // Bog‘liq ma’lumotlarni include qilish
             .ToListAsync();
 

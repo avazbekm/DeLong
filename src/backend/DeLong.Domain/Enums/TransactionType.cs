@@ -2,8 +2,8 @@
 
 public enum TransactionType
 {
-    Kirim,  //kirim
-    Chiqim,  //chiqim
-    Jonatish,  // jo'natish
-    Qaytarish     //qaytarish
+    Kirim,       //kirim
+    Chiqim,      //chiqim
+    Jonatish,    // jo'natish
+    Qaytarish    //qaytarish
 }

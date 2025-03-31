@@ -17,4 +17,5 @@ public class ReturnProduct : Auditable
     public string UnitOfMeasure { get; set; } = string.Empty;
     public decimal ReturnSumma { get; set; }
     public string Reason { get; set; } = string.Empty; // Qaytish sababi
+    public long BranchId { get; set; }
 }

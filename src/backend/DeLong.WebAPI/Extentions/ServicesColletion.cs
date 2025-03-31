@@ -15,7 +15,6 @@ public static class ServicesColletion
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<IPriceServer, PriceService>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IStockService, StockService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<ISaleItemService, SaleItemService>();
@@ -24,7 +23,7 @@ public static class ServicesColletion
         services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IDiscountService, DiscountService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
-        services.AddScoped<IWarehouseService, WarehouseService>();
+        services.AddScoped<IBranchService, BranchService>();
         services.AddScoped<IKursDollarService, KursDollarService>();
         services.AddScoped<ITransactionService, TransactionService>();
         services.AddScoped<IDebtPaymentService, DebtPaymentService>();

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.TransactionItems;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using DeLong.Application.Interfaces;
+using DeLong.Application.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Service.DTOs.TransactionItems;
 
 namespace DeLong.Service.Services;
 
@@ -25,7 +25,7 @@ public class TransactionItemService : AuditableService, ITransactionItemService
     {
         var mappedItem = _mapper.Map<TransactionItem>(dto);
         SetCreatedFields(mappedItem); // Auditable maydonlarni qo‘shish
-
+        mappedItem.BranchId = GetCurrentBranchId();
         await _transactionItemRepository.CreateAsync(mappedItem);
         await _transactionItemRepository.SaveChanges();
         return _mapper.Map<TransactionItemResultDto>(mappedItem);
@@ -59,7 +59,8 @@ public class TransactionItemService : AuditableService, ITransactionItemService
 
     public async ValueTask<TransactionItemResultDto> RetrieveByIdAsync(long id)
     {
-        var existItem = await _transactionItemRepository.GetAsync(u => u.Id == id && !u.IsDeleted,
+        var branchId = GetCurrentBranchId();
+        var existItem = await _transactionItemRepository.GetAsync(u => u.Id == id && !u.IsDeleted && u.BranchId.Equals(branchId),
             includes: new[] { "Product" }) // Product ni include qilish
             ?? throw new NotFoundException($"TransactionItem not found with ID = {id}");
 
@@ -68,7 +69,8 @@ public class TransactionItemService : AuditableService, ITransactionItemService
 
     public async ValueTask<IEnumerable<TransactionItemResultDto>> RetrieveAllAsync()
     {
-        var items = await _transactionItemRepository.GetAll(t => !t.IsDeleted,
+        var branchId = GetCurrentBranchId();
+        var items = await _transactionItemRepository.GetAll(t => !t.IsDeleted && t.BranchId.Equals(branchId),
             includes: new[] { "Product" }) // Product ni include qilish
             .ToListAsync();
         return _mapper.Map<IEnumerable<TransactionItemResultDto>>(items);

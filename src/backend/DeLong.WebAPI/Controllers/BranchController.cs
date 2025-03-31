@@ -1,46 +1,37 @@
-﻿using DeLong.Application.DTOs.Warehouses;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Branchs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
 [Authorize] // Faqat autentifikatsiya qilinganlar uchun
-public class WarehouseController : BaseController
+public class BranchController : BaseController
 {
-    private readonly IWarehouseService _warehouseService;
+    private readonly IBranchService _service;
 
-    public WarehouseController(IWarehouseService warehouseService)
+    public BranchController(IBranchService service)
     {
-        _warehouseService = warehouseService;
+        _service = service;
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> AddAsync(WarehouseCreationDto dto)
+    public async Task<IActionResult> AddAsync(BranchCreationDto dto)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _warehouseService.AddAsync(dto)
+            Data = await _service.AddAsync(dto)
         });
 
     [HttpPut("update")]
-    public async Task<IActionResult> UpdateAsync(WarehouseUpdatedDto dto)
+    public async Task<IActionResult> UpdateAsync(BranchUpdateDto dto)
         => Ok(new Response
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _warehouseService.ModifyAsync(dto)
-        });
-
-    [HttpDelete("delete/{id:long}")]
-    public async Task<IActionResult> DeleteAsync(long id)
-        => Ok(new Response
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = await _warehouseService.RemoveAsync(id)
+            Data = await _service.ModifyAsync(dto)
         });
 
     [HttpDelete("remove/{id:long}")]
@@ -49,7 +40,7 @@ public class WarehouseController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _warehouseService.RemoveAsync(id)
+            Data = await _service.RemoveAsync(id)
         });
 
     [HttpGet("get/{id:long}")]
@@ -58,7 +49,7 @@ public class WarehouseController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _warehouseService.RetrieveByIdAsync(id)
+            Data = await _service.RetrieveByIdAsync(id)
         });
 
     [HttpGet("get-all")]
@@ -67,6 +58,6 @@ public class WarehouseController : BaseController
         {
             StatusCode = 200,
             Message = "Success",
-            Data = await _warehouseService.RetrieveAllAsync()
+            Data = await _service.RetrieveAllAsync()
         });
 }

@@ -35,7 +35,7 @@ public class PriceService : AuditableService, IPriceServer
 
         var mappedPrices = _mapper.Map<Price>(dto);
         SetCreatedFields(mappedPrices); // Auditable maydonlarni qo‘shish
-
+        mappedPrices.BranchId = GetCurrentBranchId();
         await _priceRepository.CreateAsync(mappedPrices);
         await _priceRepository.SaveChanges();
 
@@ -71,7 +71,8 @@ public class PriceService : AuditableService, IPriceServer
 
     public async ValueTask<PriceResultDto> RetrieveByIdAsync(long id)
     {
-        var existPrices = await _priceRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var existPrices = await _priceRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This Price is not found with ID = {id}");
 
         return _mapper.Map<PriceResultDto>(existPrices);
@@ -79,14 +80,16 @@ public class PriceService : AuditableService, IPriceServer
 
     public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync()
     {
-        var prices = await _priceRepository.GetAll(p => !p.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var prices = await _priceRepository.GetAll(p => !p.IsDeleted && p.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<PriceResultDto>>(prices);
     }
 
     public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(long productId)
     {
-        var prices = await _priceRepository.GetAll(p => p.ProductId.Equals(productId) && !p.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var prices = await _priceRepository.GetAll(p => p.ProductId.Equals(productId) && !p.IsDeleted && p.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<PriceResultDto>>(prices);
     }
@@ -94,7 +97,8 @@ public class PriceService : AuditableService, IPriceServer
     // Pagination metodi ishlatilmagan, agar kerak bo‘lsa qo‘shish mumkin
     public async ValueTask<IEnumerable<PriceResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
     {
-        var pricesQuery = _priceRepository.GetAll(p => !p.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var pricesQuery = _priceRepository.GetAll(p => !p.IsDeleted && p.BranchId.Equals(branchId))
             .ToPaginate(@params)
             .OrderBy(filter);
 

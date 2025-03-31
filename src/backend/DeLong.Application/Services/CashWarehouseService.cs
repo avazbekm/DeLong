@@ -25,7 +25,7 @@ public class CashWarehouseService : AuditableService, ICashWarehouseService
     {
         var cashWarehouse = _mapper.Map<CashWarehouse>(dto);
         SetCreatedFields(cashWarehouse); // Auditable maydonlarni qo‘shish
-
+        cashWarehouse.BranchId = GetCurrentBranchId();
         await _repository.CreateAsync(cashWarehouse);
         await _repository.SaveChanges();
 
@@ -61,8 +61,9 @@ public class CashWarehouseService : AuditableService, ICashWarehouseService
 
     public async ValueTask<CashWarehouseResultDto> RetrieveByIdAsync()
     {
+        var branchId = GetCurrentBranchId();
         // Id o‘rniga eng oxirgi qo‘shilgan zaxira omborini olamiz
-        var latestCashWarehouse = await _repository.GetAll(w => !w.IsDeleted)
+        var latestCashWarehouse = await _repository.GetAll(w => !w.IsDeleted && w.BranchId.Equals(branchId))
             .OrderByDescending(w => w.CreatedAt) // CreatedAt bo‘yicha eng so‘nggi
             .FirstOrDefaultAsync()
             ?? throw new NotFoundException("Hech qanday zaxira ombori topilmadi");
@@ -72,7 +73,8 @@ public class CashWarehouseService : AuditableService, ICashWarehouseService
 
     public async ValueTask<IEnumerable<CashWarehouseResultDto>> RetrieveAllAsync()
     {
-        var cashWarehouses = await _repository.GetAll(w => !w.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var cashWarehouses = await _repository.GetAll(w => !w.IsDeleted && w.BranchId.Equals(branchId))
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<CashWarehouseResultDto>>(cashWarehouses);

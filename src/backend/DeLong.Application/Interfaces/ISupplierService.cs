@@ -9,6 +9,5 @@ public interface ISupplierService
     ValueTask<SupplierResultDto> ModifyAsync(SupplierUpdateDto dto);
     ValueTask<bool> RemoveAsync(long id);
     ValueTask<SupplierResultDto> RetrieveByIdAsync(long id);
-    ValueTask<IEnumerable<SupplierResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
     ValueTask<IEnumerable<SupplierResultDto>> RetrieveAllAsync();
 }
