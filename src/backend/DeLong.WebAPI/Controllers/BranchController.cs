@@ -1,7 +1,4 @@
-﻿using DeLong.Application.DTOs.Warehouses;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using DeLong.Service.Interfaces;
 using DeLong.Service.DTOs.Branchs;

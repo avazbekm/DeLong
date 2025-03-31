@@ -1,6 +1,7 @@
 ﻿using DeLong.Application.Exceptions;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

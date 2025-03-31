@@ -185,10 +185,11 @@ namespace DeLong.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BranchIdTo = table.Column<long>(type: "bigint", nullable: false),
+                    SupplierIdFrom = table.Column<long>(type: "bigint", nullable: true),
+                    BranchId = table.Column<long>(type: "bigint", nullable: false),
+                    BranchIdTo = table.Column<long>(type: "bigint", nullable: true),
                     TransactionType = table.Column<int>(type: "integer", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: false),
-                    BranchId = table.Column<long>(type: "bigint", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),

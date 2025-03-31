@@ -5,11 +5,11 @@ using DeLong.Domain.Entities;
 using DeLong.WebAPI.Extentions;
 using DeLong.WebAPI.Middlewares;
 using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Branchs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using DeLong.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using DeLong.Service.DTOs.Branchs;
 
 var builder = WebApplication.CreateBuilder(args);
 

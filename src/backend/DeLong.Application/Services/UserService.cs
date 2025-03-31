@@ -7,12 +7,7 @@ using DeLong.Application.DTOs.Users;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using DeLong.Infrastructure.Repositories;
 
 namespace DeLong.Service.Services;
 
@@ -71,8 +66,7 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<UserResultDto> RetrieveByIdAsync(long id)
     {
-        var branchId = GetCurrentBranchId();
-        var existUser = await _userRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId))
+        var existUser = await _userRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This user is not found with ID = {id}");
 
         return _mapper.Map<UserResultDto>(existUser);
@@ -90,7 +84,7 @@ public class UserService : AuditableService, IUserService
     public async ValueTask<IEnumerable<UserResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
     {
         var branchId = GetCurrentBranchId();
-        var query = _userRepository.GetAll(u => !u.IsDeleted);
+        var query = _userRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId));
 
         if (!string.IsNullOrWhiteSpace(search))
         {
@@ -109,7 +103,8 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<IEnumerable<UserResultDto>> RetrieveAllAsync()
     {
-        var users = await _userRepository.GetAll(u => !u.IsDeleted)
+        var branchId = GetCurrentBranchId();
+        var users = await _userRepository.GetAll(u => !u.IsDeleted && u.BranchId.Equals(branchId))
             .ToListAsync();
         return _mapper.Map<IEnumerable<UserResultDto>>(users);
     }
@@ -122,7 +117,7 @@ public class UserService : AuditableService, IUserService
     }
 
     public async ValueTask<UserResultDto> GetLastUser()
-    {
+    {   
         var lastUser = await _userRepository.GetAll(u => !u.IsDeleted)
                 .OrderByDescending(u => u.CreatedAt) // CreatedAt bo‘yicha teskari tartiblash
                 .FirstOrDefaultAsync();

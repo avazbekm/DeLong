@@ -31,7 +31,7 @@ public class EmployeeService : AuditableService, IEmployeeService
         dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
         var employee = _mapper.Map<Employee>(dto);
         SetCreatedFields(employee); // Auditable maydonlarni qo‘shish
-
+        employee.BranchId = GetCurrentBranchId();
         await _employeeRepository.CreateAsync(employee);
         await _employeeRepository.SaveChanges();
 
@@ -101,8 +101,7 @@ public class EmployeeService : AuditableService, IEmployeeService
 
     public async ValueTask<Employee> VerifyEmployeeAsync(string username, string password)
     {
-        var branchId = GetCurrentBranchId();
-        var employee = await _employeeRepository.GetAsync(u => u.Username == username && !u.IsDeleted && u.BranchId.Equals(branchId))
+        var employee = await _employeeRepository.GetAsync(u => u.Username == username && !u.IsDeleted)
             ?? throw new NotFoundException($"Employee with username {username} not found");
 
         if (!BCrypt.Net.BCrypt.Verify(password, employee.Password))

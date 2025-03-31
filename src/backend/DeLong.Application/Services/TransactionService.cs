@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Transactions;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.Transactions;
 
 namespace DeLong.Service.Services;
 
@@ -62,7 +62,8 @@ public class TransactionService : AuditableService, ITransactionService
 
     public async ValueTask<TransactionResultDto> RetrieveByIdAsync(long id)
     {
-        var existTransaction = await _transactionRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted,
+        var branchId = GetCurrentBranchId();
+        var existTransaction = await _transactionRepository.GetAsync(u => u.Id.Equals(id) && !u.IsDeleted && u.BranchId.Equals(branchId),
             includes: new[] { "Items" }) // TransactionItem’larni yuklash
             ?? throw new NotFoundException($"Transaction not found with ID = {id}");
 
@@ -71,7 +72,8 @@ public class TransactionService : AuditableService, ITransactionService
 
     public async ValueTask<IEnumerable<TransactionResultDto>> RetrieveAllAsync()
     {
-        var transactions = await _transactionRepository.GetAll(t => !t.IsDeleted,
+        var branchId = GetCurrentBranchId();
+        var transactions = await _transactionRepository.GetAll(t => !t.IsDeleted && t.BranchId.Equals(branchId),
             includes: new[] { "Items" }) // TransactionItem’larni yuklash
             .ToListAsync();
 

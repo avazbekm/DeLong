@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeLong.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250328182449_Initial")]
+    [Migration("20250331044821_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -963,7 +963,7 @@ namespace DeLong.Data.Migrations
                     b.Property<long>("BranchId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BranchIdTo")
+                    b.Property<long?>("BranchIdTo")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Comment")
@@ -978,6 +978,9 @@ namespace DeLong.Data.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<long?>("SupplierIdFrom")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("integer");
