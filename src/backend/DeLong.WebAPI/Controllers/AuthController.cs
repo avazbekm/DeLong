@@ -1,7 +1,6 @@
 ﻿using DeLong.Application.Exceptions;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -32,7 +31,7 @@ public class AuthController : BaseController
                 new Claim("UserId", employee.UserId.ToString()),
                 new Claim("Username", employee.Username),
                 new Claim("BranchId", employee.BranchId.ToString()),
-                new Claim("Role", userRole.Role.ToString())
+                new Claim(ClaimTypes.Role, userRole.Role.ToString().ToLower())
             };
 
             var accessToken = _tokenService.GenerateAccessToken(claims);

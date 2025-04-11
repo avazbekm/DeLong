@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.KursDollar;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Service.DTOs.KursDollar;
 
 namespace DeLong.Service.Services;
 

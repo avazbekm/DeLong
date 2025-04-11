@@ -17,6 +17,7 @@ public class BranchController : BaseController
     }
 
     [HttpPost("create")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> AddAsync(BranchCreationDto dto)
         => Ok(new Response
         {
@@ -26,6 +27,7 @@ public class BranchController : BaseController
         });
 
     [HttpPut("update")]
+    [Authorize(Roles = "Admin,admin")]
     public async Task<IActionResult> UpdateAsync(BranchUpdateDto dto)
         => Ok(new Response
         {
@@ -35,6 +37,7 @@ public class BranchController : BaseController
         });
 
     [HttpDelete("remove/{id:long}")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> DestroyAsync(long id)
         => Ok(new Response
         {
@@ -60,4 +63,16 @@ public class BranchController : BaseController
             Message = "Success",
             Data = await _service.RetrieveAllAsync()
         });
+
+
+    [HttpGet("history/{branchId}")]
+    [Authorize(Roles = "admin")]
+    public async ValueTask<ActionResult<IEnumerable<BranchChangeHistoryDto>>> GetHistoryAsync([FromRoute] long branchId)
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _service.GetChangeHistoryAsync(branchId)
+        });
+
 }
