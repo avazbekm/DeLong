@@ -29,6 +29,8 @@ public class AppDbContext : DbContext
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<ReturnProduct> ReturnProducts { get; set; }
     public DbSet<ChangeHistory> ChangeHistories { get; set; }
+    public DbSet<CreditorDebt> CreditorDebts { get; set; }
+    public DbSet<CreditorDebtPayment> CreditorDebtPayments { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

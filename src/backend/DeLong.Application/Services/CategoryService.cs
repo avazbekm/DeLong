@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Categories;
-using DeLong.Application.Exceptions;
+using DeLong.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using DeLong.Service.Interfaces;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
+using DeLong.Application.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.Categories;
 
 namespace DeLong.Service.Services;
 

@@ -1,12 +1,12 @@
-﻿using DeLong.Application.DTOs.Customers;
-using DeLong.Domain.Configurations;
+﻿using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Interfaces;
 #pragma warning disable
 public interface ICustomerService
 {
     ValueTask<CustomerResultDto> AddAsync(CustomerCreationDto dto);
-    ValueTask<CustomerResultDto> ModifyAsync(CustomerUpdateDto dto);
+    ValueTask<bool> ModifyAsync(CustomerUpdateDto dto);
     ValueTask<bool> RemoveAsync(long id);
     ValueTask<CustomerResultDto> RetrieveByIdAsync(long id);
     ValueTask<CustomerResultDto> RetrieveByInnAsync(int INN);

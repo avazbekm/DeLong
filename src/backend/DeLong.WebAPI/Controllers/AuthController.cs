@@ -1,21 +1,19 @@
-﻿using DeLong.Application.Exceptions;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using DeLong.WebAPI.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Application.Exceptions;
 
 namespace DeLong.WebAPI.Controllers;
 
 public class AuthController : BaseController
 {
     private readonly ITokenService _tokenService;
-    private readonly IEmployeeService _employeeService;
     private readonly IUserService _userService;
 
     public AuthController(ITokenService tokenService, IEmployeeService employeeService, IUserService userService)
     {
         _tokenService = tokenService;
-        _employeeService = employeeService;
         _userService = userService;
     }
 
@@ -24,14 +22,13 @@ public class AuthController : BaseController
     {
         try
         {
-            var employee = await _employeeService.VerifyEmployeeAsync(model.Username, model.Password);
-            var userRole = await _userService.RetrieveByIdAsync(employee.UserId);
+            var user = await _userService.VerifyUserAsync(model.Username, model.Password);
             var claims = new List<Claim>
             {
-                new Claim("UserId", employee.UserId.ToString()),
-                new Claim("Username", employee.Username),
-                new Claim("BranchId", employee.BranchId.ToString()),
-                new Claim(ClaimTypes.Role, userRole.Role.ToString().ToLower())
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("Username", user.Username),
+                new Claim("BranchId", user.BranchId.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.ToString().ToLower())
             };
 
             var accessToken = _tokenService.GenerateAccessToken(claims);

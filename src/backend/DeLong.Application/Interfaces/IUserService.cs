@@ -14,6 +14,7 @@ public interface IUserService
     ValueTask<IEnumerable<UserResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
     ValueTask<IEnumerable<UserResultDto>> RetrieveAllAsync();
     void CreateSeedUserAsync(User user); // Seed uchun
+    ValueTask<User> VerifyUserAsync(string username, string password); // Yangi metod
     ValueTask<UserResultDto> GetLastUser();
     ValueTask<bool> AnyUsersAsync(); // Qo‘shildi
 }

@@ -338,21 +338,13 @@ namespace DeLong.Data.Migrations
                     b.ToTable("ChangeHistories");
                 });
 
-            modelBuilder.Entity("DeLong.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebt", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("BankAccount")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<long>("BranchId")
                         .HasColumnType("bigint");
@@ -363,28 +355,133 @@ namespace DeLong.Data.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSettled")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("RemainingAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("CreditorDebts");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebtPayment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("BranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CreditorDebtId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("PaymentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreditorDebtId");
+
+                    b.ToTable("CreditorDebtPayments");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.Customer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("BankAccount")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("text");
+
+                    b.Property<long>("BranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EmployeeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EmployeePhone")
+                        .HasColumnType("text");
+
                     b.Property<int?>("INN")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("JSHSHIR")
+                    b.Property<string>("MFO")
                         .HasColumnType("text");
 
-                    b.Property<string>("MFO")
+                    b.Property<string>("ManagerName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ManagerPhone")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("OKONX")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -393,16 +490,10 @@ namespace DeLong.Data.Migrations
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("YurAddress")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Customers");
                 });
@@ -554,6 +645,10 @@ namespace DeLong.Data.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -561,13 +656,17 @@ namespace DeLong.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long?>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Username")
@@ -577,8 +676,6 @@ namespace DeLong.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BranchId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Employees");
                 });
@@ -1023,6 +1120,9 @@ namespace DeLong.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("RequestId")
+                        .HasColumnType("uuid");
+
                     b.Property<long?>("SupplierIdFrom")
                         .HasColumnType("bigint");
 
@@ -1102,7 +1202,6 @@ namespace DeLong.Data.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("BranchId")
@@ -1114,13 +1213,13 @@ namespace DeLong.Data.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("DateOfBirth")
+                    b.Property<DateTimeOffset?>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("DateOfExpiry")
+                    b.Property<DateTimeOffset?>("DateOfExpiry")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("DateOfIssue")
+                    b.Property<DateTimeOffset?>("DateOfIssue")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
@@ -1134,15 +1233,17 @@ namespace DeLong.Data.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("JSHSHIR")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Patronomyc")
+                    b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Patronomyc")
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
@@ -1153,11 +1254,6 @@ namespace DeLong.Data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("SeriaPasport")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TelegramPhone")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -1165,6 +1261,10 @@ namespace DeLong.Data.Migrations
 
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1197,15 +1297,26 @@ namespace DeLong.Data.Migrations
                     b.Navigation("CashRegister");
                 });
 
-            modelBuilder.Entity("DeLong.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebt", b =>
                 {
-                    b.HasOne("DeLong.Domain.Entities.User", "User")
+                    b.HasOne("DeLong.Domain.Entities.Supplier", "Supplier")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebtPayment", b =>
+                {
+                    b.HasOne("DeLong.Domain.Entities.CreditorDebt", "CreditorDebt")
+                        .WithMany("CreditorDebtPayments")
+                        .HasForeignKey("CreditorDebtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreditorDebt");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Debt", b =>
@@ -1249,15 +1360,7 @@ namespace DeLong.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DeLong.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Branch");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Payment", b =>
@@ -1388,6 +1491,11 @@ namespace DeLong.Data.Migrations
             modelBuilder.Entity("DeLong.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebt", b =>
+                {
+                    b.Navigation("CreditorDebtPayments");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Debt", b =>

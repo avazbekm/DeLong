@@ -25,10 +25,14 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<UserResultDto> AddAsync(UserCreationDto dto)
     {
-        var existUser = await _userRepository.GetAsync(u => u.JSHSHIR.Equals(dto.JSHSHIR) && !u.IsDeleted);
-        if (existUser != null)
-            throw new AlreadyExistException($"This user is already exists with JSHSHIR = {dto.JSHSHIR}");
 
+
+        var existUser = await _userRepository.GetAsync(u =>
+           (u.Username == dto.Username || u.Phone == dto.Phone) && !u.IsDeleted);
+        if (existUser is not null)
+            throw new AlreadyExistException($"This User already exists with Username = {dto.Username}");
+
+        dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
         var mappedUser = _mapper.Map<User>(dto);
         SetCreatedFields(mappedUser); // Auditable maydonlarni qo‘shish
         mappedUser.BranchId = GetCurrentBranchId();
@@ -40,9 +44,16 @@ public class UserService : AuditableService, IUserService
 
     public async ValueTask<UserResultDto> ModifyAsync(UserUpdateDto dto)
     {
-        var existUser = await _userRepository.GetAsync(u => u.Id.Equals(dto.Id) && !u.IsDeleted)
-            ?? throw new NotFoundException($"This user is not found with ID = {dto.Id}");
+       
+        var existUser = await _userRepository.GetAsync(u => u.Id == dto.Id && !u.IsDeleted)
+           ?? throw new NotFoundException($"This User is not found with ID = {dto.Id}");
 
+        if (!string.IsNullOrWhiteSpace(dto.Password))
+            dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+        else
+            dto.Password = existUser.Password;
+
+     
         _mapper.Map(dto, existUser);
         SetUpdatedFields(existUser); // Auditable maydonlarni yangilash
 
@@ -131,5 +142,16 @@ public class UserService : AuditableService, IUserService
     public async ValueTask<bool> AnyUsersAsync()
     {
         return await _userRepository.GetAll(u => !u.IsDeleted).AnyAsync();
+    }
+
+    public async ValueTask<User> VerifyUserAsync(string username, string password)
+    {
+       var user = await _userRepository.GetAsync(u => u.Username == username && !u.IsDeleted)
+            ?? throw new NotFoundException($"Employee with username {username} not found");
+
+        if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+            throw new Exception("Incorrect password"); // UnauthorizedException o‘rniga umumiy Exception
+
+        return user;
     }
 }

@@ -30,7 +30,7 @@ public class CustomerService : AuditableService, ICustomerService
         {
             Customer existCustomer = await _customerRepository.GetAsync(u => u.CompanyName.Equals(dto.CompanyName) && !u.IsDeleted);
             if (existCustomer is not null)
-                throw new AlreadyExistException($"This customer is already exists with INN = {dto.CompanyName}");
+                throw new AlreadyExistException($"This customer is already exists with Company name = {dto.CompanyName}");
         }
  
         var mappedCustomer = _mapper.Map<Customer>(dto);
@@ -42,7 +42,7 @@ public class CustomerService : AuditableService, ICustomerService
         return _mapper.Map<CustomerResultDto>(mappedCustomer);
     }
 
-    public async ValueTask<CustomerResultDto> ModifyAsync(CustomerUpdateDto dto)
+    public async ValueTask<bool> ModifyAsync(CustomerUpdateDto dto)
     {
         Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(dto.Id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This customer is not found with ID = {dto.Id}");
@@ -53,7 +53,7 @@ public class CustomerService : AuditableService, ICustomerService
         _customerRepository.Update(existCustomer);
         await _customerRepository.SaveChanges();
 
-        return _mapper.Map<CustomerResultDto>(existCustomer);
+        return true;
     }
 
     public async ValueTask<bool> RemoveAsync(long id)

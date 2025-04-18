@@ -99,7 +99,7 @@ public class DebtService : AuditableService, IDebtService
                 if (debt.Sale?.UserId.HasValue == true && debt.Sale.User != null)
                     return $"{debt.Sale.User.FirstName} {debt.Sale.User.LastName}";
                 else if (debt.Sale?.CustomerId.HasValue == true && debt.Sale.Customer != null)
-                    return debt.Sale.Customer.Name;
+                    return debt.Sale.Customer.CompanyName;
                 return "Noma'lum";
             })
             .Where(group => group.Any(debt => debt.RemainingAmount > 0))

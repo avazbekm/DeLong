@@ -4,6 +4,7 @@ using DeLong.Domain.Entities;
 using DeLong.Service.DTOs.Sale;
 using DeLong.Service.DTOs.Debts;
 using DeLong.Service.DTOs.Prices;
+using DeLong.Service.DTOs.Branchs;
 using DeLong.Service.DTOs.Employee;
 using DeLong.Service.DTOs.Payments;
 using DeLong.Service.DTOs.SaleItems;
@@ -21,7 +22,8 @@ using DeLong.Service.DTOs.TransactionItems;
 using DeLong.Application.DTOs.Transactions;
 using DeLong.Application.DTOs.CashRegisters;
 using DeLong_Desktop.ApiService.DTOs.Discounts;
-using DeLong.Service.DTOs.Branchs;
+using DeLong.Service.DTOs.CreditorDebts;
+using DeLong.Service.DTOs.CreditorDebtPayments;
 
 namespace DeLong.Application.Mappers;
 
@@ -43,6 +45,17 @@ public class MappingProfile : Profile
         CreateMap<Asset, AssetResultDto>().ReverseMap();
         CreateMap<Asset, AssetUpdateDto>().ReverseMap();
         CreateMap<Asset, AssetCreationDto>().ReverseMap();
+
+        // CreditorDebtPayment
+        CreateMap<CreditorDebtPayment, CreditorDebtPaymentResultDto>().ReverseMap();
+        CreateMap<CreditorDebtPayment, CreditorDebtPaymentUpdateDto>().ReverseMap();
+        CreateMap<CreditorDebtPayment, CreditorDebtPaymentCreationDto>().ReverseMap();
+
+        // CreditorDebt
+        CreateMap<CreditorDebt, CreditorDebtResultDto>().ReverseMap();
+        CreateMap<CreditorDebt, CreditorDebtUpdateDto>().ReverseMap();
+        CreateMap<CreditorDebt, CreditorDebtCreationDto>().ReverseMap();
+
 
         // CashRegister
         CreateMap<CashRegister, CashRegisterResultDto>().ReverseMap();
@@ -138,5 +151,14 @@ public class MappingProfile : Profile
         CreateMap<ReturnProduct, ReturnProductCreationDto>().ReverseMap();
         CreateMap<ReturnProduct, ReturnProductUpdateDto>().ReverseMap();
         CreateMap<ReturnProduct, ReturnProductResultDto>().ReverseMap();
+
+
+        // transaction uchun 
+        CreateMap<TransactionCreationDto, Transaction>();
+        CreateMap<TransactionItemCreationDto, TransactionItem>();
+        CreateMap<PriceCreationDto, Price>();
+        CreateMap<Transaction, TransactionResultDto>();
+        CreateMap<TransactionItem, TransactionItemResultDto>();
+        CreateMap<Price, PriceResultDto>();
     }
 }

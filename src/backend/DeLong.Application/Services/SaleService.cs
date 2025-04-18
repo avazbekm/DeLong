@@ -48,7 +48,7 @@ public class SaleService : AuditableService, ISaleService
         result.PaidAmount = sale.PaidAmount; // Computed property
         result.RemainingAmount = sale.RemainingAmount;
         result.Status = sale.Status.ToString(); // Enum’dan string’ga
-        result.CustomerName = sale.Customer?.Name ?? string.Empty; // CustomerName qo‘shish
+        result.CustomerName = sale.Customer?.CompanyName ?? string.Empty; // CustomerName qo‘shish
         result.UserName = sale.User != null ? $"{sale.User.FirstName} {sale.User.LastName}".Trim() : string.Empty; // UserName hosil qilish
         return result;
     }
@@ -68,7 +68,7 @@ public class SaleService : AuditableService, ISaleService
             saleDto.PaidAmount = sale.PaidAmount; // Computed property
             saleDto.RemainingAmount = sale.RemainingAmount;
             saleDto.Status = sale.Status.ToString(); // Enum’dan string’ga
-            saleDto.CustomerName = sale.Customer?.Name ?? string.Empty; // CustomerName qo‘shish
+            saleDto.CustomerName = sale.Customer?.CompanyName ?? string.Empty; // CustomerName qo‘shish
             saleDto.UserName = sale.User != null ? $"{sale.User.FirstName} {sale.User.LastName}".Trim() : string.Empty; // UserName hosil qilish
         }
         return result;

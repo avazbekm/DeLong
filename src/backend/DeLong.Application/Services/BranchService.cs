@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using DeLong.Domain.Entities;
+using DeLong.Data.IRepository;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using DeLong.Service.DTOs.Branchs;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using DeLong.Data.IRepository;
-using System.Text.Json;
-using System.Linq.Expressions;
 
 namespace DeLong.Service.Services;
 
