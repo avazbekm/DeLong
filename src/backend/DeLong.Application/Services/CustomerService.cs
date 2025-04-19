@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Customers;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Extensions;
-using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
 using DeLong.Domain.Entities;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using DeLong.Domain.Configurations;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Extensions;
+using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.Customers;
 
 namespace DeLong.Service.Services;
 
@@ -26,19 +26,13 @@ public class CustomerService : AuditableService, ICustomerService
 
     public async ValueTask<CustomerResultDto> AddAsync(CustomerCreationDto dto)
     {
-        if (string.IsNullOrEmpty(dto.JSHSHIR))
+        if (string.IsNullOrEmpty(dto.CompanyName))
         {
-            Customer existCustomer = await _customerRepository.GetAsync(u => u.INN.Equals(dto.INN) && !u.IsDeleted);
+            Customer existCustomer = await _customerRepository.GetAsync(u => u.CompanyName.Equals(dto.CompanyName) && !u.IsDeleted);
             if (existCustomer is not null)
-                throw new AlreadyExistException($"This customer is already exists with INN = {dto.INN}");
+                throw new AlreadyExistException($"This customer is already exists with Company name = {dto.CompanyName}");
         }
-        else if (dto.INN == 0 || !dto.INN.HasValue)
-        {
-            Customer existCustomer = await _customerRepository.GetAsync(u => u.JSHSHIR.Equals(dto.JSHSHIR) && !u.IsDeleted);
-            if (existCustomer is not null)
-                throw new AlreadyExistException($"This customer is already exists with JSHSHIR = {dto.JSHSHIR}");
-        }
-
+ 
         var mappedCustomer = _mapper.Map<Customer>(dto);
         SetCreatedFields(mappedCustomer); // Auditable maydonlarni qo‘shish
         mappedCustomer.BranchId = GetCurrentBranchId();
@@ -48,7 +42,7 @@ public class CustomerService : AuditableService, ICustomerService
         return _mapper.Map<CustomerResultDto>(mappedCustomer);
     }
 
-    public async ValueTask<CustomerResultDto> ModifyAsync(CustomerUpdateDto dto)
+    public async ValueTask<bool> ModifyAsync(CustomerUpdateDto dto)
     {
         Customer existCustomer = await _customerRepository.GetAsync(u => u.Id.Equals(dto.Id) && !u.IsDeleted)
             ?? throw new NotFoundException($"This customer is not found with ID = {dto.Id}");
@@ -59,7 +53,7 @@ public class CustomerService : AuditableService, ICustomerService
         _customerRepository.Update(existCustomer);
         await _customerRepository.SaveChanges();
 
-        return _mapper.Map<CustomerResultDto>(existCustomer);
+        return true;
     }
 
     public async ValueTask<bool> RemoveAsync(long id)
@@ -93,7 +87,7 @@ public class CustomerService : AuditableService, ICustomerService
 
         if (!string.IsNullOrEmpty(search))
         {
-            customersQuery = customersQuery.Where(customer => customer.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+            customersQuery = customersQuery.Where(customer => customer.CompanyName.Contains(search, StringComparison.OrdinalIgnoreCase));
         }
 
         var customers = await customersQuery.ToListAsync();
@@ -113,15 +107,6 @@ public class CustomerService : AuditableService, ICustomerService
         var branchId = GetCurrentBranchId();
         Customer existCustomer = await _customerRepository.GetAsync(customer => customer.INN.Equals(INN) && !customer.IsDeleted && customer.BranchId.Equals(branchId))
             ?? throw new NotFoundException($"This customer is not found with INN = {INN}");
-
-        return _mapper.Map<CustomerResultDto>(existCustomer);
-    }
-
-    public async ValueTask<CustomerResultDto> RetrieveByJshshirAsync(string jshshir)
-    {
-        var branchId = GetCurrentBranchId();
-        Customer existCustomer = await _customerRepository.GetAsync(customer => customer.JSHSHIR.Equals(jshshir) && !customer.IsDeleted && customer.BranchId.Equals(branchId))
-            ?? throw new NotFoundException($"This customer is not found with JSHSHIR = {jshshir}");
 
         return _mapper.Map<CustomerResultDto>(existCustomer);
     }

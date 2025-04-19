@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Interfaces;
 using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.Employee;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using DeLong.Service.DTOs.Employee;
+using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.Exceptions;
 
 namespace DeLong.Service.Services;
 
@@ -24,7 +24,7 @@ public class EmployeeService : AuditableService, IEmployeeService
     public async ValueTask<EmployeeResultDto> AddAsync(EmployeeCreationDto dto)
     {
         var existingEmployee = await _employeeRepository.GetAsync(u =>
-            (u.Username == dto.Username || u.UserId == dto.UserId) && !u.IsDeleted);
+            (u.Username == dto.Username ) && !u.IsDeleted);
         if (existingEmployee is not null)
             throw new AlreadyExistException($"This Employee already exists with Username = {dto.Username}");
 

@@ -1,8 +1,10 @@
-﻿using DeLong.Application.Interfaces;
-using DeLong.Application.Mappers;
-using DeLong.Infrastructure.Repositories;
+﻿using DeLong.Service.Services;
 using DeLong.Service.Interfaces;
-using DeLong.Service.Services;
+using DeLong.Application.Mappers;
+using DeLong.Application.Interfaces;
+using DeLong.Infrastructure.Repositories;
+using DeLong.Data.IRepository;
+using DeLong.Data.Repositories;
 
 namespace DeLong.WebAPI.Extentions;
 
@@ -32,6 +34,10 @@ public static class ServicesColletion
         services.AddScoped<ICashWarehouseService, CashWarehouseService>();
         services.AddScoped<IReturnProductService, ReturnProductService>();
         services.AddScoped<ITransactionItemService, TransactionItemService>();
+        services.AddScoped<ICreditorDebtService, CreditorDebtService>();
+        services.AddScoped<ICreditorDebtPaymentService, CreditorDebtPaymentService>();
+        services.AddScoped<ITransactionProcessingService, TransactionProcessingService>();
+        services.AddScoped<IChangeHistoryRepository, ChangeHistoryRepository>();
 
 
         services.AddAutoMapper(typeof(MappingProfile));

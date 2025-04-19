@@ -1,5 +1,4 @@
 ﻿using DeLong.Application.DTOs.Suppliers;
-using DeLong.Domain.Configurations;
 using DeLong.Service.Interfaces;
 using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;

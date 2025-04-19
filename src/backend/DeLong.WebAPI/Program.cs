@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System.Text;
 using DeLong.Domain.Enums;
+using System.Security.Claims;
 using DeLong.Domain.Entities;
 using DeLong.WebAPI.Extentions;
 using DeLong.WebAPI.Middlewares;
@@ -36,10 +37,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            RoleClaimType = ClaimTypes.Role // Bu "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" ga teng
         };
-    });
 
+    });
 
 builder.Services.AddAuthorization();
 
@@ -128,7 +130,6 @@ using (var scope = app.Services.CreateScope())
     }
 
     // 2. Keyin user qo‘shamiz
-    long userId;
     if (!await userService.AnyUsersAsync()) // AnyUsersAsync qo‘shish kerak
     {
         var adminSettings = builder.Configuration.GetSection("Admin");
@@ -144,44 +145,21 @@ using (var scope = app.Services.CreateScope())
             DateOfExpiry = DateTimeOffset.UtcNow.AddYears(10),
             Gender = Gender.Erkak,
             Phone = adminSettings["Phone"],
-            TelegramPhone = string.Empty,
             Address = string.Empty,
             JSHSHIR = "12345678912345",
             Role = Role.Admin,
             CreatedBy = 0, // Tizim tomonidan yaratilgan
             CreatedAt = DateTimeOffset.UtcNow,
             IsDeleted = false,
+            Username = adminSettings["Username"],
+            Password = BCrypt.Net.BCrypt.HashPassword(adminSettings["Password"]),
             BranchId = branchId
         };
         userService.CreateSeedUserAsync(adminUser);
         var user = await userService.GetLastUser();
-        userId = user.Id;
-        Console.WriteLine($"Standart user qo‘shildi: {adminUser.FirstName} {adminUser.LastName}, ID: {userId}");
-    }
-    else
-    {
-        userId = (await userService.GetLastUser())?.Id ?? throw new Exception("No user found after retrieval");
     }
 
-    // 3. Oxirida employee qo‘shamiz
-    if (!await employeeService.AnyEmployeesAsync())
-    {
-        var adminSettings = builder.Configuration.GetSection("Admin");
-
-        var adminEmployee = new Employee
-        {
-            UserId = userId,
-            BranchId = branchId,
-            Username = adminSettings["Username"],
-            Password = BCrypt.Net.BCrypt.HashPassword(adminSettings["Password"]),
-            CreatedBy = 0, // Tizim tomonidan yaratilgan
-            CreatedAt = DateTimeOffset.UtcNow,
-            IsDeleted = false
-        };
-        await employeeService.CreateSeedEmployeeAsync(adminEmployee);
-
-        Console.WriteLine("Standart admin qo‘shildi: " + adminSettings["Username"]);
-    }
+    
 }// ✅ Middleware va API konfiguratsiyasi
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
