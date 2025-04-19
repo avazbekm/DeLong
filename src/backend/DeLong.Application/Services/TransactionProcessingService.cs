@@ -181,6 +181,7 @@ public class TransactionProcessingService : AuditableService, ITransactionProces
             var creditorDebt = new CreditorDebtCreationDto
             {
                 SupplierId = receiveItems.First().SupplierId,
+                TransactionId = transactionEntity.Id,
                 Date = DateTimeOffset.UtcNow,
                 RemainingAmount = totalAmount,
                 Description = $"Tranzaksiya #{transactionEntity.Id} uchun qarz",
