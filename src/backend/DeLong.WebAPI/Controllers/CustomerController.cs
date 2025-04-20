@@ -1,9 +1,9 @@
-﻿using DeLong.Application.DTOs.Customers;
-using DeLong.Domain.Configurations;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Customers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
@@ -62,15 +62,7 @@ public class CustomerController : BaseController
             Data = await _customerService.RetrieveByInnAsync(INN)
         });
 
-    [HttpGet("get/jshshir/{jshshir}")]
-    public async Task<IActionResult> GetByJshshirAsync(string jshshir)
-        => Ok(new Response
-        {
-            StatusCode = 200,
-            Message = "Success",
-            Data = await _customerService.RetrieveByJshshirAsync(jshshir)
-        });
-
+ 
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, [FromQuery] Filter filter, [FromQuery] string search = null)
         => Ok(new Response

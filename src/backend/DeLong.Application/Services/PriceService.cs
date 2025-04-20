@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using DeLong.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using DeLong.Service.Interfaces;
+using DeLong.Service.DTOs.Prices;
+using DeLong.Domain.Configurations;
 using DeLong.Application.Exceptions;
 using DeLong.Application.Extensions;
 using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
-using DeLong.Domain.Entities;
-using DeLong.Service.DTOs.Prices;
-using DeLong.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeLong.Service.Services;
@@ -29,6 +29,7 @@ public class PriceService : AuditableService, IPriceServer
             u.ProductId.Equals(dto.ProductId) &&
             u.CostPrice.Equals(dto.CostPrice) &&
             u.SellingPrice.Equals(dto.SellingPrice) &&
+            u.BranchId.Equals(dto.BranchId) &&
             !u.IsDeleted);
         if (existPrices is not null)
             throw new AlreadyExistException($"This Price is already exists with ProductId = {dto.ProductId}");
@@ -90,7 +91,42 @@ public class PriceService : AuditableService, IPriceServer
     {
         var branchId = GetCurrentBranchId();
         var prices = await _priceRepository.GetAll(p => p.ProductId.Equals(productId) && !p.IsDeleted && p.BranchId.Equals(branchId))
+            .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();
+
+        // Agar narxlar ikkitadan ko‘p bo‘lsa yoki bittadan ko‘p bo‘lsa tekshiramiz
+        if (prices.Count > 1)
+        {
+            // Barcha narxlar Quantity == 0 ekanligini tekshiramiz
+            bool allZero = prices.All(p => p.Quantity == 0);
+
+            if (allZero)
+            {
+                // Barchasi nol bo‘lsa, faqat birinchi narxdan tashqari (eng so‘nggi) hammasini o‘chiramiz
+                var pricesToDelete = prices.Skip(1).ToList();
+                foreach (var pr in pricesToDelete)
+                {
+                    _priceRepository.Delete(pr);
+                }
+                await _priceRepository.SaveChanges();
+                // Faqat birinchi narxni saqlaymiz
+                prices = prices.Take(1).ToList();
+            }
+            else
+            {
+                // Nol bo‘lmagan narxlar bor, faqat Quantity == 0 bo‘lganlarni o‘chiramiz
+                var pricesToDelete = prices.Where(p => p.Quantity == 0).ToList();
+                foreach (var pr in pricesToDelete)
+                {
+                    _priceRepository.Delete(pr);
+                }
+                await _priceRepository.SaveChanges();
+                // Quantity == 0 bo‘lmagan narxlarni saqlaymiz
+                prices = prices.Where(p => p.Quantity != 0).ToList();
+            }
+        }
+
+
         return _mapper.Map<IEnumerable<PriceResultDto>>(prices);
     }
 

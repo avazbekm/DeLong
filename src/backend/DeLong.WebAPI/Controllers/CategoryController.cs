@@ -1,8 +1,8 @@
-﻿using DeLong.Application.DTOs.Categories;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Application.DTOs.Categories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 

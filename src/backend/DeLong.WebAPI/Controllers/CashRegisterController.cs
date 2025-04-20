@@ -1,8 +1,8 @@
-﻿using DeLong.Application.DTOs.CashRegisters;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using DeLong.Application.DTOs.CashRegisters;
 
 namespace DeLong.WebAPI.Controllers;
 
@@ -17,6 +17,7 @@ public class CashRegisterController : BaseController
     }
 
     [HttpPost("create")]
+    [Authorize(Roles = "admin,boshqaruvchi,sotuvchi")]
     public async Task<IActionResult> AddAsync(CashRegisterCreationDto dto)
         => Ok(new Response
         {
