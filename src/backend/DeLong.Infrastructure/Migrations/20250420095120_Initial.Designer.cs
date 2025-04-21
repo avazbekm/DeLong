@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeLong.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250412171304_Initial")]
+    [Migration("20250420095120_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -339,6 +339,102 @@ namespace DeLong.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChangeHistories");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebt", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("BranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSettled")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("RemainingAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TransactionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("CreditorDebts");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebtPayment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("BranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CreditorDebtId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("PaymentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreditorDebtId");
+
+                    b.ToTable("CreditorDebtPayments");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Customer", b =>
@@ -1030,6 +1126,9 @@ namespace DeLong.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("RequestId")
+                        .HasColumnType("uuid");
+
                     b.Property<long?>("SupplierIdFrom")
                         .HasColumnType("bigint");
 
@@ -1204,6 +1303,28 @@ namespace DeLong.Data.Migrations
                     b.Navigation("CashRegister");
                 });
 
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebt", b =>
+                {
+                    b.HasOne("DeLong.Domain.Entities.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebtPayment", b =>
+                {
+                    b.HasOne("DeLong.Domain.Entities.CreditorDebt", "CreditorDebt")
+                        .WithMany("CreditorDebtPayments")
+                        .HasForeignKey("CreditorDebtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreditorDebt");
+                });
+
             modelBuilder.Entity("DeLong.Domain.Entities.Debt", b =>
                 {
                     b.HasOne("DeLong.Domain.Entities.Sale", "Sale")
@@ -1376,6 +1497,11 @@ namespace DeLong.Data.Migrations
             modelBuilder.Entity("DeLong.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DeLong.Domain.Entities.CreditorDebt", b =>
+                {
+                    b.Navigation("CreditorDebtPayments");
                 });
 
             modelBuilder.Entity("DeLong.Domain.Entities.Debt", b =>
