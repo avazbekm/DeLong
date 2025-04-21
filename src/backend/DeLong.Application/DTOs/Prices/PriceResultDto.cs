@@ -19,4 +19,5 @@ public class PriceResultDto
     public decimal SellingPrice { get; set; }  // Sotish narxi
     public string UnitOfMeasure { get; set; } = string.Empty; // kg,dona,karobka,litr
     public decimal Quantity { get; set; } // miqdori
+    public DateTimeOffset CreatedAt { get; set; }
 }
