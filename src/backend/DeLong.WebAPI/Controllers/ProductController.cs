@@ -1,9 +1,9 @@
-﻿using DeLong.Application.DTOs.Products;
-using DeLong.Domain.Configurations;
-using DeLong.Service.Interfaces;
-using DeLong.WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using DeLong.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using DeLong.Service.Interfaces;
+using DeLong.Domain.Configurations;
+using DeLong.Application.DTOs.Products;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeLong.WebAPI.Controllers;
 
@@ -78,5 +78,14 @@ public class ProductController : BaseController
             StatusCode = 200,
             Message = "Success",
             Data = await _productService.RetrieveAllAsync()
+        });
+    
+    [HttpGet("get-products-quantities")]
+    public async Task<IActionResult> GetProductsQuantitiesAsync()
+        => Ok(new Response
+        {
+            StatusCode = 200,
+            Message = "Success",
+            Data = await _productService.RetrieveAllProductsQuantitiesAsync()
         });
 }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DeLong.Service.DTOs.CreditorDebts;
+﻿namespace DeLong.Service.DTOs.CreditorDebts;
 
 public class CreditorDebtCreationDto
 {

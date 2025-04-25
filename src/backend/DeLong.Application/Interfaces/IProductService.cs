@@ -11,4 +11,5 @@ public interface IProductService
     ValueTask<ProductResultDto> RetrieveByIdAsync(long id);
     ValueTask<IEnumerable<ProductResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null);
     ValueTask<IEnumerable<ProductResultDto>> RetrieveAllAsync();
+    ValueTask<int?> RetrieveAllProductsQuantitiesAsync();
 }
