@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using DeLong.Application.DTOs.Products;
-using DeLong.Application.Exceptions;
-using DeLong.Application.Extensions;
-using DeLong.Application.Interfaces;
-using DeLong.Domain.Configurations;
 using DeLong.Domain.Entities;
 using DeLong.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
+using DeLong.Domain.Configurations;
+using DeLong.Application.Exceptions;
+using DeLong.Application.Extensions;
+using DeLong.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DeLong.Application.DTOs.Products;
 
 namespace DeLong.Service.Services;
 
@@ -15,12 +15,14 @@ public class ProductService : AuditableService, IProductService
 {
     private readonly IMapper _mapper;
     private readonly IRepository<Product> _productRepository;
+    private readonly IRepository<Price> _priceRepository;
 
-    public ProductService(IRepository<Product> productRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public ProductService(IRepository<Product> productRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IRepository<Price> priceRepository)
         : base(httpContextAccessor)
     {
         _mapper = mapper;
         _productRepository = productRepository;
+        _priceRepository = priceRepository;
     }
 
     public async ValueTask<ProductResultDto> AddAsync(ProductCreationDto dto)
@@ -96,5 +98,44 @@ public class ProductService : AuditableService, IProductService
             .ToListAsync();
         var result = _mapper.Map<IEnumerable<ProductResultDto>>(products);
         return result;
+    }
+
+    public async ValueTask<int?> RetrieveAllProductsQuantitiesAsync()
+    {
+        try
+        {
+            var branchId = GetCurrentBranchId();
+            Console.WriteLine($"BranchId: {branchId}"); // Log
+            var products = await _productRepository
+                .GetAll(p => !p.IsDeleted && p.BranchId.Equals(branchId))
+                .ToListAsync();
+            Console.WriteLine($"Mahsulotlar soni: {products.Count}"); // Log
+
+            if (!products.Any())
+            {
+                Console.WriteLine("Mahsulotlar topilmadi."); // Log
+                return 0;
+            }
+
+            var priceResults = new List<bool>();
+            foreach (var product in products)
+            {
+                var prices = await _priceRepository
+                    .GetAll(p => p.ProductId.Equals(product.Id) && !p.IsDeleted && p.Quantity > 0)
+                    .ToListAsync();
+                Console.WriteLine($"Mahsulot ID: {product.Id}, Narxlar soni: {prices.Count}, Quantity > 0: {prices.Any(p => p.Quantity > 0)}"); // Log
+                priceResults.Add(prices != null && prices.Any());
+            }
+
+            int quantity = priceResults.Count(result => result);
+            Console.WriteLine($"Narxlari mavjud mahsulotlar soni: {quantity}"); // Log
+
+            return quantity;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"RetrieveAllProductsQuantitiesAsync xatolik: {ex.Message}"); // Log
+            return 0; // Xatolik yuz bersa 0 qaytaramiz
+        }
     }
 }
